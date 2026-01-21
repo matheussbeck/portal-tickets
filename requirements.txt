@@ -1,0 +1,26 @@
+# Core
+fastapi==0.128.0
+uvicorn[standard]==0.40.0
+pydantic==2.12.5
+pydantic-settings==2.12.0
+
+# Database
+sqlalchemy==2.0.45
+alembic==1.18.1
+
+# Driver do banco (escolha um)
+# SQLite (desenvolvimento)
+
+# PostgreSQL (produção)
+# psycopg2-binary==2.9.11
+
+# Utilitários
+python-dotenv==1.2.1
+
+# Segurança
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.5.0
+
+# Testes
+pytest==9.0.2
+httpx==0.28.1
