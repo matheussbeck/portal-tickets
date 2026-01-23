@@ -16,7 +16,7 @@ Organização:
 from sqlalchemy import ForeignKey, Integer, String, DateTime, Enum, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
-import enum
+from enum import Enum as PyEnum
 
 from infra.configs.database import Base
 
@@ -25,7 +25,7 @@ from infra.configs.database import Base
 # ENUMS
 # =============================================================================
 
-class ApprovalStatus(enum.Enum):
+class ApprovalStatus(PyEnum):
     """Status de aprovação individual de um aprovador"""
     PENDENTE = "pendente"
     APROVADO = "aprovado"
@@ -50,7 +50,7 @@ class ProjectApproval(Base):
 
     # Identificação do projeto e aprovador
     project_id: Mapped[int] = mapped_column(
-        ForeignKey("projects.id", ondelete="CASCADE"),
+        ForeignKey("projects.id", ondelete="RESTRICT"),
         nullable=False
     )
     approver_id: Mapped[int] = mapped_column(
@@ -107,11 +107,11 @@ class ProjectAnalyst(Base):
     __tablename__ = "project_analysts"
 
     project_id: Mapped[int] = mapped_column(
-        ForeignKey("projects.id", ondelete="CASCADE"),
+        ForeignKey("projects.id", ondelete="RESTRICT"),
         nullable=False
     )
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="RESTRICT"),
         nullable=False
     )
     assigned_at: Mapped[datetime] = mapped_column(
@@ -141,11 +141,11 @@ class ProjectSponsor(Base):
     __tablename__ = "project_sponsors"
 
     project_id: Mapped[int] = mapped_column(
-        ForeignKey("projects.id", ondelete="CASCADE"),
+        ForeignKey("projects.id", ondelete="RESTRICT"),
         nullable=False
     )
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="RESTRICT"),
         nullable=False
     )
 
@@ -169,11 +169,11 @@ class ProjectOwner(Base):
     __tablename__ = "project_owners"
 
     project_id: Mapped[int] = mapped_column(
-        ForeignKey("projects.id", ondelete="CASCADE"),
+        ForeignKey("projects.id", ondelete="RESTRICT"),
         nullable=False
     )
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="RESTRICT"),
         nullable=False
     )
 
@@ -197,11 +197,11 @@ class ProjectClient(Base):
     __tablename__ = "project_clients"
 
     project_id: Mapped[int] = mapped_column(
-        ForeignKey("projects.id", ondelete="CASCADE"),
+        ForeignKey("projects.id", ondelete="RESTRICT"),
         nullable=False
     )
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="RESTRICT"),
         nullable=False
     )
 
@@ -225,11 +225,11 @@ class ProjectAllowedUser(Base):
     __tablename__ = "project_allowed_users"
 
     project_id: Mapped[int] = mapped_column(
-        ForeignKey("projects.id", ondelete="CASCADE"),
+        ForeignKey("projects.id", ondelete="RESTRICT"),
         nullable=False
     )
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="RESTRICT"),
         nullable=False
     )
 
@@ -257,11 +257,11 @@ class TicketAttendant(Base):
     __tablename__ = "ticket_attendants"
 
     ticket_id: Mapped[int] = mapped_column(
-        ForeignKey("tickets.id", ondelete="CASCADE"),
+        ForeignKey("tickets.id", ondelete="RESTRICT"),
         nullable=False
     )
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="RESTRICT"),
         nullable=False
     )
     assigned_at: Mapped[datetime] = mapped_column(
@@ -291,11 +291,11 @@ class TicketTeam(Base):
     __tablename__ = "ticket_teams"
 
     ticket_id: Mapped[int] = mapped_column(
-        ForeignKey("tickets.id", ondelete="CASCADE"),
+        ForeignKey("tickets.id", ondelete="RESTRICT"),
         nullable=False
     )
     team_id: Mapped[int] = mapped_column(
-        ForeignKey("teams.id", ondelete="CASCADE"),
+        ForeignKey("teams.id", ondelete="RESTRICT"),
         nullable=False
     )
     assigned_at: Mapped[datetime] = mapped_column(
@@ -329,11 +329,11 @@ class ReportAllowedUser(Base):
     __tablename__ = "report_allowed_users"
 
     report_id: Mapped[int] = mapped_column(
-        ForeignKey("reports.id", ondelete="CASCADE"),
+        ForeignKey("reports.id", ondelete="RESTRICT"),
         nullable=False
     )
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="RESTRICT"),
         nullable=False
     )
 
@@ -361,11 +361,11 @@ class UserReportFollow(Base):
     __tablename__ = "user_report_follows"
 
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="RESTRICT"),
         nullable=False
     )
     report_id: Mapped[int] = mapped_column(
-        ForeignKey("reports.id", ondelete="CASCADE"),
+        ForeignKey("reports.id", ondelete="RESTRICT"),
         nullable=False
     )
     followed_at: Mapped[datetime] = mapped_column(
@@ -395,11 +395,11 @@ class UserProjectFollow(Base):
     __tablename__ = "user_project_follows"
 
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="RESTRICT"),
         nullable=False
     )
     project_id: Mapped[int] = mapped_column(
-        ForeignKey("projects.id", ondelete="CASCADE"),
+        ForeignKey("projects.id", ondelete="RESTRICT"),
         nullable=False
     )
     followed_at: Mapped[datetime] = mapped_column(
@@ -429,11 +429,11 @@ class UserTicketFollow(Base):
     __tablename__ = "user_ticket_follows"
 
     user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="RESTRICT"),
         nullable=False
     )
     ticket_id: Mapped[int] = mapped_column(
-        ForeignKey("tickets.id", ondelete="CASCADE"),
+        ForeignKey("tickets.id", ondelete="RESTRICT"),
         nullable=False
     )
     followed_at: Mapped[datetime] = mapped_column(

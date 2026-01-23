@@ -1,16 +1,16 @@
 from sqlalchemy import Integer, String, Boolean, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-import enum
+from enum import Enum as PyEnum
 
 from infra.configs.database import Base
 
 
-class FormClasse(enum.Enum):
+class FormClasse(PyEnum):
     PROJETO = "projeto"
     RELATORIO = "relatorio"
 
 
-class FormTipo(enum.Enum):
+class FormTipo(PyEnum):
     ALTERACAO = "alteracao"
     BUG = "bug"
     CORRECAO = "correcao"
@@ -64,24 +64,7 @@ class Form(Base):
         default_factory=list
     )
 
-    def to_dict(self) -> dict:
-        return {
-            'id': self.id,
-            'form_name': self.form_name,
-            'form_description': self.form_description,
-            'form_ticket_class': self.form_ticket_class.value if self.form_ticket_class else None,
-            'form_type': self.form_type.value if self.form_type else None,
-            'form_fields': self.form_fields,
-            'form_is_default': self.form_is_default,
-            'form_version': self.form_version,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            'created_by': self.created_by,
-            'updated_by': self.updated_by,
-            'deleted_at': self.deleted_at.isoformat() if self.deleted_at else None,
-            'deleted_by': self.deleted_by,
-            'active': self.active.value if self.active else None
-        }
+    
 
     def __repr__(self) -> str:
         return f"<Form(id={self.id}, form_name='{self.form_name}', form_type='{self.form_type}')>"

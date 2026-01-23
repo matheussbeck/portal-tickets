@@ -1,15 +1,22 @@
 from sqlalchemy import ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-import enum
+from enum import Enum as PyEnum
 
 from infra.configs.database import Base
 
 
-class Area(enum.Enum):
+class Area(PyEnum):
     EAB = "eab"
     PROJETOS = "projetos"
     CIA = "cia"
     INDICADORES = "indicadores"
+
+
+class TeamStatus(PyEnum):
+    """Status operacional do time (diferente de active que é soft delete)"""
+    ATIVO = "ativo"
+    SUSPENSO = "suspenso"
+    REESTRUTURACAO = "reestruturacao"
 
 
 class Team(Base):
@@ -33,12 +40,17 @@ class Team(Base):
     # CLASSIFICAÇÃO
     # =========================================================================
     team_area: Mapped[Area] = mapped_column(Enum(Area), nullable=False)
+    team_status: Mapped[TeamStatus] = mapped_column(
+        Enum(TeamStatus),
+        default=TeamStatus.ATIVO,
+        init=False
+    )
 
     # =========================================================================
     # FOREIGN KEYS
     # =========================================================================
     team_manager_id: Mapped[int | None] = mapped_column(
-        ForeignKey("users.id", ondelete="RESTRICT"),
+        ForeignKey("users.id", use_alter=True, name="fk_team_manager", ondelete="RESTRICT"),
         nullable=True,
         init=False
     )
@@ -60,7 +72,6 @@ class Team(Base):
         lazy="raise",
         init=False
     )
-
     # 1 - N (Time tem muitos membros/reports/projects)
     team_members: Mapped[list["User"]] = relationship(
         foreign_keys="[User.user_team_id]",
@@ -89,24 +100,6 @@ class Team(Base):
         init=False,
         default_factory=list
     )
-
-    def to_dict(self) -> dict:
-        return {
-            'id': self.id,
-            'team_name': self.team_name,
-            'team_description': self.team_description,
-            'team_area': self.team_area.value if self.team_area else None,
-            'team_manager_id': self.team_manager_id,
-            'team_location': self.team_location,
-            'team_cost_center': self.team_cost_center,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            'created_by': self.created_by,
-            'updated_by': self.updated_by,
-            'deleted_at': self.deleted_at.isoformat() if self.deleted_at else None,
-            'deleted_by': self.deleted_by,
-            'active': self.active.value if self.active else None
-        }
 
     def __repr__(self) -> str:
         return f"<Team(id={self.id}, team_name='{self.team_name}', team_area='{self.team_area}')>"

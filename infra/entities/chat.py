@@ -19,7 +19,7 @@ class Chat(Base):
     # FOREIGN KEYS
     # =========================================================================
     chat_ticket_id: Mapped[int] = mapped_column(
-        ForeignKey("tickets.id", ondelete="CASCADE"),
+        ForeignKey("tickets.id", ondelete="RESTRICT"),
         nullable=False,
         unique=True
     )
@@ -47,20 +47,6 @@ class Chat(Base):
         init=False,
         default_factory=list
     )
-
-    def to_dict(self) -> dict:
-        return {
-            'id': self.id,
-            'chat_ticket_id': self.chat_ticket_id,
-            'chat_title': self.chat_title,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            'created_by': self.created_by,
-            'updated_by': self.updated_by,
-            'deleted_at': self.deleted_at.isoformat() if self.deleted_at else None,
-            'deleted_by': self.deleted_by,
-            'active': self.active.value if self.active else None
-        }
 
     def __repr__(self) -> str:
         return f"<Chat(id={self.id}, chat_ticket_id={self.chat_ticket_id})>"

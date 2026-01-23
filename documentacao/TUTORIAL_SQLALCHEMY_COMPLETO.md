@@ -24,12 +24,103 @@ Este tutorial foi construído especificamente para desenvolvedores que estão cr
 4. **Prática**: Exemplos de código comentados
 5. **Trade-offs**: Vantagens, desvantagens e alternativas
 
+### Metodologia: Construção Linear do Conhecimento
+
+Este tutorial segue uma metodologia rigorosa de **construção linear do conhecimento**. Cada conceito, classe, função ou padrão é apresentado seguindo uma progressão evolutiva:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PROGRESSÃO DO CONHECIMENTO                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  BÁSICO      ──►    INTERMEDIÁRIO    ──►    AVANÇADO    ──►    ESTADO      │
+│  (Fundamentos)      (Funcionalidades)       (Otimizações)     DA ARTE      │
+│                                                                             │
+│  "O que é?"         "Como usar?"           "Como melhorar?"   "Produção"   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Princípios desta metodologia**:
+
+1. **Começar pelo começo**: Cada assunto parte do conceito mais fundamental
+2. **Evoluir em sequência**: Cada exemplo constrói sobre o anterior
+3. **Sem saltos**: Não assumimos conhecimento não apresentado anteriormente
+4. **Exemplos incrementais**: O mesmo código evolui do básico ao avançado
+5. **User como entidade central**: Usamos User como exemplo principal por ser a mais complexa
+6. **Testes em cada etapa**: Validação prática após cada bloco de conhecimento
+7. **Estado da arte final**: Cada seção termina com a versão "pronta para produção"
+
+**Estrutura de cada conceito**:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  1. BÁSICO                                                                  │
+│     - Definição simples                                                     │
+│     - Exemplo mínimo funcional                                              │
+│     - "O que faz e por que existe"                                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  2. INTERMEDIÁRIO                                                           │
+│     - Funcionalidades adicionais                                            │
+│     - Casos de uso comuns                                                   │
+│     - Configurações importantes                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  3. AVANÇADO                                                                │
+│     - Otimizações e edge cases                                              │
+│     - Integrações com outros componentes                                    │
+│     - Trade-offs e decisões de design                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  4. ESTADO DA ARTE (Versão Final)                                           │
+│     - Código completo pronto para produção                                  │
+│     - Todas as boas práticas aplicadas                                      │
+│     - Testes de validação                                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Por que User como entidade central?**
+
+User é a entidade mais complexa do sistema porque possui:
+- Relacionamentos N-1 (pertence a um Team)
+- Relacionamentos 1-N (pode ser manager de um Team)
+- Relacionamentos N-N (acesso a múltiplos Reports)
+- Campos de auditoria (created_by, updated_by)
+- Status operacional (além do status de soft delete)
+- Autenticação (password hash, tokens)
+- Autorização (roles, permissions)
+
+Se você entender User completamente, todas as outras entidades serão triviais.
+
 ### Como Usar Este Material
 
 - **Iniciantes**: Leia sequencialmente, execute os exemplos
 - **Intermediários**: Foque nos Módulos 2, 3 e 4 (relacionamentos e arquitetura)
 - **Avançados**: Módulos 4 e 5 (performance e boas práticas)
 - **Referência**: Use o índice para consultas rápidas
+
+### IMPORTANTE: Módulo 9 - O Exemplo Central
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  O MÓDULO 9 (USER - DO ZERO À PRODUÇÃO) É O CORAÇÃO DESTE TUTORIAL          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Ele demonstra User passando por TODAS as camadas com progressão:           │
+│                                                                             │
+│  9.1 Entity      → BÁSICO → INTERMEDIÁRIO → AVANÇADO → ESTADO DA ARTE      │
+│  9.2 Repository  → BÁSICO → INTERMEDIÁRIO → AVANÇADO → ESTADO DA ARTE      │
+│  9.3 Exceptions  → Hierarquia completa de exceções                          │
+│  9.4 Schemas     → BÁSICO → INTERMEDIÁRIO → AVANÇADO → ESTADO DA ARTE      │
+│  9.5 Service     → BÁSICO → INTERMEDIÁRIO → AVANÇADO → ESTADO DA ARTE      │
+│  9.6 API         → BÁSICO → INTERMEDIÁRIO → AVANÇADO → ESTADO DA ARTE      │
+│  9.7 Tests       → Testes completos de validação                            │
+│                                                                             │
+│  QUANDO ESTUDAR QUALQUER MÓDULO, CONSULTE O MÓDULO 9 PARA VER O EXEMPLO    │
+│  PRÁTICO COMPLETO COM A ENTIDADE USER.                                      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+Ao terminar o Módulo 9, você terá um modelo completo que serve de referência para construir qualquer outra entidade do seu projeto.
 
 ### Pré-requisitos
 
@@ -70,9 +161,14 @@ Este tutorial está organizado em **PASSOS** para garantir uma progressão linea
 [ ] Dependências instaladas (requirements.txt)
 [ ] Estrutura de pastas criada (infra/, services/, api/, schemas/)
 [ ] Arquivo .env configurado com variáveis de ambiente
+[ ] Arquivo .env.example criado (template sem valores sensíveis)
 [ ] Arquivo .gitignore configurado (NÃO commitar .env!)
 [ ] Git iniciado (git init)
+[ ] Repositório GitHub criado e conectado (git remote add origin)
+[ ] Primeiro commit feito (git commit -m "chore: setup inicial do projeto")
+[ ] Push para GitHub (git push -u origin main)
 [ ] Alembic inicializado (alembic init alembic)
+[ ] env.py configurado para usar settings.py (fonte única de verdade)
 [ ] Conexão com banco testada
 ```
 
@@ -348,9 +444,15 @@ meu_projeto/
 ├── requirements.txt
 ├── alembic.ini                   # Configuração do Alembic
 │
-├── alembic/                      # Migrations
-│   ├── versions/
-│   └── env.py
+├── alembic/                      # Migrations (gerado por: alembic init alembic)
+│   ├── versions/                 # Arquivos de migration ficam aqui
+│   │   └── 001_criar_tabelas.py  # Exemplo de migration
+│   ├── env.py                    # Conecta Alembic ao seu projeto
+│   ├── script.py.mako            # Template para novas migrations
+│   └── README                    # Instruções do Alembic
+│
+├── database/                     # Banco SQLite fica aqui (se usar SQLite)
+│   └── portal.db                 # Criado automaticamente
 │
 ├── infra/                        # Infraestrutura (banco, conexões)
 │   ├── __init__.py
@@ -573,12 +675,12 @@ user = User(status="ativo")       # Erro! Tipo errado detectado
 user = User(status=Status.BANANA) # Erro! Não existe
 ```
 
-**Por que `PyEnum` (alias para `enum.Enum`)?**
+**Por que `PyEnum` (alias para `PyEnum`)?**
 
 Usamos `from enum import Enum as PyEnum` para evitar confusão com `sqlalchemy.Enum`:
 ```python
 from enum import Enum as PyEnum      # Enum do Python (define os valores)
-from sqlalchemy import Enum          # Enum do SQLAlchemy (tipo de coluna SQL)
+from sqlalchemy from enum import Enum as PyEnum          # Enum do SQLAlchemy (tipo de coluna SQL)
 ```
 
 ### Por Que server_default ao Invés de default?
@@ -686,17 +788,24 @@ from sqlalchemy.orm import (
 
 class Status(PyEnum):
     """
-    Status padrão para soft delete.
+    Status BASE para soft delete.
+
+    IMPORTANTE: Este enum tem apenas 2 valores porque é usado
+    EXCLUSIVAMENTE para soft delete (registro ativo ou "deletado").
+
+    Para status OPERACIONAIS (suspenso, bloqueado, etc.), crie
+    enums específicos nas entidades filhas:
+    - UserStatus: ATIVO, SUSPENSO, BLOQUEADO, FERIAS, AFASTADO
+    - TeamStatus: ATIVO, SUSPENSO, REESTRUTURACAO
+    - TicketStatus: ABERTO, PENDENTE, ATIVO, ENCERRADO, etc.
 
     Por que Enum ao invés de string?
     - IDE sugere valores válidos (autocomplete)
     - Typos detectados em tempo de desenvolvimento
     - Refatoração segura (renomear propaga)
     """
-    ATIVO = "ativo"
-    INATIVO = "inativo"
-    SUSPENSO = "suspenso"
-    BLOQUEADO = "bloqueado"
+    ATIVO = "ativo"    # Registro ativo (visível em queries normais)
+    INATIVO = "inativo"  # Registro soft-deleted (filtrado por padrão)
 
 
 class Base(MappedAsDataclass, DeclarativeBase):
@@ -739,43 +848,102 @@ class Base(MappedAsDataclass, DeclarativeBase):
         init=False
     )
 
-    # Auditoria de usuário (quem criou/atualizou)
+    # ══════════════════════════════════════════════════════════════════
+    # CAMPOS DE AUDITORIA
+    # Por que NÃO usamos ForeignKey para users.id aqui?
+    #
+    # Se usássemos FK, TODA entidade teria 3 FKs para users:
+    #   - created_by → users.id
+    #   - updated_by → users.id
+    #   - deleted_by → users.id
+    #
+    # Isso causa AMBIGUIDADE nos relationships:
+    #   User.messages_sent ↔ Message.user
+    #   Erro: "Could not determine join condition"
+    #
+    # Solução: Mantemos como Integer simples.
+    # A integridade é garantida pela aplicação, não pelo banco.
+    # ══════════════════════════════════════════════════════════════════
+
     created_by: Mapped[int | None] = mapped_column(
         Integer,
         nullable=True,
-        init=False,
-        default=None
+        init=False
     )
 
     updated_by: Mapped[int | None] = mapped_column(
         Integer,
         nullable=True,
-        init=False,
-        default=None
+        init=False
     )
 
     # Soft delete
     deleted_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
         nullable=True,
-        init=False,
-        default=None
+        init=False
     )
 
     deleted_by: Mapped[int | None] = mapped_column(
         Integer,
         nullable=True,
-        init=False,
-        default=None
+        init=False
     )
 
-    # Status ativo/inativo
+    # Status ativo/inativo (APENAS para soft delete!)
     active: Mapped[Status] = mapped_column(
         Enum(Status),
         default=Status.ATIVO,
         init=False  # CRÍTICO: init=False porque tem default
     )
+
+    # ══════════════════════════════════════════════════════════════════
+    # MÉTODO to_dict() - Conversão para dicionário
+    # ══════════════════════════════════════════════════════════════════
+
+    def to_dict(self) -> dict:
+        """
+        Converte entidade para dicionário.
+
+        - Converte Enums para seus valores (.value)
+        - Converte datetime para ISO format
+        - Ignora relationships (apenas colunas)
+
+        Para serialização completa com relacionamentos,
+        use os Pydantic Schemas (seção 3.2).
+        """
+        from sqlalchemy import inspect
+        from enum import Enum as PyEnum
+
+        result = {}
+        mapper = inspect(self.__class__)
+
+        for column in mapper.columns:
+            value = getattr(self, column.key)
+
+            # Converter Enums para string
+            if isinstance(value, PyEnum):
+                value = value.value
+            # Converter datetime para ISO
+            elif isinstance(value, datetime):
+                value = value.isoformat()
+
+            result[column.key] = value
+
+        return result
 ```
+
+**Por que to_dict() na Base?**
+
+O método `to_dict()` é útil para:
+- Testes rápidos durante desenvolvimento
+- Logs e debugging
+- Retornos simples de repositories
+
+**Mas atenção**: Para APIs em produção, prefira Pydantic Schemas (seção 3.2) porque:
+- Controlam exatamente quais campos são expostos
+- Validam dados automaticamente
+- Geram documentação OpenAPI
 
 ### Por Que Usar Context Manager para Conexões?
 
@@ -905,56 +1073,373 @@ def get_db():
 
 ---
 
+### get_db() - Aprofundamento (Do Básico ao Estado da Arte)
+
+O `get_db()` é uma **generator function** que fornece sessões do banco de dados para endpoints FastAPI via **Dependency Injection**. Existem várias formas de implementá-lo, cada uma com trade-offs diferentes.
+
+#### Nível 1: Por Que Usar get_db()? (BÁSICO)
+
+Sem dependency injection, você teria que criar e gerenciar a session manualmente em cada endpoint:
+
+```python
+# ❌ SEM get_db() - Repetitivo e propenso a erros
+@app.get("/users")
+def list_users():
+    session = Session()        # Cria manualmente
+    try:
+        users = session.query(User).all()
+        return users
+    finally:
+        session.close()        # Precisa lembrar de fechar!
+
+@app.get("/teams")
+def list_teams():
+    session = Session()        # Mesmo código duplicado
+    try:
+        teams = session.query(Team).all()
+        return teams
+    finally:
+        session.close()        # Mesmo código duplicado
+
+# ... 50 endpoints depois, você esquece de fechar uma session
+# Resultado: Connection leak, banco fica lento, aplicação crasha
+```
+
+Com `get_db()`:
+
+```python
+# ✅ COM get_db() - Limpo e seguro
+@app.get("/users")
+def list_users(db: Session = Depends(get_db)):
+    return db.query(User).all()
+    # Session é fechada automaticamente!
+
+@app.get("/teams")
+def list_teams(db: Session = Depends(get_db)):
+    return db.query(Team).all()
+    # Session é fechada automaticamente!
+```
+
+---
+
+#### Nível 2: Entendendo a Generator Function (INTERMEDIÁRIO)
+
+O `yield` transforma a função em um **generator**, que funciona diferente de funções normais:
+
+```python
+def get_db():
+    session = Session()        # 1. Executa ANTES do endpoint
+    try:
+        yield session          # 2. Pausa aqui e fornece a session
+        # ... endpoint executa ...
+    finally:
+        session.close()        # 3. Executa DEPOIS do endpoint (sempre!)
+
+# Linha do tempo:
+# 1. FastAPI chama get_db()
+# 2. session é criada
+# 3. yield entrega session para o endpoint
+# 4. Endpoint executa com a session
+# 5. Quando endpoint termina, finally executa
+# 6. session.close() é chamado (mesmo se houve exceção!)
+```
+
+---
+
+#### Nível 3: Diferentes Implementações (AVANÇADO)
+
+Existem várias formas de implementar `get_db()`, cada uma com trade-offs:
+
+**Opção 1: Básica (Apenas fecha)**
+```python
+def get_db():
+    """Versão mínima - apenas fecha a session."""
+    session = Session()
+    try:
+        yield session
+    finally:
+        session.close()
+
+# Prós: Simples
+# Contras: Não faz commit/rollback automático
+# O SERVICE deve fazer commit!
+```
+
+**Opção 2: Com Commit/Rollback Automático**
+```python
+def get_db():
+    """Versão com commit/rollback automático."""
+    session = Session()
+    try:
+        yield session
+        session.commit()  # Commit se não houve exceção
+    except Exception:
+        session.rollback()  # Rollback se houve exceção
+        raise
+    finally:
+        session.close()
+
+# Prós: Commit automático ao final do request
+# Contras: Menos controle, pode commitar coisas parciais
+```
+
+**Opção 3: Usando DBConnectionHandler (Nosso Projeto)**
+```python
+def get_db():
+    """Versão usando context manager customizado."""
+    handler = DBConnectionHandler()
+    try:
+        handler.session = handler._Session()
+        yield handler.session
+    finally:
+        handler.session.close()
+
+# Nota: Esta versão NÃO usa o __enter__/__exit__ do context manager!
+# O commit deve ser feito pelo SERVICE.
+```
+
+**Opção 4: Context Manager Completo**
+```python
+def get_db():
+    """Versão que usa o context manager corretamente."""
+    with DBConnectionHandler() as db:
+        yield db.session
+
+# Prós: Usa o __exit__ que faz commit/rollback
+# Contras: Comportamento implícito pode confundir
+```
+
+---
+
+#### Nível 4: Qual Escolher? (ESTADO DA ARTE)
+
+**Nossa recomendação para este projeto: Opção 1 (Básica) + Commit explícito no Service**
+
+```python
+# connection.py
+def get_db():
+    """
+    Fornece session para endpoints.
+
+    IMPORTANTE: O commit deve ser feito EXPLICITAMENTE pelo Service!
+    Isso dá controle total sobre as transações.
+    """
+    session = Session()
+    try:
+        yield session
+    finally:
+        session.close()
+
+# service.py
+class UserService:
+    def __init__(self, db: Session):
+        self.db = db
+
+    def create_user(self, data: dict) -> User:
+        user = User(**data)
+        self.db.add(user)
+        self.db.commit()       # Commit EXPLÍCITO
+        self.db.refresh(user)
+        return user
+```
+
+**Por que commit explícito é melhor?**
+
+| Critério | Commit Automático | Commit Explícito |
+|----------|-------------------|------------------|
+| Controle | Baixo | Total |
+| Debug | Difícil | Fácil |
+| Transações | Uma por request | Múltiplas possíveis |
+| Rollback parcial | Não | Sim |
+| Performance | Pode commitar demais | Commit só quando precisa |
+
+---
+
+#### Problema Comum: Sessão Detached
+
+```python
+# ❌ ERRO: Tentar usar objeto fora da session
+@app.get("/users/{id}")
+def get_user(id: int, db: Session = Depends(get_db)):
+    user = db.query(User).get(id)
+    return user.team.team_name  # ERRO! team não foi carregado
+
+# Por que? lazy="raise" + session fechada antes de acessar team
+```
+
+**Soluções:**
+
+```python
+# Solução 1: Eager loading
+from sqlalchemy.orm import joinedload
+
+@app.get("/users/{id}")
+def get_user(id: int, db: Session = Depends(get_db)):
+    user = db.query(User).options(joinedload(User.team)).get(id)
+    return {"name": user.user_full_name, "team": user.team.team_name}
+
+# Solução 2: Schema que não acessa relationships
+class UserResponse(BaseModel):
+    user_full_name: str
+    user_team_id: int  # Só o ID, não o objeto
+```
+
+---
+
+#### Diagrama: Ciclo de Vida da Session com get_db()
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      CICLO DE VIDA DA SESSION                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. Request chega                                                           │
+│        │                                                                    │
+│        ▼                                                                    │
+│  2. FastAPI chama get_db()                                                  │
+│        │                                                                    │
+│        ▼                                                                    │
+│  3. Session() criada ───────────────────────┐                               │
+│        │                                    │                               │
+│        ▼                                    │ Session ativa                 │
+│  4. yield session                           │                               │
+│        │                                    │                               │
+│        ▼                                    │                               │
+│  5. Endpoint executa ◄──────────────────────┤                               │
+│     ├─ db.query(...)                        │                               │
+│     ├─ db.add(...)                          │                               │
+│     └─ service.commit() ────────────────────┤                               │
+│        │                                    │                               │
+│        ▼                                    │                               │
+│  6. Endpoint retorna                        │                               │
+│        │                                    │                               │
+│        ▼                                    │                               │
+│  7. finally: session.close() ◄──────────────┘                               │
+│        │                                                                    │
+│        ▼                                                                    │
+│  8. Response enviada                                                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## 0.4 Variáveis de Ambiente
 
-### Por Que Usar pydantic-settings ao Invés de os.environ?
+Variáveis de ambiente são a forma correta de configurar aplicações. Nesta seção você vai aprender:
 
-Compare as abordagens:
+1. **O que é o arquivo `.env`** e como criar
+2. **O que é `settings.py`** e como ele lê o `.env`
+3. **Como usar as variáveis** em qualquer arquivo do projeto
 
-**Abordagem 1: os.environ (frágil)**
-```python
-import os
+### Passo 1: Criar o arquivo `.env`
 
-# ❌ Problemas:
-database_url = os.environ["DATABASE_URL"]  # KeyError se não existir
-debug = os.environ.get("DEBUG")            # Retorna string "true", não bool
-timeout = os.environ.get("TIMEOUT", 30)    # Retorna "30" (string), não int
+O `.env` é um arquivo de texto simples na **raiz do projeto** que armazena configurações.
+
+**Crie o arquivo `.env`:**
+
+```env
+# ============================================================================
+# VARIÁVEIS DE AMBIENTE - Seu Projeto
+# ============================================================================
+# Formato: NOME_VARIAVEL=valor (sem espaços ao redor do =)
+# Comentários começam com #
+# ============================================================================
+
+# ============================================================================
+# APLICAÇÃO
+# ============================================================================
+APP_NAME=Portal de Chamados
+DEBUG=true
+
+# ============================================================================
+# BANCO DE DADOS
+# ============================================================================
+# Desenvolvimento (SQLite):
+DATABASE_URL=sqlite:///./database/portal.db
+
+# Produção (PostgreSQL) - descomente quando for usar:
+# DATABASE_URL=postgresql://usuario:senha@localhost:5432/portal_db
+
+# ============================================================================
+# SEGURANÇA
+# ============================================================================
+# IMPORTANTE: Gere uma chave única com:
+#   python -c "import secrets; print(secrets.token_hex(32))"
+SECRET_KEY=sua_chave_secreta_aqui_com_pelo_menos_32_caracteres
+
+# Configurações de token
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
 ```
 
-**Abordagem 2: pydantic-settings (robusto)**
-```python
-from pydantic_settings import BaseSettings
+**Por que usar `.env`?**
 
-class Settings(BaseSettings):
-    DATABASE_URL: str                       # Obrigatório, erro claro se faltar
-    DEBUG: bool = False                     # Converte "true"/"false" para bool
-    TIMEOUT: int = 30                       # Converte para int automaticamente
+| Sem .env | Com .env |
+|----------|----------|
+| Senhas no código fonte | Senhas fora do código |
+| Commita credenciais no Git | `.env` está no `.gitignore` |
+| Mesmo valor em dev e prod | Cada ambiente tem seu `.env` |
+| Difícil trocar configuração | Basta editar o arquivo |
 
-settings = Settings()  # Carrega de .env automaticamente
+### Passo 2: Criar o arquivo `.env.example`
+
+Este arquivo serve como **documentação** para outros desenvolvedores.
+
+**Crie o arquivo `.env.example`:**
+
+```env
+# ============================================================================
+# VARIÁVEIS DE AMBIENTE - Template
+# ============================================================================
+# COMO USAR:
+# 1. Copie este arquivo para .env
+# 2. Preencha os valores marcados como [OBRIGATÓRIO]
+# 3. Nunca commite o .env (já está no .gitignore)
+#
+# LEGENDA:
+# [OBRIGATÓRIO] = App crasha se não configurar
+# [OPCIONAL]    = Tem valor default, pode omitir
+# ============================================================================
+
+# APLICAÇÃO [OPCIONAL]
+APP_NAME=Portal de Chamados
+DEBUG=false
+
+# BANCO DE DADOS [OBRIGATÓRIO]
+DATABASE_URL=sqlite:///./database/portal.db
+
+# SEGURANÇA [OBRIGATÓRIO]
+# Gere com: python -c "import secrets; print(secrets.token_hex(32))"
+SECRET_KEY=COLE_AQUI_SUA_CHAVE_COM_64_CARACTERES
+
+# TOKENS [OPCIONAL]
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
 ```
 
-**Vantagens do pydantic-settings**:
+**Diferença entre `.env` e `.env.example`:**
 
-| Aspecto | os.environ | pydantic-settings |
-|---------|------------|-------------------|
-| Variável faltando | KeyError genérico | Erro claro dizendo qual falta |
-| Conversão de tipos | Manual | Automática (str→bool, str→int) |
-| Validação | Nenhuma | Valida tipos e formatos |
-| Valores default | `.get(key, default)` | Declarativo na classe |
-| Autocomplete IDE | Não | Sim (atributos tipados) |
-| Carregar de .env | Manual com python-dotenv | Automático |
+| Arquivo | Contém valores reais? | Commita no Git? | Quem edita? |
+|---------|----------------------|-----------------|-------------|
+| `.env` | ✅ SIM | ❌ NÃO (está no .gitignore) | Você |
+| `.env.example` | ❌ NÃO (apenas template) | ✅ SIM | Todos |
 
-### Arquivo: `infra/configs/settings.py`
+### Passo 3: Criar `settings.py` (lê o `.env`)
+
+Agora criamos o arquivo Python que **lê** o `.env` e disponibiliza as variáveis.
+
+**Crie o arquivo `infra/configs/settings.py`:**
 
 ```python
 """
-Configurações centralizadas usando Pydantic Settings.
+Configurações centralizadas da aplicação.
 
-Carrega variáveis do arquivo .env automaticamente.
-Converte tipos (str→bool, str→int) automaticamente.
-Valida que variáveis obrigatórias existem.
+FONTE ÚNICA DE VERDADE para todas as variáveis de ambiente.
+Todos os outros arquivos importam daqui.
 """
 from pydantic_settings import BaseSettings
+from pydantic import Field
 from functools import lru_cache
 
 
@@ -963,72 +1448,249 @@ class Settings(BaseSettings):
     Configurações da aplicação.
 
     Variáveis são carregadas de:
-    1. Variáveis de ambiente do sistema
+    1. Variáveis de ambiente do sistema (prioridade máxima)
     2. Arquivo .env no diretório raiz
 
-    Prioridade: variável de ambiente > .env > valor default
+    Prioridade: variável de ambiente do sistema > .env > valor default
+
+    REGRA DE DESIGN:
+    - Variáveis CRÍTICAS (banco, segurança): sem default → app crasha se faltar
+    - Variáveis com valor sensato padrão: com default → funciona sem configurar
     """
 
-    # Aplicação
-    APP_NAME: str = "Minha API"
-    DEBUG: bool = False  # "true"/"false" convertido automaticamente
+    # =========================================================================
+    # APLICAÇÃO (defaults seguros - app funciona sem configurar)
+    # =========================================================================
+    APP_NAME: str = "Portal de Chamados"
+    DEBUG: bool = False  # Default seguro: produção = false
 
-    # Banco de dados
-    DATABASE_URL: str = "sqlite:///./app.db"
+    # =========================================================================
+    # BANCO DE DADOS (OBRIGATÓRIO - app crasha se não configurar)
+    # =========================================================================
+    DATABASE_URL: str = Field(
+        ...,  # ... significa OBRIGATÓRIO (sem default)
+        description="URL de conexão com o banco"
+    )
 
-    # Segurança
-    SECRET_KEY: str = "sua-chave-secreta-aqui"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30  # "30" convertido para int
+    # =========================================================================
+    # SEGURANÇA (OBRIGATÓRIO - app crasha se não configurar)
+    # =========================================================================
+    SECRET_KEY: str = Field(
+        ...,  # ... significa OBRIGATÓRIO (sem default)
+        min_length=32,  # Força chave com pelo menos 32 caracteres
+        description="Chave secreta para JWT"
+    )
 
+    # Tokens (defaults sensatos - funciona sem configurar)
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+
+    # =========================================================================
+    # CONFIGURAÇÃO DO PYDANTIC
+    # =========================================================================
     class Config:
-        env_file = ".env"
-        case_sensitive = True
+        env_file = ".env"        # Arquivo de onde lê as variáveis
+        case_sensitive = True    # DATABASE_URL ≠ database_url
+        extra = "ignore"         # Ignora variáveis extras no .env
 
 
-@lru_cache
+@lru_cache  # Garante que Settings() é chamado só uma vez
 def get_settings() -> Settings:
-    """Retorna settings cacheado."""
+    """Retorna settings cacheado (singleton)."""
     return Settings()
 
 
-# Instância global
+# =========================================================================
+# INSTÂNCIA GLOBAL - Importe assim:
+# from infra.configs.settings import settings
+# =========================================================================
 settings = get_settings()
 ```
 
-### Arquivo: `.env`
+**O que significa cada parte:**
 
-```env
-# Aplicação
-APP_NAME=Portal de Chamados
-DEBUG=true
+| Código | Significado |
+|--------|-------------|
+| `DATABASE_URL: str` | Tipo da variável é string |
+| `= Field(...)` | ... significa OBRIGATÓRIO (sem default) |
+| `= Field(..., min_length=32)` | Obrigatório + validação de tamanho |
+| `DEBUG: bool = False` | Opcional, default é False |
+| `env_file = ".env"` | Arquivo de onde lê as variáveis |
+| `@lru_cache` | Cria só uma instância (singleton) |
 
-# Banco de dados
-# Desenvolvimento (SQLite)
-DATABASE_URL=sqlite:///./portal.db
+**O que acontece se faltar variável obrigatória:**
 
-# Produção (PostgreSQL)
-# DATABASE_URL=postgresql://user:password@localhost:5432/portal
+```
+$ python -c "from infra.configs.settings import settings"
 
-# Segurança
-SECRET_KEY=sua-chave-super-secreta-mude-em-producao
-ACCESS_TOKEN_EXPIRE_MINUTES=30
+pydantic_core._pydantic_core.ValidationError: 2 validation errors for Settings
+DATABASE_URL
+  Field required [type=missing]
+SECRET_KEY
+  Field required [type=missing]
 ```
 
-### Arquivo: `.env.example`
+**Isso é BOM!** Melhor crashar na inicialização do que descobrir em produção.
 
-```env
-# Copie este arquivo para .env e preencha os valores
+### Passo 4: Usar as Variáveis em Outros Arquivos
 
-# Aplicação
-APP_NAME=Minha API
-DEBUG=false
+Agora que temos `.env` → `settings.py`, veja como usar em qualquer lugar.
 
-# Banco de dados
-DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+**Regra de ouro:** Sempre importe de `settings.py`, NUNCA leia `.env` diretamente.
 
-# Segurança
-SECRET_KEY=gere-uma-chave-segura
-ACCESS_TOKEN_EXPIRE_MINUTES=30
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# EM QUALQUER ARQUIVO DO PROJETO:
+# ═══════════════════════════════════════════════════════════════════════════
+
+from infra.configs.settings import settings
+
+# Usar as variáveis
+print(settings.DATABASE_URL)     # "sqlite:///./database/portal.db"
+print(settings.DEBUG)            # True (já convertido de "true"!)
+print(settings.SECRET_KEY)       # "sua_chave_secreta_..."
+print(settings.APP_NAME)         # "Portal de Chamados"
+```
+
+### Passo 5: Aplicar em Cada Arquivo
+
+**Em `infra/configs/connection.py`:**
+
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from infra.configs.settings import settings  # ← Importa settings
+
+engine = create_engine(
+    settings.DATABASE_URL,  # ← Usa a variável
+    echo=settings.DEBUG     # ← Se DEBUG=true, mostra SQL no console
+)
+```
+
+**Em `alembic/env.py`:**
+
+```python
+from infra.configs.settings import settings  # ← Adicione este import
+
+# Depois de: config = context.config
+# Adicione esta linha:
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+```
+
+**Em `main.py` (FastAPI):**
+
+```python
+from fastapi import FastAPI
+from infra.configs.settings import settings
+
+app = FastAPI(
+    title=settings.APP_NAME,
+    debug=settings.DEBUG
+)
+```
+
+### Fluxo Visual Completo
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    FLUXO DAS VARIÁVEIS DE AMBIENTE                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  PASSO 1: Você define no .env                                               │
+│  ┌──────────────────────────────────────┐                                   │
+│  │ DATABASE_URL=sqlite:///./db.db       │                                   │
+│  │ SECRET_KEY=abc123...                  │                                   │
+│  │ DEBUG=true                            │                                   │
+│  └──────────────────────────────────────┘                                   │
+│                        │                                                    │
+│                        ▼                                                    │
+│  PASSO 2: settings.py lê automaticamente                                    │
+│  ┌──────────────────────────────────────┐                                   │
+│  │ class Settings(BaseSettings):        │                                   │
+│  │     DATABASE_URL: str = Field(...)   │  ← Lê do .env                     │
+│  │     SECRET_KEY: str = Field(...)     │  ← Valida mínimo 32 chars         │
+│  │     DEBUG: bool = False              │  ← Converte "true" → True         │
+│  │                                      │                                   │
+│  │ settings = Settings()                │  ← Instância pronta para usar     │
+│  └──────────────────────────────────────┘                                   │
+│                        │                                                    │
+│                        ▼                                                    │
+│  PASSO 3: Outros arquivos importam                                          │
+│                                                                             │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐              │
+│  │ connection.py   │  │ alembic/env.py  │  │ main.py         │              │
+│  │                 │  │                 │  │                 │              │
+│  │ from settings   │  │ from settings   │  │ from settings   │              │
+│  │ import settings │  │ import settings │  │ import settings │              │
+│  │                 │  │                 │  │                 │              │
+│  │ settings.       │  │ settings.       │  │ settings.       │              │
+│  │ DATABASE_URL    │  │ DATABASE_URL    │  │ APP_NAME        │              │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘              │
+│                                                                             │
+│  RESULTADO: Uma única fonte de verdade!                                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Por Que pydantic-settings e Não os.environ?
+
+```python
+# ❌ RUIM: os.environ
+import os
+database_url = os.environ["DATABASE_URL"]  # KeyError se não existir!
+debug = os.environ.get("DEBUG")            # Retorna "true" (string), não True
+timeout = os.environ.get("TIMEOUT", 30)    # Retorna "30" (string), não 30
+
+# ✅ BOM: pydantic-settings
+from infra.configs.settings import settings
+database_url = settings.DATABASE_URL  # Erro claro se não existir
+debug = settings.DEBUG                # True (bool), não "true" (string)
+timeout = settings.ACCESS_TOKEN_EXPIRE_MINUTES  # 30 (int), não "30" (string)
+```
+
+| Aspecto | os.environ | pydantic-settings |
+|---------|------------|-------------------|
+| Variável faltando | KeyError genérico | Erro claro dizendo qual |
+| Conversão de tipos | Manual | Automática |
+| Validação | Nenhuma | Tipos, tamanhos, formatos |
+| IDE autocomplete | Não | Sim |
+| Valores default | `.get(key, default)` | Declarativo na classe |
+
+### Não Confunda os Arquivos!
+
+```
+.env              → Arquivo de TEXTO com variáveis (DATABASE_URL=...)
+                    Você EDITA para configurar valores
+
+settings.py       → Arquivo PYTHON que LÊ o .env
+                    Você IMPORTA para usar valores
+
+alembic/env.py    → Arquivo PYTHON do Alembic (configuração de migrations)
+                    Nome parecido, mas função completamente diferente!
+
+pydantic-settings → BIBLIOTECA Python que faz a mágica de ler .env
+                    pip install pydantic-settings
+```
+
+### Resumo: O Que Você Precisa Fazer
+
+| Passo | Arquivo | Ação |
+|-------|---------|------|
+| 1 | `.env` | Criar e configurar seus valores |
+| 2 | `.env.example` | Criar template para documentação |
+| 3 | `settings.py` | Criar uma vez, definir variáveis |
+| 4 | `.gitignore` | Adicionar `.env` (nunca commitar!) |
+| 5 | Qualquer arquivo | `from infra.configs.settings import settings` |
+| `connection.py` | Usa settings para conectar ao banco | ⚠️ Raramente (já configurado) |
+| Qualquer outro | Importa settings quando precisar | ✅ SIM - importe e use |
+
+### Erro Comum: Não Confunda os "env"!
+
+```
+.env          → Arquivo de TEXTO com variáveis (DATABASE_URL=...)
+env.py        → Arquivo PYTHON do Alembic (configura migrations)
+pydantic-settings → BIBLIOTECA que lê o .env
+
+Eles têm nomes parecidos, mas são coisas COMPLETAMENTE diferentes!
 ```
 
 ### Arquivo: `.gitignore`
@@ -1044,6 +1706,7 @@ venv/
 # Banco de dados local
 *.db
 *.sqlite
+database/
 
 # Python
 __pycache__/
@@ -1344,6 +2007,135 @@ else:
     run_migrations_online()
 ```
 
+### Passo 4.1: Unificar URL do Banco (CRÍTICO!)
+
+O código acima tem um problema sutil mas grave:
+
+```python
+url = config.get_main_option("sqlalchemy.url")  # Lê do alembic.ini
+```
+
+Isso significa que a URL do banco está em **dois lugares**:
+
+| Arquivo | Valor | Usado por |
+|---------|-------|-----------|
+| `alembic.ini` | `sqlite:///database/portal.db` | Alembic |
+| `settings.py` | `sqlite:///./app.db` | Aplicação |
+
+**Problema:** Se você atualiza um e esquece o outro, Alembic e aplicação usam bancos diferentes!
+
+**Solução:** Fazer o `env.py` usar as mesmas configurações da aplicação:
+
+```python
+# alembic/env.py
+from logging.config import fileConfig
+from sqlalchemy import engine_from_config, pool
+from alembic import context
+
+# ══════════════════════════════════════════════════════════════════
+# IMPORTANTE: Usar mesmas configurações da aplicação
+# ══════════════════════════════════════════════════════════════════
+from infra.configs.database import Base
+from infra.configs.settings import settings  # ← ADICIONAR ESTE IMPORT
+
+# Importar todas as entidades para que Alembic as "veja"
+from infra.entities.team import Team
+from infra.entities.user import User
+from infra.entities.report import Report
+from infra.entities.project import Project
+from infra.entities.ticket import Ticket
+from infra.entities.form import Form
+from infra.entities.chat import Chat
+from infra.entities.message import Message
+from infra.entities.associations import *
+
+# Configuração do Alembic
+config = context.config
+
+# ══════════════════════════════════════════════════════════════════
+# SOBRESCREVER a URL do alembic.ini com a do settings
+# Isso garante que Alembic e aplicação usem o MESMO banco!
+# ══════════════════════════════════════════════════════════════════
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
+
+# Metadados para autogenerate
+target_metadata = Base.metadata
+
+
+def run_migrations_offline() -> None:
+    """Roda migrations em modo 'offline' (gera SQL sem conectar)."""
+    url = config.get_main_option("sqlalchemy.url")  # Agora vem do settings!
+    context.configure(
+        url=url,
+        target_metadata=target_metadata,
+        literal_binds=True,
+        dialect_opts={"paramstyle": "named"},
+    )
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+def run_migrations_online() -> None:
+    """Roda migrations em modo 'online' (conecta ao banco)."""
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section, {}),
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
+    with connectable.connect() as connection:
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata
+        )
+        with context.begin_transaction():
+            context.run_migrations()
+
+
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    run_migrations_online()
+```
+
+**A linha mágica:**
+
+```python
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+```
+
+Essa linha sobrescreve qualquer valor que esteja no `alembic.ini` com o valor do `settings.py`.
+
+**Fluxo correto (fonte única de verdade):**
+
+```
+.env
+└── DATABASE_URL=sqlite:///./portal.db
+        │
+        ▼
+    settings.py (pydantic lê .env)
+        │
+        ├──────────────────┬──────────────────┐
+        ▼                  ▼                  ▼
+   connection.py        env.py           qualquer outro
+   (aplicação)        (Alembic)          módulo futuro
+```
+
+**Com isso, o `alembic.ini` pode manter um valor placeholder:**
+
+```ini
+# alembic.ini
+# Este valor será SOBRESCRITO pelo env.py
+# Mantemos aqui apenas como fallback/documentação
+sqlalchemy.url = sqlite:///./placeholder.db
+```
+
+> **Por que não remover do alembic.ini?**
+> Alguns comandos do Alembic (como `alembic check`) podem tentar ler antes do Python carregar.
+> Manter um placeholder evita erros em edge cases.
+
 ### Passo 5: Criar Primeira Migration
 
 ```bash
@@ -1449,6 +2241,216 @@ git commit -m "migration: nova feature"
 
 # 3. Em produção: apenas aplique
 alembic upgrade head
+```
+
+### Passo Adicional: Configurar script.py.mako
+
+O arquivo `script.py.mako` é o **template** que o Alembic usa para gerar novos arquivos de migration. Sem ele configurado corretamente, você receberá erros como:
+
+```
+ERROR: Could not determine revision id from filename
+```
+
+**O que é script.py.mako?**
+- É um template Mako (engine de templates Python)
+- Define a estrutura de TODA migration gerada
+- Contém variáveis que o Alembic substitui (revision, down_revision, etc.)
+
+**Template correto** (copie exatamente):
+
+```python
+# alembic/script.py.mako
+"""${message}
+
+Revision ID: ${up_revision}
+Revises: ${down_revision | comma,n}
+Create Date: ${create_date}
+
+"""
+from typing import Sequence, Union
+
+from alembic import op
+import sqlalchemy as sa
+${imports if imports else ""}
+
+# revision identifiers, used by Alembic.
+revision: str = ${repr(up_revision)}
+down_revision: Union[str, None] = ${repr(down_revision)}
+branch_labels: Union[str, Sequence[str], None] = ${repr(branch_labels)}
+depends_on: Union[str, Sequence[str], None] = ${repr(depends_on)}
+
+
+def upgrade() -> None:
+    ${upgrades if upgrades else "pass"}
+
+
+def downgrade() -> None:
+    ${downgrades if downgrades else "pass"}
+```
+
+**⚠️ CRÍTICO**: Se o template estiver corrompido ou incompleto, TODA migration gerada terá problemas. Verifique se:
+1. A variável `revision: str = ${repr(up_revision)}` existe
+2. A variável `down_revision` existe
+3. Não há caracteres especiais ou encoding errado
+
+### Erros Comuns do Alembic e Soluções
+
+#### Erro 1: "Could not determine revision id"
+
+```
+ERROR [alembic.util.messaging] Could not determine revision id from filename xxx.py
+```
+
+**Causa**: O template `script.py.mako` está incorreto ou a migration gerada não tem a variável `revision`.
+
+**Solução**:
+```bash
+# 1. Verifique se script.py.mako está correto (copie o template acima)
+
+# 2. Delete a migration com problema
+rm alembic/versions/xxx_migration_com_problema.py
+
+# 3. Gere novamente
+alembic revision --autogenerate -m "sua mensagem"
+```
+
+#### Erro 2: "Unresolvable cycles between tables"
+
+```
+SAWarning: Cannot correctly sort tables; there are unresolvable cycles
+between tables "teams, users", which is usually caused by mutually
+dependent foreign key constraints.
+```
+
+**Causa**: Duas tabelas referenciam uma à outra (dependência circular).
+
+**Exemplo do problema**:
+```python
+# User tem FK para Team
+class User(Base):
+    team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))
+
+# Team tem FK para User (manager)
+class Team(Base):
+    manager_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+```
+
+**Solução 1: use_alter=True** (recomendado)
+
+```python
+# Na FK que "fecha o ciclo", adicione use_alter=True
+class Team(Base):
+    manager_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", use_alter=True, name="fk_team_manager"),
+        nullable=True  # Precisa ser nullable para quebrar o ciclo
+    )
+```
+
+**Por que funciona?**
+- `use_alter=True` diz ao Alembic: "crie a FK em um comando ALTER TABLE separado"
+- Isso permite criar as tabelas primeiro, depois adicionar a FK
+- O `name="fk_..."` é obrigatório quando usa `use_alter`
+
+**Solução 2: post_create para constraints**
+
+No `env.py`, adicione ordenação manual:
+```python
+def run_migrations_online() -> None:
+    connectable = engine_from_config(...)
+    with connectable.connect() as connection:
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            # Ordena tabelas manualmente em caso de ciclos
+            include_object=lambda obj, name, type_, reflected, compare_to: True,
+        )
+```
+
+#### Erro 3: "Target database is not up to date"
+
+```
+ERROR: Target database is not up to date
+```
+
+**Causa**: Você tem migrations locais que não foram aplicadas.
+
+**Solução**:
+```bash
+# Aplique as migrations pendentes primeiro
+alembic upgrade head
+
+# Depois gere a nova
+alembic revision --autogenerate -m "nova migration"
+```
+
+#### Erro 4: "Can't locate revision"
+
+```
+ERROR: Can't locate revision identified by 'abc123'
+```
+
+**Causa**: O banco aponta para uma revision que não existe nos arquivos.
+
+**Solução**:
+```bash
+# Ver o estado atual
+alembic current
+
+# Ver histórico de migrations
+alembic history
+
+# Se precisar resetar (CUIDADO: perde histórico)
+alembic stamp head  # Marca o banco como "atualizado"
+```
+
+#### Erro 5: "Detected removed table"
+
+```
+INFO [alembic.autogenerate.compare] Detected removed table 'old_table'
+```
+
+**Causa**: Uma tabela existe no banco mas não tem model correspondente.
+
+**Solução**: Verifique se:
+1. O model está importado no `env.py`
+2. A tabela realmente deve ser removida
+3. Se for intencional, revise a migration antes de aplicar
+
+### Ordem de Criação: Como Evitar Problemas de FK
+
+O Alembic cria tabelas na ordem das dependências. Para isso funcionar:
+
+1. **Tabelas sem FK** são criadas primeiro (Team sem manager_id)
+2. **Tabelas com FK** são criadas depois (User com team_id)
+3. **FKs circulares** precisam de `use_alter=True`
+
+**Estrutura recomendada para ciclos**:
+```python
+# 1. Team é criado primeiro (manager_id é nullable e use_alter)
+class Team(Base):
+    __tablename__ = "teams"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    team_name: Mapped[str] = mapped_column(String(100))
+
+    # FK circular - DEVE ser nullable + use_alter
+    manager_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", use_alter=True, name="fk_team_manager"),
+        nullable=True,
+        init=False,
+        default=None
+    )
+
+# 2. User é criado depois (team_id referencia teams que já existe)
+class User(Base):
+    __tablename__ = "users"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_name: Mapped[str] = mapped_column(String(200))
+
+    # FK normal - teams já existe quando user é criado
+    team_id: Mapped[int] = mapped_column(
+        ForeignKey("teams.id", ondelete="RESTRICT"),
+        nullable=False
+    )
 ```
 
 ### Quando Usar `create_all()` vs Alembic?
@@ -2084,6 +3086,125 @@ class User(Base):
         return self.user_full_name
 ```
 
+### Comportamentos no Model: O Que Pode e Não Pode
+
+O código acima menciona "Camada 4: Comportamentos" como métodos opcionais. Mas que tipo de comportamento pertence ao Model?
+
+**Princípio**: O Model/Entity é responsável por **descrever dados e transformações simples**. Ele **NÃO** conhece:
+- A Session (não faz queries)
+- Outros Models (não importa diretamente)
+- Regras de negócio complexas
+- Validações que dependem de dados externos
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              COMPORTAMENTOS: MODEL vs OUTRAS CAMADAS                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ✅ PODE IR NO MODEL (Entity)                                               │
+│  • __repr__ e __str__ (representação para debug/display)                    │
+│  • @property para campos calculados simples (sem query)                     │
+│  • Formatação de dados (nome completo, mascarar email)                      │
+│  • Validações de formato do próprio objeto                                  │
+│                                                                             │
+│  ❌ NÃO PODE IR NO MODEL                                                    │
+│  • Queries (session.query) → vai no REPOSITORY                              │
+│  • Validações que consultam banco ("email único?") → vai no SERVICE         │
+│  • Regras de negócio ("usuário pode criar ticket?") → vai no SERVICE        │
+│  • Transformações complexas com múltiplas entidades → vai no SERVICE        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Exemplos de Comportamentos PERMITIDOS no Model
+
+```python
+class User(Base):
+    __tablename__ = "users"
+
+    user_full_name: Mapped[str] = mapped_column(String(200))
+    user_email: Mapped[str] = mapped_column(String(100))
+    created_at: Mapped[datetime] = mapped_column(DateTime)
+
+    # ✅ CORRETO: Representação para debug
+    def __repr__(self) -> str:
+        return f"<User(id={self.id}, name='{self.user_full_name}')>"
+
+    # ✅ CORRETO: Property que calcula com dados do próprio objeto
+    @property
+    def first_name(self) -> str:
+        """Retorna o primeiro nome."""
+        return self.user_full_name.split()[0] if self.user_full_name else ""
+
+    # ✅ CORRETO: Formatação de dados
+    @property
+    def masked_email(self) -> str:
+        """Mascara o email para exibição pública."""
+        if not self.user_email:
+            return ""
+        user, domain = self.user_email.split("@")
+        return f"{user[:2]}***@{domain}"
+
+    # ✅ CORRETO: Cálculo com dados do próprio objeto
+    @property
+    def days_since_creation(self) -> int:
+        """Dias desde a criação."""
+        return (datetime.now() - self.created_at).days
+
+    # ✅ CORRETO: Validação do próprio objeto (sem consulta externa)
+    def is_email_valid(self) -> bool:
+        """Verifica se email tem formato válido."""
+        import re
+        pattern = r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        return bool(re.match(pattern, self.user_email or ""))
+```
+
+#### Exemplos de Comportamentos que NÃO PERTENCEM ao Model
+
+```python
+class User(Base):
+    # ... campos ...
+
+    # ❌ ERRADO: Faz query (pertence ao REPOSITORY)
+    def get_tickets(self, session):
+        return session.query(Ticket).filter(Ticket.client_id == self.id).all()
+
+    # ❌ ERRADO: Regra de negócio (pertence ao SERVICE)
+    def can_create_ticket(self, session):
+        active_tickets = session.query(Ticket).filter(
+            Ticket.client_id == self.id,
+            Ticket.status != "closed"
+        ).count()
+        return active_tickets < 5  # Limite de 5 tickets abertos
+
+    # ❌ ERRADO: Validação que consulta banco (pertence ao SERVICE)
+    def is_email_unique(self, session):
+        existing = session.query(User).filter(
+            User.user_email == self.user_email,
+            User.id != self.id
+        ).first()
+        return existing is None
+
+    # ❌ ERRADO: Operação de persistência (pertence ao REPOSITORY)
+    def save(self, session):
+        session.add(self)
+        session.commit()
+```
+
+#### Onde Colocar Cada Comportamento
+
+| Comportamento | Camada | Por quê |
+|---------------|--------|---------|
+| `__repr__`, `__str__` | Model | Representação do próprio objeto |
+| `@property` campos calculados | Model | Usa apenas dados do próprio objeto |
+| `get_by_email(email)` | Repository | Faz query no banco |
+| `list_active()` | Repository | Faz query com filtro |
+| `is_email_unique(email)` | Service | Validação que consulta banco |
+| `can_create_ticket(user)` | Service | Regra de negócio |
+| `create_user_with_team()` | Service | Orquestra múltiplas operações |
+
+**Regra simples**: Se precisa de `session` ou de dados de outra entidade, **NÃO pertence ao Model**.
+
 ### SQL Gerado
 
 O código acima gera automaticamente:
@@ -2266,6 +3387,8 @@ user_photo: Mapped[str | None] = mapped_column(nullable=True)
 5. **`String(100)`**: Tipo SQL (VARCHAR(100)) - pode ser inferido em casos simples
 6. **`unique=True`**: Constraint UNIQUE - valor não pode repetir
 7. **`nullable=False`**: Constraint NOT NULL - valor obrigatório (inferido se Mapped[str] sem | None)
+
+**EXEMPLO PRÁTICO COMPLETO**: Consulte o **Módulo 9.1 (User Entity)** para ver a evolução completa de uma Entity do básico ao estado da arte, com todos os conceitos aplicados.
 
 ---
 
@@ -2458,7 +3581,35 @@ Se o `audit_repo.log_create()` falhar antes do commit, o rollback desfaz TUDO - 
 
 ### Identity Map - O Cache da Session
 
-A Session mantém um **Identity Map** - um dicionário que mapeia (tabela, id) → objeto Python.
+#### O Que É Identity Map?
+
+**Identity Map** é um padrão de design (Martin Fowler) que garante: **um registro do banco = um único objeto em memória**.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         IDENTITY MAP                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   BANCO DE DADOS              IDENTITY MAP              CÓDIGO PYTHON       │
+│   ┌──────────────┐           ┌──────────────┐          ┌──────────────┐    │
+│   │ users        │           │ {            │          │ user1 ───────┼──┐ │
+│   │ id=1, Ana    │  ──────►  │  (User, 1):  │  ◄───────│ user2 ───────┼──┤ │
+│   │ id=2, Carlos │           │    <User@x>  │          │ user3 ───────┼──┘ │
+│   └──────────────┘           │  (User, 2):  │          └──────────────┘    │
+│                              │    <User@y>  │                               │
+│                              │ }            │     Todos apontam para o      │
+│                              └──────────────┘     MESMO objeto em memória   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Por que existe?**
+
+1. **Evitar duplicatas**: Sem Identity Map, cada query retornaria um objeto diferente
+2. **Consistência**: Alteração em `user1` reflete em `user2` (são o mesmo objeto)
+3. **Performance**: Segunda query para mesmo ID não vai ao banco
+
+#### Como Funciona na Prática
 
 ```python
 # Query 1: Busca user 1
@@ -2476,26 +3627,80 @@ print(user1 is user2)  # True
 # Session retornou do cache (Identity Map)
 ```
 
-**Por que isso importa?**
+**Implicações importantes**:
 
-1. **Performance**: Evita queries repetidas
-2. **Consistência**: Mesmo objeto, mesmas mudanças
-3. **Memória**: Cuidado com sessions de longa duração
+```python
+# Alterações em user1 aparecem em user2 (mesmo objeto!)
+user1.user_full_name = "Novo Nome"
+print(user2.user_full_name)  # "Novo Nome" - mesmo objeto!
 
-**Problema com sessions longas**:
+# Query com filtro TAMBÉM usa Identity Map
+user3 = session.query(User).filter(User.id == 1).first()
+print(user1 is user3)  # True - Identity Map garante unicidade
+```
+
+#### Quando o Identity Map NÃO Funciona
+
+```python
+# ❌ Sessions diferentes = Identity Maps diferentes
+session1 = SessionLocal()
+session2 = SessionLocal()
+
+user_s1 = session1.get(User, 1)
+user_s2 = session2.get(User, 1)
+
+print(user_s1 is user_s2)  # False! Objetos diferentes!
+
+# Alteração em uma session não aparece na outra (até reload)
+user_s1.user_full_name = "Alterado na S1"
+print(user_s2.user_full_name)  # Ainda o valor antigo!
+```
+
+#### Por Que Isso Importa para APIs
+
+Em APIs REST, cada request geralmente usa uma **nova session**. Isso significa:
+
+```python
+# Request 1: Usuário A altera o nome
+@router.patch("/users/{id}")
+def update_user(id: int, db: Session = Depends(get_db)):
+    user = db.get(User, id)
+    user.user_full_name = "Novo Nome"
+    db.commit()  # Salva no banco
+
+# Request 2: Usuário B lê o mesmo user
+@router.get("/users/{id}")
+def get_user(id: int, db: Session = Depends(get_db)):
+    user = db.get(User, id)  # NOVA session, NOVA query
+    return user  # Traz dados atualizados do banco
+```
+
+**Cada request tem sua própria session** → **Cada request vê o estado atual do banco** → **Consistência garantida**.
+
+#### Problemas com Sessions de Longa Duração
+
 ```python
 # ❌ Session acumula objetos em memória
 session = Session()
 for i in range(1_000_000):
     user = session.get(User, i)  # Todos ficam no Identity Map!
-# Memória explode!
+# Memória explode! Todos os 1M de objetos estão no cache.
 
-# ✅ Solução: expire_all() ou nova session
+# ✅ Solução 1: expire_all() periodicamente
 session = Session()
 for batch in batches:
     for user_id in batch:
         user = session.get(User, user_id)
+        process(user)
     session.expire_all()  # Limpa cache, permite GC
+
+# ✅ Solução 2: Nova session por batch
+for batch in batches:
+    with SessionLocal() as session:  # Nova session
+        for user_id in batch:
+            user = session.get(User, user_id)
+            process(user)
+    # Session fechada = Identity Map descartado
 ```
 
 ### expire_on_commit
@@ -2535,27 +3740,278 @@ session.refresh(user)  # Recarrega do banco
 | `expunge(obj)` | Remover objeto da session (detach) |
 | `close()` | Fechar session (expunge all + rollback) |
 
+### Estratégias de Gerenciamento de Session
+
+Esta é uma das decisões mais importantes para performance e consistência. Existem 3 estratégias principais:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│               ESTRATÉGIAS DE GERENCIAMENTO DE SESSION                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ESTRATÉGIA 1: SESSION POR REQUEST (Recomendado para APIs)                  │
+│  ┌─────────────────────────────────────────────────────────────┐            │
+│  │ Request chega → Nova session → Operações → Commit → Close   │            │
+│  └─────────────────────────────────────────────────────────────┘            │
+│  ✅ Isolamento entre requests                                               │
+│  ✅ Consistência garantida                                                  │
+│  ✅ Memória controlada                                                      │
+│  ❌ Overhead de criar/destruir session (mínimo)                             │
+│                                                                             │
+│  ESTRATÉGIA 2: SESSION DE LONGA DURAÇÃO (Background jobs)                   │
+│  ┌─────────────────────────────────────────────────────────────┐            │
+│  │ Job inicia → Session → Múltiplas operações → Commit final   │            │
+│  └─────────────────────────────────────────────────────────────┘            │
+│  ✅ Transação abrangente (tudo ou nada)                                     │
+│  ✅ Reutiliza conexão                                                       │
+│  ❌ Acumula objetos em memória                                              │
+│  ❌ Lock no banco por mais tempo                                            │
+│                                                                             │
+│  ESTRATÉGIA 3: HÍBRIDA (Batches)                                            │
+│  ┌─────────────────────────────────────────────────────────────┐            │
+│  │ Job inicia → Session → Batch 1 → Commit → Batch 2 → Commit  │            │
+│  └─────────────────────────────────────────────────────────────┘            │
+│  ✅ Balanceia memória e transação                                           │
+│  ✅ Commit parcial = progresso salvo                                        │
+│  ❌ Mais complexo de implementar                                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Estratégia 1: Session por Request (APIs REST)
+
+**Quando usar**: APIs REST, aplicações web
+
+**Implementação com FastAPI**:
+
+```python
+# infra/configs/connection.py
+from contextlib import contextmanager
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+engine = create_engine(settings.DATABASE_URL, pool_pre_ping=True)
+SessionLocal = sessionmaker(bind=engine, autoflush=False)
+
+def get_db():
+    """
+    Dependency que fornece session por request.
+    Garante que session é fechada mesmo se ocorrer exceção.
+    """
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# Uso no endpoint
+@router.get("/users/{id}")
+def get_user(id: int, db: Session = Depends(get_db)):
+    # Session criada para ESTE request
+    user = db.get(User, id)
+    return user
+    # Session fechada automaticamente após retorno
+```
+
+**Trade-offs**:
+
+| Aspecto | Session por Request |
+|---------|---------------------|
+| Memória | ✅ Controlada (liberada após request) |
+| Consistência | ✅ Alta (cada request vê estado atual) |
+| Performance | ⚠️ Pool de conexões mitiga overhead |
+| Transação | Uma transação = um request |
+
+#### Estratégia 2: Session de Longa Duração (Background Jobs)
+
+**Quando usar**: Jobs de processamento, migrations de dados, scripts
+
+```python
+# ❌ ERRADO: Session global compartilhada
+session = SessionLocal()  # Criada uma vez
+
+def process_job():
+    for item in items:
+        session.add(item)  # Acumula na mesma session!
+    session.commit()
+
+# ✅ CORRETO: Session gerenciada
+def process_job():
+    session = SessionLocal()
+    try:
+        for item in items:
+            session.add(item)
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+```
+
+**Trade-offs**:
+
+| Aspecto | Session Longa |
+|---------|---------------|
+| Memória | ❌ Acumula (Identity Map cresce) |
+| Consistência | ⚠️ Pode ver dados "stale" |
+| Performance | ✅ Menos overhead de conexão |
+| Transação | Uma transação = todo o job (ou falha tudo) |
+
+#### Estratégia 3: Híbrida por Batches
+
+**Quando usar**: Processamento de grandes volumes
+
+```python
+def process_large_dataset(items: list):
+    """Processa em batches para balancear memória e transação."""
+    BATCH_SIZE = 100
+    session = SessionLocal()
+
+    try:
+        for i in range(0, len(items), BATCH_SIZE):
+            batch = items[i:i + BATCH_SIZE]
+
+            for item in batch:
+                entity = Entity(**item)
+                session.add(entity)
+
+            # Commit por batch - salva progresso
+            session.commit()
+
+            # Limpa Identity Map - libera memória
+            session.expire_all()
+
+            print(f"Processados: {i + len(batch)}/{len(items)}")
+
+    except Exception as e:
+        session.rollback()
+        print(f"Erro no batch. Último commit salvo: {i}")
+        raise
+    finally:
+        session.close()
+```
+
+**Trade-offs**:
+
+| Aspecto | Híbrida por Batches |
+|---------|---------------------|
+| Memória | ✅ Controlada (expire_all por batch) |
+| Consistência | ⚠️ Falha parcial = dados parciais |
+| Performance | ✅ Boa (commits periódicos) |
+| Transação | Uma transação = um batch |
+
+#### Qual Estratégia Usar?
+
+| Contexto | Estratégia | Por quê |
+|----------|------------|---------|
+| **API REST** | Por Request | Isolamento, consistência, padrão |
+| **Job de importação** | Híbrida | Volume grande, progresso parcial OK |
+| **Auditoria/Analytics** | Por Request | Consistência crítica |
+| **Seed de dados** | Longa ou Híbrida | Performance, dados controlados |
+| **Testes unitários** | Por Teste | Isolamento entre testes |
+
 ---
 
 ## 1.3 CRUD Básico - As 4 Operações Fundamentais
 
-### Setup Inicial
+### Onde Cada Operação Fica na Arquitetura?
+
+Antes de ver as operações, entenda **onde cada código deve ficar**:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ONDE CADA CÓDIGO FICA                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ENTITY (infra/entities/)                                                   │
+│  • Definição de colunas e tipos                                             │
+│  • Relationships                                                            │
+│  • Constraints (unique, nullable)                                           │
+│  • __repr__ para debug                                                      │
+│  NÃO inclui: queries, commits, validação de negócio                         │
+│                                                                             │
+│  REPOSITORY (infra/repositories/)                                           │
+│  • CRUD básico (create, read, update, delete)                               │
+│  • Queries específicas (get_by_email, list_active)                          │
+│  • flush() - NÃO commit()                                                   │
+│  NÃO inclui: regras de negócio, validação, commit                           │
+│                                                                             │
+│  SERVICE (services/)                                                        │
+│  • Regras de negócio ("email deve ser único")                               │
+│  • Orquestração de múltiplos repositories                                   │
+│  • commit() e rollback()                                                    │
+│  • Transformação Entity → Schema                                            │
+│  NÃO inclui: queries diretas, HTTP, validação de input                      │
+│                                                                             │
+│  API/ROUTES (api/routes/)                                                   │
+│  • Receber HTTP request                                                     │
+│  • Validar input (via Pydantic schemas)                                     │
+│  • Chamar service                                                           │
+│  • Retornar HTTP response                                                   │
+│  NÃO inclui: queries, regras de negócio, session.commit()                   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Exemplo de fluxo completo**:
+
+```
+POST /users (criar usuário)
+     │
+     ▼
+┌─────────────┐      ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+│   ROUTE     │ ───► │   SERVICE   │ ───► │ REPOSITORY  │ ───► │   ENTITY    │
+│             │      │             │      │             │      │             │
+│ Valida JSON │      │ Valida email│      │ session.add │      │ Mapeia para │
+│ Schema      │      │ único       │      │ session.    │      │ tabela      │
+│             │      │ commit()    │      │ flush()     │      │             │
+└─────────────┘      └─────────────┘      └─────────────┘      └─────────────┘
+```
+
+### Setup Inicial (Seguindo Boas Práticas)
+
+⚠️ **ATENÇÃO**: O código abaixo é para **entender CRUD isoladamente**. Em produção, use a estrutura de pastas e connection.py do Módulo 0.
 
 ```python
+# Para TESTES e APRENDIZADO apenas:
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 # Criar engine (conexão com banco)
 engine = create_engine("sqlite:///database.db", echo=True)  # echo=True mostra SQL
 
-# Criar todas as tabelas
+# Para TESTES: create_all é aceitável
+# Em PRODUÇÃO: use Alembic (ver Módulo 0.5)
 Base.metadata.create_all(engine)
 
 # Criar session factory
 SessionLocal = sessionmaker(bind=engine)
 
-# Usar session
+# Usar session (em produção, use Depends(get_db))
 session = SessionLocal()
+```
+
+**Em produção**, o setup fica em arquivos separados (ver Módulo 0.3):
+
+```python
+# infra/configs/connection.py (produção)
+from infra.configs.settings import settings
+
+engine = create_engine(
+    settings.DATABASE_URL,
+    pool_pre_ping=True,     # Verifica conexão antes de usar
+    pool_size=5,            # Conexões no pool
+    max_overflow=10         # Conexões extras permitidas
+)
+SessionLocal = sessionmaker(bind=engine, autoflush=False)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 ```
 
 ### CREATE - Criar Registros
@@ -2657,6 +4113,105 @@ bulk_insert_users(session, users_data)  # ~10x mais rápido
 | `add()` | Lento | ✅ Sim | ✅ Sim | 1-10 registros |
 | `add_all()` | Médio | ✅ Sim | ✅ Sim | 10-1000 registros |
 | `bulk_insert()` | Rápido | ❌ Não | ❌ Não | 1000+ registros, ETL |
+
+#### Bulk Insert em APIs REST: Quando Usar?
+
+**Pergunta comum**: Se minha API precisa validar entrada e retornar os objetos criados, por que usaria bulk insert?
+
+**Resposta**: Na maioria dos endpoints REST, você **NÃO usará bulk insert direto**. O fluxo normal é:
+
+```python
+# Endpoint típico de API
+@router.post("/users", response_model=UserResponse)
+def create_user(data: UserCreate, service: UserService = Depends(get_service)):
+    # 1. Validação já foi feita pelo Pydantic (UserCreate)
+    # 2. Service faz validação de negócio (email único, etc.)
+    # 3. Repository faz add() + flush() → retorna objeto com ID
+    return service.create_user(data)
+```
+
+**Quando bulk insert FAZ sentido em APIs**:
+
+| Cenário | Usar Bulk? | Por quê |
+|---------|------------|---------|
+| `POST /users` (criar 1) | ❌ `add()` | Precisa validar e retornar objeto |
+| `POST /users/batch` (criar 10-50) | ⚠️ `add_all()` | Se precisar retornar IDs |
+| `POST /import/users` (importar CSV) | ✅ Bulk | Volume alto, pode processar em background |
+| Background job de migração | ✅ Bulk | Dados já validados na origem |
+
+**Endpoint de importação em massa (exemplo real)**:
+
+```python
+@router.post("/import/users", status_code=202)  # 202 = Accepted (processando)
+async def import_users_batch(
+    file: UploadFile,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
+    """
+    Importa usuários de um CSV.
+    Processamento assíncrono - retorna imediatamente.
+    """
+    # 1. Validação básica do arquivo
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(400, "Arquivo deve ser CSV")
+
+    # 2. Salvar arquivo temporariamente
+    content = await file.read()
+
+    # 3. Processar em background (não bloqueia a resposta)
+    background_tasks.add_task(process_import, content)
+
+    return {"status": "processing", "message": "Importação iniciada"}
+
+
+def process_import(content: bytes):
+    """Job em background - usa bulk insert."""
+    session = SessionLocal()
+    try:
+        # Parse CSV
+        rows = parse_csv(content)
+
+        # Validar todos antes de inserir
+        valid_rows = [r for r in rows if validate_row(r)]
+        invalid_rows = [r for r in rows if not validate_row(r)]
+
+        # Bulk insert apenas dos válidos
+        if valid_rows:
+            session.execute(User.__table__.insert(), valid_rows)
+            session.commit()
+
+        # Logar erros
+        log_invalid_rows(invalid_rows)
+
+    finally:
+        session.close()
+```
+
+**Regra geral para APIs**:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  DECISÃO: USAR BULK INSERT EM API?                                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. Precisa retornar os objetos criados?                                    │
+│     SIM → use add() ou add_all()                                            │
+│                                                                             │
+│  2. Volume é > 100 registros?                                               │
+│     NÃO → use add_all() (mais simples)                                      │
+│     SIM → considere bulk ou processamento assíncrono                        │
+│                                                                             │
+│  3. Dados já foram validados?                                               │
+│     NÃO → valide ANTES do bulk insert                                       │
+│     SIM → bulk insert é seguro                                              │
+│                                                                             │
+│  4. Pode processar em background?                                           │
+│     SIM → bulk insert + background task (melhor UX)                         │
+│     NÃO → add_all() com batches                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
 ### READ - Ler Registros
 
@@ -2947,6 +4502,297 @@ def restore_user(session: Session, user_id: int):
 - ❌ Queries mais complexas (sempre filtrar deleted_at)
 - ❌ Índices únicos problemáticos (email deletado pode ser reutilizado?)
 
+#### Soft Delete Estratégico: Comportamentos Diferentes por Relacionamento
+
+O Soft Delete simples (marcar `deleted_at`) não resolve todos os cenários. Na prática, você precisa de **comportamentos diferentes** para diferentes relacionamentos:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              ESTRATÉGIAS DE SOFT DELETE POR RELACIONAMENTO                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  CENÁRIO: Deletar um Team                                                   │
+│                                                                             │
+│  1. USERS do time → ERRO! (usuário não pode ficar sem time)                 │
+│     Ação: Impedir deleção até reatribuir usuários                           │
+│                                                                             │
+│  2. TICKETS relacionados → MANTER (histórico valioso)                       │
+│     Ação: Soft delete do team, tickets apontam para team deletado           │
+│                                                                             │
+│  3. REPORTS do time → MANTER (dados financeiros/analytics)                  │
+│     Ação: Reports continuam acessíveis para auditoria                       │
+│                                                                             │
+│  4. PROJECTS ativos → ERRO ou TRANSFERIR                                    │
+│     Ação: Impedir ou transferir para outro time                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Implementação: Service Layer com Validações**
+
+```python
+# services/team_service.py
+from dataclasses import dataclass
+from datetime import datetime
+
+@dataclass
+class TeamDeletionResult:
+    success: bool
+    team_id: int
+    message: str
+    blocked_by: list[str] | None = None  # O que impediu a deleção
+    affected: dict | None = None  # O que foi afetado
+
+class TeamService:
+    def __init__(self, session: Session):
+        self.session = session
+        self.team_repo = TeamRepository(session)
+        self.user_repo = UserRepository(session)
+
+    def soft_delete_team(
+        self,
+        team_id: int,
+        deleted_by: int,
+        force: bool = False
+    ) -> TeamDeletionResult:
+        """
+        Soft delete de um time com validações de relacionamento.
+
+        Args:
+            team_id: ID do time a deletar
+            deleted_by: ID do usuário que está deletando
+            force: Se True, ignora algumas validações (CUIDADO!)
+        """
+        team = self.team_repo.get_by_id(team_id)
+        if not team:
+            return TeamDeletionResult(False, team_id, "Time não encontrado")
+
+        # 1. VALIDAÇÃO: Usuários ativos no time
+        active_users = self.user_repo.get_active_by_team(team_id)
+        if active_users and not force:
+            return TeamDeletionResult(
+                success=False,
+                team_id=team_id,
+                message="Time possui usuários ativos que precisam ser reatribuídos",
+                blocked_by=[
+                    f"User {u.id}: {u.user_full_name}"
+                    for u in active_users
+                ]
+            )
+
+        # 2. VALIDAÇÃO: Projetos ativos
+        active_projects = self._get_active_projects(team_id)
+        if active_projects and not force:
+            return TeamDeletionResult(
+                success=False,
+                team_id=team_id,
+                message="Time possui projetos ativos",
+                blocked_by=[
+                    f"Project {p.id}: {p.project_name}"
+                    for p in active_projects
+                ]
+            )
+
+        # 3. SOFT DELETE: Apenas marca como deletado
+        # Tickets e Reports continuam apontando para o time
+        team.deleted_at = datetime.now()
+        team.deleted_by = deleted_by
+
+        self.session.commit()
+
+        return TeamDeletionResult(
+            success=True,
+            team_id=team_id,
+            message="Time deletado com sucesso",
+            affected={
+                "tickets_mantidos": self._count_tickets(team_id),
+                "reports_mantidos": self._count_reports(team_id)
+            }
+        )
+```
+
+**Entity preparada para Soft Delete**:
+
+```python
+class Team(Base):
+    __tablename__ = "teams"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    team_name: Mapped[str] = mapped_column(String(100))
+
+    # Campos de Soft Delete
+    deleted_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+        init=False,
+        default=None
+    )
+    deleted_by: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"),
+        nullable=True,
+        init=False,
+        default=None
+    )
+
+    # Relationships que IMPEDEM deleção (precisam ser reatribuídos)
+    members: Mapped[list["User"]] = relationship(
+        back_populates="team",
+        lazy="raise",
+        init=False,
+        default_factory=list
+        # SEM cascade delete! Users não são deletados com o time
+    )
+
+    # Relationships que MANTÊM histórico (soft delete não afeta)
+    tickets: Mapped[list["Ticket"]] = relationship(
+        back_populates="team",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    @property
+    def is_deleted(self) -> bool:
+        return self.deleted_at is not None
+```
+
+**Queries que Respeitam Soft Delete**:
+
+```python
+class TeamRepository(BaseRepository[Team]):
+    def get_active_teams(self) -> list[Team]:
+        """Retorna apenas times não deletados."""
+        return self.session.query(Team).filter(
+            Team.deleted_at.is_(None)
+        ).all()
+
+    def get_all_including_deleted(self) -> list[Team]:
+        """Retorna todos os times (para auditoria)."""
+        return self.session.query(Team).all()
+
+    def get_deleted_teams(self) -> list[Team]:
+        """Retorna apenas times deletados (para análise)."""
+        return self.session.query(Team).filter(
+            Team.deleted_at.isnot(None)
+        ).all()
+```
+
+#### Auditoria e Analytics com Soft Delete
+
+O maior benefício do Soft Delete é manter dados históricos para análise:
+
+```python
+# Analytics: Performance de times (incluindo deletados)
+def get_team_performance_history(session: Session) -> list[dict]:
+    """
+    Retorna performance de TODOS os times, incluindo deletados.
+    Essencial para análises históricas.
+    """
+    return session.execute(text("""
+        SELECT
+            t.id,
+            t.team_name,
+            t.deleted_at,
+            COUNT(DISTINCT u.id) as total_members,
+            COUNT(DISTINCT tk.id) as total_tickets,
+            AVG(
+                EXTRACT(epoch FROM (tk.closed_at - tk.created_at)) / 3600
+            ) as avg_resolution_hours
+        FROM teams t
+        LEFT JOIN users u ON u.user_team_id = t.id AND u.deleted_at IS NULL
+        LEFT JOIN tickets tk ON tk.ticket_team_id = t.id
+        GROUP BY t.id, t.team_name, t.deleted_at
+        ORDER BY t.deleted_at IS NULL DESC, t.team_name
+    """)).fetchall()
+
+# Auditoria: Quem deletou o quê
+def get_deletion_audit_log(session: Session, days: int = 30) -> list[dict]:
+    """Retorna log de deleções recentes."""
+    cutoff = datetime.now() - timedelta(days=days)
+
+    # Buscar teams deletados
+    deleted_teams = session.query(
+        Team.id,
+        Team.team_name,
+        Team.deleted_at,
+        User.user_full_name.label("deleted_by_name")
+    ).join(
+        User, Team.deleted_by == User.id, isouter=True
+    ).filter(
+        Team.deleted_at >= cutoff
+    ).all()
+
+    return [
+        {
+            "entity": "Team",
+            "id": t.id,
+            "name": t.team_name,
+            "deleted_at": t.deleted_at,
+            "deleted_by": t.deleted_by_name
+        }
+        for t in deleted_teams
+    ]
+```
+
+#### Índices Únicos com Soft Delete
+
+**Problema**: Email "user@email.com" foi soft-deleted. Novo usuário quer usar o mesmo email.
+
+```python
+# ❌ PROBLEMA: UNIQUE constraint impede reutilização
+user_email: Mapped[str] = mapped_column(
+    String(100),
+    unique=True  # Deletado ainda ocupa o email!
+)
+```
+
+**Solução 1: Índice parcial (PostgreSQL)**
+
+```python
+# No model
+__table_args__ = (
+    Index(
+        "ix_users_email_active",
+        "user_email",
+        unique=True,
+        postgresql_where=text("deleted_at IS NULL")  # Só ativos
+    ),
+)
+```
+
+**Solução 2: Mover email para campo auxiliar**
+
+```python
+def soft_delete_user(session: Session, user_id: int, deleted_by: int):
+    user = session.get(User, user_id)
+    if user:
+        # Libera o email para reutilização
+        user.original_email = user.user_email  # Campo auxiliar
+        user.user_email = f"deleted_{user.id}_{user.user_email}"
+        user.deleted_at = datetime.now()
+        user.deleted_by = deleted_by
+        session.commit()
+```
+
+#### Checklist: Implementando Soft Delete
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  CHECKLIST: SOFT DELETE COMPLETO                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  [ ] Campos deleted_at e deleted_by em todas entidades principais           │
+│  [ ] Service valida relacionamentos ANTES de deletar                        │
+│  [ ] Relacionamentos que IMPEDEM deleção documentados                       │
+│  [ ] Relacionamentos que MANTÊM histórico documentados                      │
+│  [ ] Repository tem métodos get_active() e get_all_including_deleted()      │
+│  [ ] Índices únicos tratam soft delete (parcial ou mover valor)             │
+│  [ ] Analytics queries incluem dados deletados quando necessário            │
+│  [ ] API retorna apenas ativos por padrão, com flag para incluir deletados  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
 #### Hard Delete (usar com cautela)
 
 ```python
@@ -3017,9 +4863,9 @@ DELETE FROM users WHERE is_active = false;
 ```python
 from sqlalchemy import Integer, String, Text, Float, Numeric, Boolean, DateTime, Date, Time, JSON, Enum as SQLEnum, LargeBinary
 from decimal import Decimal
-import enum
+from enum import Enum as PyEnum
 
-class UserType(enum.Enum):
+class UserType(PyEnum):
     ADMIN = "admin"
     USER = "user"
     GUEST = "guest"
@@ -3285,7 +5131,7 @@ SELECT * FROM minha_tabela WHERE id = ?
 
 #### O Erro
 
-Quando duas tabelas têm **múltiplas FKs** entre si, o SQLAlchemy não sabe qual usar:
+Quando duas tabelas têm **múltiplas FKs** entre si, o SQLAlchemy não sabe qual usar para montar o JOIN:
 
 ```
 sqlalchemy.exc.AmbiguousForeignKeysError: Could not determine join condition
@@ -3293,66 +5139,213 @@ between 'teams' and 'users'; tables have more than one foreign key constraint
 relationship between them.
 ```
 
-#### Quando Acontece?
+#### Por Que Acontece? (Entendendo a Causa)
 
-Exemplo clássico: User pode ser **membro** de um Team E também **gerente** de um Team.
+O SQLAlchemy monta automaticamente o JOIN baseado nas FKs. Mas quando há **mais de uma FK** entre duas tabelas, ele não consegue decidir qual usar:
 
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│  Team                                  User                              │
-├──────────────────────────────────────────────────────────────────────────┤
-│  id                                    id                                │
-│  team_name                             user_full_name                    │
-│  team_manager_id (FK→User) ───────────→                                  │
-│                         ←─────────────  user_team_id (FK→Team)           │
-│                                                                          │
-│  2 FKs entre as tabelas = AMBIGUIDADE!                                   │
-└──────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    POR QUE A AMBIGUIDADE ACONTECE?                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Team                                  User                                 │
+│  ┌─────────────────────┐              ┌─────────────────────┐              │
+│  │ id                  │              │ id                  │              │
+│  │ team_name           │              │ user_full_name      │              │
+│  │ team_manager_id (FK)│───────────►  │                     │              │
+│  └─────────────────────┘              │ user_team_id (FK)   │──────────►   │
+│                         ◄─────────────│                     │  Team        │
+│                                       └─────────────────────┘              │
+│                                                                             │
+│  SQLAlchemy: "Você quer JOIN por team_manager_id ou por user_team_id?"     │
+│  Você: "..." (se não especificar, ERRO!)                                   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### A Solução
-
-Especifique **explicitamente** qual FK usar com o parâmetro `foreign_keys`:
+**O problema interno**:
 
 ```python
+# Sem foreign_keys, SQLAlchemy tenta inferir:
+team: Mapped["Team"] = relationship(back_populates="team_members")
+
+# SQLAlchemy pensa:
+# "User tem FK para Team (user_team_id)"
+# "Team tem FK para User (team_manager_id)"
+# "Qual usar para fazer JOIN users.??? = teams.id?"
+# ERRO: AmbiguousForeignKeysError
+```
+
+#### A Solução Completa
+
+**Regra**: Quando há múltiplas FKs entre duas tabelas, TODOS os relationships precisam de `foreign_keys`.
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# EXEMPLO COMPLETO: User ↔ Team com 2 FKs
+# ═══════════════════════════════════════════════════════════════════════════
+
 class User(Base):
     __tablename__ = "users"
 
-    user_team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_full_name: Mapped[str] = mapped_column(String(200))
 
-    # ✅ CORRETO - Especifica a FK
+    # FK 1: Time do qual sou membro
+    user_team_id: Mapped[int] = mapped_column(
+        ForeignKey("teams.id", ondelete="RESTRICT"),
+        nullable=False
+    )
+
+    # Relationship 1: Meu time (usa a FK que está AQUI)
     team: Mapped["Team"] = relationship(
-        foreign_keys=[user_team_id],  # ← Qual FK usar
-        back_populates="team_members",
+        foreign_keys=[user_team_id],  # ← FK está AQUI = use variável
+        back_populates="members",
         lazy="raise",
         init=False
     )
+
+    # Relationship 2: Time que eu gerencio (usa a FK que está no TEAM)
+    managed_team: Mapped["Team | None"] = relationship(
+        foreign_keys="[Team.team_manager_id]",  # ← FK está em OUTRA classe = use string
+        back_populates="manager",
+        lazy="raise",
+        init=False
+    )
+
+
+class Team(Base):
+    __tablename__ = "teams"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    team_name: Mapped[str] = mapped_column(String(100))
+
+    # FK 2: Gerente do time
+    team_manager_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", use_alter=True, name="fk_team_manager"),
+        nullable=True,
+        init=False,
+        default=None
+    )
+
+    # Relationship: Gerente (usa a FK que está AQUI)
+    manager: Mapped["User | None"] = relationship(
+        foreign_keys=[team_manager_id],  # ← FK está AQUI = use variável
+        back_populates="managed_team",
+        lazy="raise",
+        init=False
+    )
+
+    # Relationship: Membros (usa a FK que está no USER)
+    members: Mapped[list["User"]] = relationship(
+        foreign_keys="[User.user_team_id]",  # ← FK está em OUTRA classe = use string
+        back_populates="team",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
 ```
 
-#### Regra: Quando Usar Variável vs String?
+#### Regra Definitiva: Variável vs String
 
 | Onde está a FK? | Sintaxe | Exemplo |
 |-----------------|---------|---------|
 | Na **MESMA** classe | `foreign_keys=[variavel]` | `foreign_keys=[user_team_id]` |
 | Em **OUTRA** classe | `foreign_keys="[Classe.atributo]"` | `foreign_keys="[Team.team_manager_id]"` |
 
-```python
-# FK está AQUI (nesta classe) → use variável
-team: Mapped["Team"] = relationship(
-    foreign_keys=[user_team_id],  # ✅ Variável
-    ...
-)
+**Por que a diferença?**
 
-# FK está em OUTRA classe → use string
+```python
+# Quando FK está na MESMA classe:
+# A variável já existe no escopo, pode referenciá-la diretamente
+user_team_id: Mapped[int] = mapped_column(...)  # ← Definida ANTES
+team: Mapped["Team"] = relationship(foreign_keys=[user_team_id])  # ← Usa a variável
+
+# Quando FK está em OUTRA classe:
+# A variável não existe aqui, use string para SQLAlchemy resolver depois
 managed_team: Mapped["Team | None"] = relationship(
-    foreign_keys="[Team.team_manager_id]",  # ✅ String
-    ...
+    foreign_keys="[Team.team_manager_id]"  # ← String porque Team.team_manager_id não existe aqui
 )
 ```
 
-> 📖 **Para exemplos completos e detalhados**, veja a seção **2.8 Relacionamentos Avançados** no MÓDULO 2, que cobre casos como Team↔User e Ticket→User com múltiplas FKs.
+#### Outro Exemplo: Ticket com 2 FKs para User
 
-> 📖 **Para o padrão completo da classe Base**, veja o **MÓDULO 0.3** onde explicamos cada decisão em detalhes.
+```python
+class Ticket(Base):
+    __tablename__ = "tickets"
+
+    # FK 1: Quem abriu o ticket
+    ticket_client_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="RESTRICT")
+    )
+
+    # FK 2: Quem está atendendo
+    ticket_attendant_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"),
+        nullable=True,
+        init=False,
+        default=None
+    )
+
+    # Relationship para quem abriu
+    client: Mapped["User"] = relationship(
+        foreign_keys=[ticket_client_id],  # ← Especifica qual FK
+        back_populates="tickets_opened",
+        lazy="raise",
+        init=False
+    )
+
+    # Relationship para quem atende
+    attendant: Mapped["User | None"] = relationship(
+        foreign_keys=[ticket_attendant_id],  # ← Especifica qual FK
+        back_populates="tickets_attending",
+        lazy="raise",
+        init=False
+    )
+
+
+class User(Base):
+    # ... campos ...
+
+    # Tickets que eu abri (FK está no Ticket)
+    tickets_opened: Mapped[list["Ticket"]] = relationship(
+        foreign_keys="[Ticket.ticket_client_id]",  # ← String pois FK está em Ticket
+        back_populates="client",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # Tickets que eu atendo (FK está no Ticket)
+    tickets_attending: Mapped[list["Ticket"]] = relationship(
+        foreign_keys="[Ticket.ticket_attendant_id]",  # ← String pois FK está em Ticket
+        back_populates="attendant",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+```
+
+#### Checklist: Quando Preciso de `foreign_keys`?
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  PRECISO DE foreign_keys?                                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. Quantas FKs existem entre as duas tabelas?                              │
+│     → 1 FK: NÃO precisa de foreign_keys (SQLAlchemy infere)                 │
+│     → 2+ FKs: SEMPRE precisa de foreign_keys                                │
+│                                                                             │
+│  2. A FK está na MINHA classe ou na OUTRA?                                  │
+│     → Minha classe: foreign_keys=[variavel]                                 │
+│     → Outra classe: foreign_keys="[Classe.variavel]"                        │
+│                                                                             │
+│  3. Todos os relationships entre as duas tabelas têm foreign_keys?          │
+│     → Se um tem, TODOS precisam ter!                                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -3681,15 +5674,115 @@ class User(Base):
 | `SET DEFAULT` | Coloca valor padrão nos FKs dos filhos |
 | `NO ACTION` | Padrão do banco (geralmente igual RESTRICT) |
 
-**Recomendações por caso de uso**:
+---
+
+#### CRÍTICO: ondelete com Soft Delete
+
+Se você usa **soft delete** (que é a recomendação deste tutorial), a configuração de `ondelete` muda COMPLETAMENTE!
+
+**O Problema com CASCADE + Soft Delete**:
 
 ```python
-# Para dados que PERTENCEM ao pai (composição):
+# ❌ ERRADO quando você usa soft delete!
+message_chat_id: Mapped[int] = mapped_column(
+    ForeignKey("chats.id", ondelete="CASCADE")
+)
+
+# O que acontece:
+# 1. Você faz soft delete do chat (active=INATIVO)
+# 2. O banco NÃO dispara CASCADE porque não houve DELETE real
+# 3. As mensagens continuam existindo normalmente ✅
+
+# MAS se alguém rodar DELETE direto no banco (manutenção, migração):
+# 1. DELETE FROM chats WHERE id = 1
+# 2. CASCADE dispara: DELETE FROM messages WHERE chat_id = 1
+# 3. Você PERDE todas as mensagens permanentemente! ❌
+```
+
+**A Solução: RESTRICT em tudo com Soft Delete**:
+
+```python
+# ✅ CORRETO para sistemas com soft delete
+message_chat_id: Mapped[int] = mapped_column(
+    ForeignKey("chats.id", ondelete="RESTRICT")
+)
+
+# O que acontece:
+# 1. Soft delete do chat funciona normalmente (active=INATIVO)
+# 2. Se tentar DELETE real, banco BLOQUEIA (ainda tem mensagens)
+# 3. Proteção contra deleção acidental ✅
+```
+
+**Por que RESTRICT é melhor com Soft Delete?**
+
+| Situação | CASCADE | RESTRICT |
+|----------|---------|----------|
+| Soft delete do pai | OK (nada acontece) | OK (nada acontece) |
+| Hard delete acidental | Perde filhos! | Bloqueia (seguro) |
+| Migração com DELETE | Perde filhos! | Bloqueia (seguro) |
+| Manutenção direta no banco | Perde filhos! | Bloqueia (seguro) |
+
+---
+
+**Recomendações ATUALIZADAS (com Soft Delete)**:
+
+```python
+# ✅ PADRÃO: Use RESTRICT em TUDO
+# Isso protege contra deleção acidental de dados relacionados
+
+# Mensagens pertencem a um Chat
+message_chat_id: Mapped[int] = mapped_column(
+    ForeignKey("chats.id", ondelete="RESTRICT")  # Protege mensagens
+)
+
+# Usuário pertence a um Time
+user_team_id: Mapped[int] = mapped_column(
+    ForeignKey("teams.id", ondelete="RESTRICT")  # Protege usuários
+)
+
+# Ticket pertence a um Projeto
+ticket_project_id: Mapped[int] = mapped_column(
+    ForeignKey("projects.id", ondelete="RESTRICT")  # Protege tickets
+)
+
+# Para referências opcionais (campos de auditoria):
+report_last_updated_by: Mapped[int | None] = mapped_column(
+    ForeignKey("users.id", ondelete="SET NULL"),  # OK usar SET NULL aqui
+    nullable=True
+)
+# Se hard-deletar user, report continua existindo com campo NULL ✅
+```
+
+**Regra de Ouro para Soft Delete**:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      REGRA DE OURO: ondelete + Soft Delete                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   1. Use ondelete="RESTRICT" em TODAS as FKs obrigatórias                   │
+│   2. Use ondelete="SET NULL" apenas em FKs opcionais (nullable=True)        │
+│   3. NUNCA use ondelete="CASCADE" em sistemas com soft delete               │
+│                                                                             │
+│   Motivo: CASCADE só dispara em DELETE real, não em soft delete             │
+│           Mas se alguém fizer DELETE real, você perde dados!                │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+**Recomendações SEM Soft Delete** (hard delete direto):
+
+Se você NÃO usa soft delete (deleta registros de verdade), aí CASCADE faz sentido:
+
+```python
+# Para dados que PERTENCEM ao pai (composição) - SEM soft delete:
 # Exemplo: Mensagens pertencem a um Chat
 message_chat_id: Mapped[int] = mapped_column(
     ForeignKey("chats.id", ondelete="CASCADE")
 )
-# Se deletar chat, deleta mensagens também ✅
+# Se deletar chat, deleta mensagens também ✅ (mas você perde tudo!)
 
 # Para dados INDEPENDENTES (associação):
 # Exemplo: Usuário pertence a um Time
@@ -5989,6 +8082,8 @@ def to_dict(self):
 | **back_populates** | Nome do relationship no lado MUITOS | Nome do relationship no lado UM |
 | **foreign_keys** | Necessário se múltiplas FKs | Necessário se múltiplas FKs |
 
+**EXEMPLO PRÁTICO COMPLETO**: Consulte o **Módulo 9.1 (User Entity)** para ver todos os tipos de relacionamentos implementados em uma única entidade, com evolução do básico ao estado da arte.
+
 ---
 
 # MÓDULO 3: ARQUITETURA PROFISSIONAL
@@ -6054,13 +8149,491 @@ def create_ticket(data: dict):
 
 ### Padrões Arquiteturais Existentes
 
-| Padrão | Descrição | Prós | Contras |
-|--------|-----------|------|---------|
-| **MVC** | Model-View-Controller | Simples, familiar | Controller vira "god class" |
-| **Clean Architecture** | Camadas com dependência unidirecional | Muito testável | Complexo para projetos pequenos |
-| **Hexagonal** | Portas e Adaptadores | Muito flexível | Curva de aprendizado alta |
-| **DDD** | Domain-Driven Design | Ótimo para domínios complexos | Overkill para CRUDs |
-| **Layered** | Camadas simples | Fácil de entender | Pode virar "lasanha" |
+Antes de escolher uma arquitetura, você precisa entender as opções disponíveis. Cada uma resolve problemas específicos e tem trade-offs diferentes.
+
+#### 1. MVC (Model-View-Controller)
+
+O padrão mais conhecido, originário de aplicações desktop (Smalltalk, 1979) e popularizado em web com Ruby on Rails.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              MVC                                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ┌──────────┐        ┌──────────────┐        ┌──────────┐                 │
+│   │  VIEW    │ ←───── │  CONTROLLER  │ ←────→ │  MODEL   │                 │
+│   │(template)│        │   (lógica)   │        │ (dados)  │                 │
+│   └──────────┘        └──────────────┘        └──────────┘                 │
+│                                                                             │
+│   Usuário interage    Controller decide       Model acessa                  │
+│   com View            o que fazer             banco de dados                │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Exemplo em Python/Flask**:
+```python
+# model.py
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+
+# controller.py (em Flask são as routes)
+@app.route('/users', methods=['POST'])
+def create_user():
+    user = User(name=request.json['name'])
+    db.session.add(user)
+    db.session.commit()
+    return render_template('user.html', user=user)  # View
+
+# view: templates/user.html
+```
+
+**Quando usar**:
+- Aplicações web tradicionais com HTML renderizado no servidor
+- Projetos pequenos com poucos desenvolvedores
+- Protótipos rápidos
+
+**Quando NÃO usar**:
+- APIs REST (não tem "View" no sentido tradicional)
+- Lógica de negócio complexa (Controller vira "god class")
+- Times grandes (Controller concentra tudo)
+
+**Trade-offs**:
+| Prós | Contras |
+|------|---------|
+| Simples de entender | Controller acumula responsabilidades |
+| Muito documentação disponível | Difícil testar lógica de negócio isolada |
+| Familiar para a maioria | Model tende a ficar "gordo" com lógica |
+| Rápido para começar | Não separa bem camadas de dados |
+
+---
+
+#### 2. Clean Architecture (Uncle Bob, 2012)
+
+Criada por Robert C. Martin ("Uncle Bob"), foca em **independência**: o core da aplicação não depende de frameworks, banco de dados ou UI.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         CLEAN ARCHITECTURE                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│                    ┌───────────────────────┐                                │
+│                    │     FRAMEWORKS &      │  ← Mais externo (detalhes)    │
+│                    │       DRIVERS         │     Web, DB, UI                │
+│                    │  ┌─────────────────┐  │                                │
+│                    │  │   INTERFACE     │  │  ← Controllers, Gateways      │
+│                    │  │   ADAPTERS      │  │     Presenters                 │
+│                    │  │  ┌───────────┐  │  │                                │
+│                    │  │  │APPLICATION│  │  │  ← Use Cases                   │
+│                    │  │  │  BUSINESS │  │  │     Regras de negócio app     │
+│                    │  │  │ ┌───────┐ │  │  │                                │
+│                    │  │  │ │ENTITY │ │  │  │  ← Mais interno (core)         │
+│                    │  │  │ │(core) │ │  │  │     Regras de negócio puras   │
+│                    │  │  │ └───────┘ │  │  │                                │
+│                    │  │  └───────────┘  │  │                                │
+│                    │  └─────────────────┘  │                                │
+│                    └───────────────────────┘                                │
+│                                                                             │
+│   REGRA: Dependências apontam para DENTRO (nunca para fora!)               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Exemplo em Python**:
+```python
+# domain/entities/user.py (core - sem dependências externas)
+@dataclass
+class User:
+    id: int
+    name: str
+    email: str
+
+# application/use_cases/create_user.py (use case)
+class CreateUserUseCase:
+    def __init__(self, user_repository: UserRepositoryInterface):
+        self.user_repository = user_repository
+
+    def execute(self, name: str, email: str) -> User:
+        # Regra de negócio: email deve ser único
+        if self.user_repository.exists_by_email(email):
+            raise DomainException("Email já cadastrado")
+        user = User(id=0, name=name, email=email)
+        return self.user_repository.save(user)
+
+# infrastructure/repositories/sqlalchemy_user_repository.py (adapter)
+class SQLAlchemyUserRepository(UserRepositoryInterface):
+    def save(self, user: User) -> User:
+        db_user = UserModel(name=user.name, email=user.email)
+        session.add(db_user)
+        session.commit()
+        return User(id=db_user.id, name=db_user.name, email=db_user.email)
+
+# interface/api/user_controller.py (interface adapter)
+@app.post("/users")
+def create_user(request: UserCreateRequest):
+    use_case = CreateUserUseCase(SQLAlchemyUserRepository())
+    user = use_case.execute(request.name, request.email)
+    return UserResponse.from_entity(user)
+```
+
+**Estrutura de pastas**:
+```
+projeto/
+├── domain/                 # Core (sem dependências)
+│   ├── entities/
+│   └── exceptions/
+├── application/            # Use Cases
+│   ├── interfaces/        # Contratos (abstrações)
+│   └── use_cases/
+├── infrastructure/         # Implementações concretas
+│   ├── repositories/
+│   └── services/
+└── interface/              # Adaptadores externos
+    ├── api/
+    └── cli/
+```
+
+**Quando usar**:
+- Aplicações corporativas de longa duração
+- Quando precisar trocar banco/framework sem reescrever tudo
+- Times grandes com especialistas por camada
+- Domínio de negócio complexo
+
+**Quando NÃO usar**:
+- Projetos pequenos/MVPs
+- CRUDs simples
+- Time pequeno (overhead de manutenção)
+- Deadline apertado
+
+**Trade-offs**:
+| Prós | Contras |
+|------|---------|
+| Core 100% testável sem mocks | Muito código "boilerplate" |
+| Independente de frameworks | Curva de aprendizado alta |
+| Fácil trocar implementações | Overkill para CRUDs |
+| Escalável para times grandes | Múltiplas camadas de mapeamento |
+
+---
+
+#### 3. Hexagonal Architecture (Ports & Adapters)
+
+Criada por Alistair Cockburn (2005), visualiza a aplicação como um hexágono com "portas" de entrada/saída.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       HEXAGONAL ARCHITECTURE                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│              ┌──────────┐                    ┌──────────┐                   │
+│              │ REST API │                    │ Database │                   │
+│              │(adapter) │                    │(adapter) │                   │
+│              └────┬─────┘                    └────┬─────┘                   │
+│                   │                               │                         │
+│              ┌────▼─────┐                    ┌────▼─────┐                   │
+│              │  PORT    │                    │  PORT    │                   │
+│              │(entrada) │                    │ (saída)  │                   │
+│              └────┬─────┘                    └────▲─────┘                   │
+│                   │                               │                         │
+│              ┌────▼───────────────────────────────┴─────┐                   │
+│              │                                          │                   │
+│              │           APPLICATION CORE               │                   │
+│              │         (regras de negócio)              │                   │
+│              │                                          │                   │
+│              └────▲───────────────────────────────┬─────┘                   │
+│                   │                               │                         │
+│              ┌────┴─────┐                    ┌────▼─────┐                   │
+│              │  PORT    │                    │  PORT    │                   │
+│              │(entrada) │                    │ (saída)  │                   │
+│              └────▲─────┘                    └────┬─────┘                   │
+│                   │                               │                         │
+│              ┌────┴─────┐                    ┌────▼─────┐                   │
+│              │   CLI    │                    │  Email   │                   │
+│              │(adapter) │                    │(adapter) │                   │
+│              └──────────┘                    └──────────┘                   │
+│                                                                             │
+│   PORTS = Interfaces (contratos)                                            │
+│   ADAPTERS = Implementações concretas                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Exemplo em Python**:
+```python
+# ports/input/user_service_port.py (porta de entrada)
+class UserServicePort(ABC):
+    @abstractmethod
+    def create_user(self, name: str, email: str) -> User: ...
+
+# ports/output/user_repository_port.py (porta de saída)
+class UserRepositoryPort(ABC):
+    @abstractmethod
+    def save(self, user: User) -> User: ...
+    @abstractmethod
+    def find_by_email(self, email: str) -> User | None: ...
+
+# core/user_service.py (implementação do core)
+class UserService(UserServicePort):
+    def __init__(self, user_repo: UserRepositoryPort):
+        self.user_repo = user_repo
+
+    def create_user(self, name: str, email: str) -> User:
+        if self.user_repo.find_by_email(email):
+            raise EmailAlreadyExistsError()
+        return self.user_repo.save(User(name=name, email=email))
+
+# adapters/input/rest_adapter.py (adaptador de entrada)
+@app.post("/users")
+def create_user_endpoint(data: UserCreate):
+    service = UserService(SQLAlchemyUserAdapter())  # injeção
+    return service.create_user(data.name, data.email)
+
+# adapters/output/sqlalchemy_adapter.py (adaptador de saída)
+class SQLAlchemyUserAdapter(UserRepositoryPort):
+    def save(self, user: User) -> User:
+        # implementação com SQLAlchemy
+        ...
+```
+
+**Quando usar**:
+- Múltiplas interfaces de entrada (API, CLI, eventos)
+- Múltiplas integrações externas (bancos, APIs, filas)
+- Quando quiser testar o core isoladamente
+- Microsserviços
+
+**Quando NÃO usar**:
+- Aplicações com única interface (só API REST)
+- Projetos simples
+- Time sem experiência em DI/IoC
+
+**Trade-offs**:
+| Prós | Contras |
+|------|---------|
+| Muito flexível para integrações | Muitas interfaces/abstrações |
+| Core completamente isolado | Difícil visualizar fluxo completo |
+| Fácil adicionar novos adapters | Overhead para casos simples |
+| Testável com mocks | Curva de aprendizado |
+
+---
+
+#### 4. DDD (Domain-Driven Design)
+
+Criado por Eric Evans (2003), não é apenas arquitetura - é uma abordagem completa para modelar domínios complexos.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     DOMAIN-DRIVEN DESIGN                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   BOUNDED CONTEXTS (Contextos Delimitados)                                  │
+│   ┌─────────────────────┐    ┌─────────────────────┐                       │
+│   │   VENDAS            │    │   FINANCEIRO        │                       │
+│   │  ┌───────────────┐  │    │  ┌───────────────┐  │                       │
+│   │  │ Cliente       │  │◄──►│  │ Cliente       │  │  ← Mesmo conceito,   │
+│   │  │ (com pedidos) │  │    │  │ (com faturas) │  │    modelos diferentes│
+│   │  └───────────────┘  │    │  └───────────────┘  │                       │
+│   └─────────────────────┘    └─────────────────────┘                       │
+│                                                                             │
+│   BUILDING BLOCKS (dentro de cada contexto)                                 │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │                                                                      │  │
+│   │  ENTITIES         VALUE OBJECTS      AGGREGATES     REPOSITORIES    │  │
+│   │  (identidade)     (sem identidade)   (consistência)  (persistência) │  │
+│   │                                                                      │  │
+│   │  ┌─────────┐      ┌─────────┐        ┌─────────┐     ┌───────────┐  │  │
+│   │  │ Pedido  │      │ Dinheiro│        │ Pedido  │     │ PedidoRepo│  │  │
+│   │  │ id: 123 │      │ R$100,00│        │ + Itens │     │ save()    │  │  │
+│   │  └─────────┘      └─────────┘        └─────────┘     └───────────┘  │  │
+│   │                                                                      │  │
+│   │  DOMAIN SERVICES      DOMAIN EVENTS      FACTORIES                   │  │
+│   │  (operações entre     (comunicação)      (criação complexa)          │  │
+│   │   aggregates)                                                        │  │
+│   │                                                                      │  │
+│   └─────────────────────────────────────────────────────────────────────┘  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Exemplo em Python**:
+```python
+# domain/entities/order.py (Entity com identidade)
+class Order:
+    def __init__(self, id: OrderId, customer_id: CustomerId):
+        self.id = id
+        self.customer_id = customer_id
+        self.items: list[OrderItem] = []
+        self.status = OrderStatus.PENDING
+
+    def add_item(self, product_id: ProductId, quantity: int, price: Money):
+        if self.status != OrderStatus.PENDING:
+            raise DomainException("Pedido já fechado")
+        self.items.append(OrderItem(product_id, quantity, price))
+
+    def calculate_total(self) -> Money:
+        return sum(item.subtotal for item in self.items)
+
+# domain/value_objects/money.py (Value Object - sem identidade)
+@dataclass(frozen=True)
+class Money:
+    amount: Decimal
+    currency: str = "BRL"
+
+    def __add__(self, other: "Money") -> "Money":
+        if self.currency != other.currency:
+            raise DomainException("Moedas diferentes")
+        return Money(self.amount + other.amount, self.currency)
+
+# domain/repositories/order_repository.py (Interface)
+class OrderRepository(ABC):
+    @abstractmethod
+    def save(self, order: Order) -> None: ...
+    @abstractmethod
+    def find_by_id(self, order_id: OrderId) -> Order | None: ...
+
+# application/services/order_service.py (Application Service)
+class OrderService:
+    def __init__(self, order_repo: OrderRepository, event_bus: EventBus):
+        self.order_repo = order_repo
+        self.event_bus = event_bus
+
+    def place_order(self, order: Order) -> None:
+        order.close()  # Domain logic no Aggregate
+        self.order_repo.save(order)
+        self.event_bus.publish(OrderPlacedEvent(order.id))
+```
+
+**Conceitos-chave**:
+- **Ubiquitous Language**: Vocabulário comum entre devs e negócio
+- **Bounded Context**: Fronteiras claras entre subdomínios
+- **Aggregate**: Grupo de entidades tratado como unidade
+- **Entity**: Objeto com identidade única
+- **Value Object**: Objeto definido por seus atributos (imutável)
+
+**Quando usar**:
+- Domínio de negócio complexo (banco, e-commerce, logística)
+- Múltiplos subdomínios com regras diferentes
+- Equipe inclui domain experts
+- Projeto de longa duração
+
+**Quando NÃO usar**:
+- CRUDs simples
+- Poucos devs
+- Domínio trivial
+- Prazo curto
+
+**Trade-offs**:
+| Prós | Contras |
+|------|---------|
+| Modela domínios complexos com precisão | Curva de aprendizado muito alta |
+| Linguagem comum negócio/tech | Requer domain experts disponíveis |
+| Escalável para sistemas grandes | Overkill para maioria dos projetos |
+| Fronteiras claras entre contextos | Muito código e abstração |
+
+---
+
+#### 5. Layered Architecture (Camadas)
+
+A mais simples e tradicional. Separa código em camadas horizontais com responsabilidades distintas.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       LAYERED ARCHITECTURE                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │                    PRESENTATION LAYER                                │  │
+│   │                    (API, Views, Controllers)                         │  │
+│   └─────────────────────────────────┬───────────────────────────────────┘  │
+│                                     ↓                                       │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │                    APPLICATION LAYER                                 │  │
+│   │                    (Services, Use Cases)                             │  │
+│   └─────────────────────────────────┬───────────────────────────────────┘  │
+│                                     ↓                                       │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │                    DOMAIN LAYER                                      │  │
+│   │                    (Entities, Business Rules)                        │  │
+│   └─────────────────────────────────┬───────────────────────────────────┘  │
+│                                     ↓                                       │
+│   ┌─────────────────────────────────────────────────────────────────────┐  │
+│   │                    INFRASTRUCTURE LAYER                              │  │
+│   │                    (Database, External Services)                     │  │
+│   └─────────────────────────────────────────────────────────────────────┘  │
+│                                                                             │
+│   REGRA: Cada camada só conhece a camada imediatamente abaixo               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Exemplo em Python**:
+```python
+# infrastructure/entities/user.py (Domain/Infrastructure)
+class User(Base):
+    __tablename__ = "users"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+    email: Mapped[str] = mapped_column(String(100), unique=True)
+
+# infrastructure/repositories/user_repository.py (Infrastructure)
+class UserRepository:
+    def save(self, user: User) -> User:
+        with DBConnectionHandler() as db:
+            db.session.add(user)
+            db.session.commit()
+            db.session.refresh(user)
+            return user
+
+# services/user_service.py (Application)
+class UserService:
+    def __init__(self):
+        self.repo = UserRepository()
+
+    def create_user(self, name: str, email: str) -> User:
+        # Regra de negócio aqui
+        user = User(name=name, email=email)
+        return self.repo.save(user)
+
+# api/routes/user_routes.py (Presentation)
+@router.post("/users", response_model=UserResponse)
+def create_user(data: UserCreate, service: UserService = Depends()):
+    return service.create_user(data.name, data.email)
+```
+
+**Quando usar**:
+- Maioria dos projetos web
+- APIs REST
+- Times de tamanho médio
+- Quando quer estrutura sem complexidade
+
+**Quando NÃO usar**:
+- Domínio extremamente complexo (use DDD)
+- Precisar trocar frameworks frequentemente (use Clean/Hexagonal)
+
+**Trade-offs**:
+| Prós | Contras |
+|------|---------|
+| Simples de entender e implementar | Pode virar "lasanha" se não disciplinado |
+| Pouco boilerplate | Infrastructure no fundo cria dependência |
+| Familiar para maioria dos devs | Menos flexível que Clean/Hexagonal |
+| Boa separação de responsabilidades | Testabilidade depende de disciplina |
+
+---
+
+#### Tabela Comparativa Final
+
+| Critério | MVC | Clean | Hexagonal | DDD | Layered |
+|----------|-----|-------|-----------|-----|---------|
+| **Complexidade** | Baixa | Alta | Alta | Muito Alta | Baixa/Média |
+| **Curva de aprendizado** | Baixa | Alta | Alta | Muito Alta | Baixa |
+| **Testabilidade** | Média | Excelente | Excelente | Excelente | Boa |
+| **Flexibilidade** | Baixa | Alta | Muito Alta | Alta | Média |
+| **Boilerplate** | Baixo | Alto | Alto | Muito Alto | Baixo |
+| **Para CRUDs** | OK | Overkill | Overkill | Muito Overkill | Ideal |
+| **Para domínios complexos** | Ruim | Bom | Bom | Excelente | Limitado |
+| **Time pequeno** | OK | Difícil | Difícil | Muito Difícil | Ideal |
+| **Time grande** | Problemas | Bom | Bom | Ideal | OK |
+
+---
 
 ### Nossa Escolha: Layered Architecture Simplificada
 
@@ -6367,6 +8940,374 @@ class UserSchema(BaseModel):
 
 ## 3.2 Schemas com Pydantic
 
+Esta seção segue a metodologia de construcao linear do conhecimento. Vamos evoluir um UserSchema do basico ao estado da arte, sem repeticoes, construindo incrementalmente.
+
+---
+
+### User Schema - Evolucao Completa (Do Basico ao Estado da Arte)
+
+#### NIVEL 1: Schema Minimo Funcional (BASICO)
+
+O schema mais simples possivel que funciona:
+
+```python
+# schemas/user_schemas.py - NIVEL 1: BASICO
+from pydantic import BaseModel
+
+class UserSchema(BaseModel):
+    """Schema minimo - apenas campos obrigatorios."""
+    id: int
+    user_full_name: str
+    user_email: str
+
+# Uso:
+# user_data = UserSchema(id=1, user_full_name="Joao", user_email="joao@email.com")
+# print(user_data.model_dump())  # {'id': 1, 'user_full_name': 'Joao', 'user_email': 'joao@email.com'}
+```
+
+**O que voce aprendeu**:
+- Schema herda de `BaseModel`
+- Campos sao declarados com type hints
+- `model_dump()` converte para dicionario
+
+---
+
+#### NIVEL 2: Lendo de ORM Objects (INTERMEDIARIO)
+
+Agora queremos criar o schema diretamente de um objeto SQLAlchemy:
+
+```python
+# schemas/user_schemas.py - NIVEL 2: Com suporte a ORM
+from pydantic import BaseModel, ConfigDict
+
+class UserSchema(BaseModel):
+    """Schema que pode ser criado de objetos ORM."""
+    id: int
+    user_full_name: str
+    user_email: str
+
+    # NOVO: Permite criar de objetos SQLAlchemy
+    model_config = ConfigDict(from_attributes=True)
+
+# Uso com ORM:
+# user_orm = session.get(User, 1)  # Objeto SQLAlchemy
+# user_schema = UserSchema.model_validate(user_orm)  # Converte para Pydantic
+# print(user_schema.model_dump())  # {'id': 1, 'user_full_name': 'Joao', ...}
+```
+
+**O que mudou**:
+- Adicionamos `model_config = ConfigDict(from_attributes=True)`
+- Isso permite usar `UserSchema.model_validate(orm_object)`
+
+---
+
+#### NIVEL 3: Separando Create, Update e Response (AVANCADO)
+
+Na pratica, voce precisa de schemas diferentes para cada operacao:
+
+```python
+# schemas/user_schemas.py - NIVEL 3: Schemas separados
+from pydantic import BaseModel, ConfigDict, Field, EmailStr
+from datetime import datetime
+
+# ============================================================================
+# BASE - Campos compartilhados (evita repeticao)
+# ============================================================================
+class UserBase(BaseModel):
+    """Campos comuns a todos os schemas de User."""
+    user_full_name: str = Field(..., min_length=2, max_length=200)
+    user_email: EmailStr  # Valida formato de email automaticamente!
+
+
+# ============================================================================
+# CREATE - Para criacao de usuario (entrada da API)
+# ============================================================================
+class UserCreate(UserBase):
+    """
+    Dados necessarios para criar um usuario.
+
+    NAO inclui:
+    - id (gerado pelo banco)
+    - created_at (gerado automaticamente)
+    - active (default e ATIVO)
+    """
+    user_password: str = Field(..., min_length=8, description="Minimo 8 caracteres")
+    user_team_id: int = Field(..., gt=0, description="ID do time (deve existir)")
+
+
+# ============================================================================
+# UPDATE - Para atualizacao (todos opcionais)
+# ============================================================================
+class UserUpdate(BaseModel):
+    """
+    Campos que podem ser atualizados.
+
+    TODOS opcionais - so atualiza o que foi enviado.
+    """
+    user_full_name: str | None = Field(None, min_length=2, max_length=200)
+    user_email: EmailStr | None = None
+    user_team_id: int | None = Field(None, gt=0)
+    is_active: bool | None = None
+
+
+# ============================================================================
+# RESPONSE - Para retornar na API (saida)
+# ============================================================================
+class UserResponse(UserBase):
+    """
+    Dados retornados pela API.
+
+    NAO inclui:
+    - user_password (sensivel!)
+    - deleted_at, deleted_by (interno)
+    """
+    id: int
+    user_team_id: int
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ============================================================================
+# LIST - Versao resumida para listagens
+# ============================================================================
+class UserList(BaseModel):
+    """Versao minima para listagens (performance)."""
+    id: int
+    user_full_name: str
+    user_email: str
+    is_active: bool
+
+    model_config = ConfigDict(from_attributes=True)
+```
+
+**O que mudou**:
+- `UserBase`: Campos comuns (DRY - Don't Repeat Yourself)
+- `UserCreate`: Para `POST /users` (recebe password, team_id)
+- `UserUpdate`: Para `PATCH /users/{id}` (tudo opcional)
+- `UserResponse`: Para retorno (sem senha!)
+- `UserList`: Para `GET /users` (poucos campos)
+
+---
+
+#### NIVEL 4: Com Relacionamentos e Validacoes Custom (ESTADO DA ARTE)
+
+A versao completa com tudo que voce precisa em producao:
+
+```python
+# schemas/user_schemas.py - NIVEL 4: ESTADO DA ARTE
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    EmailStr,
+    field_validator,
+    computed_field,
+    model_validator
+)
+from datetime import datetime
+from typing import Self
+import re
+
+
+# ============================================================================
+# SCHEMAS AUXILIARES (para evitar recursao)
+# ============================================================================
+class TeamSimple(BaseModel):
+    """Team simplificado - evita recursao Team->Users->Team->Users..."""
+    id: int
+    team_name: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ============================================================================
+# BASE - Campos compartilhados
+# ============================================================================
+class UserBase(BaseModel):
+    """Campos comuns com validacoes."""
+    user_full_name: str = Field(
+        ...,
+        min_length=2,
+        max_length=200,
+        description="Nome completo do usuario",
+        examples=["Joao da Silva"]
+    )
+    user_email: EmailStr = Field(
+        ...,
+        description="Email valido e unico no sistema",
+        examples=["joao.silva@empresa.com"]
+    )
+
+    @field_validator('user_full_name')
+    @classmethod
+    def name_must_have_two_words(cls, v: str) -> str:
+        """Valida que nome tem pelo menos duas palavras."""
+        if len(v.split()) < 2:
+            raise ValueError('Nome deve ter pelo menos nome e sobrenome')
+        return v.title()  # Capitaliza: "joao silva" -> "Joao Silva"
+
+
+# ============================================================================
+# CREATE - Para criacao
+# ============================================================================
+class UserCreate(UserBase):
+    """Dados para criar usuario."""
+    user_password: str = Field(
+        ...,
+        min_length=8,
+        description="Senha com minimo 8 caracteres, 1 maiuscula, 1 numero"
+    )
+    user_team_id: int = Field(..., gt=0)
+    user_role: str = Field(default="user", pattern="^(admin|manager|user)$")
+
+    @field_validator('user_password')
+    @classmethod
+    def password_strength(cls, v: str) -> str:
+        """Valida forca da senha."""
+        if not re.search(r'[A-Z]', v):
+            raise ValueError('Senha deve ter pelo menos uma letra maiuscula')
+        if not re.search(r'[0-9]', v):
+            raise ValueError('Senha deve ter pelo menos um numero')
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', v):
+            raise ValueError('Senha deve ter pelo menos um caractere especial')
+        return v
+
+
+# ============================================================================
+# UPDATE - Para atualizacao
+# ============================================================================
+class UserUpdate(BaseModel):
+    """Campos atualizaveis (todos opcionais)."""
+    user_full_name: str | None = Field(None, min_length=2, max_length=200)
+    user_email: EmailStr | None = None
+    user_team_id: int | None = Field(None, gt=0)
+    is_active: bool | None = None
+
+    @model_validator(mode='after')
+    def at_least_one_field(self) -> Self:
+        """Garante que pelo menos um campo foi enviado."""
+        if all(v is None for v in self.model_dump().values()):
+            raise ValueError('Pelo menos um campo deve ser enviado para atualizacao')
+        return self
+
+
+# ============================================================================
+# RESPONSE - Para retorno (sem senha!)
+# ============================================================================
+class UserResponse(UserBase):
+    """Dados retornados pela API."""
+    id: int
+    user_team_id: int
+    user_role: str
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+    @computed_field
+    @property
+    def display_name(self) -> str:
+        """Campo calculado: primeiro nome + status."""
+        first_name = self.user_full_name.split()[0]
+        status = "[Ativo]" if self.is_active else "[Inativo]"
+        return f"{first_name} {status}"
+
+
+# ============================================================================
+# RESPONSE COM RELACIONAMENTO
+# ============================================================================
+class UserWithTeam(UserResponse):
+    """User com dados do time incluidos."""
+    team: TeamSimple | None = None  # Inclui o time se foi carregado
+
+
+# ============================================================================
+# LIST - Para listagens
+# ============================================================================
+class UserList(BaseModel):
+    """Versao minima para listagens."""
+    id: int
+    user_full_name: str
+    user_email: str
+    is_active: bool
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ============================================================================
+# RESPONSE DE LISTAGEM PAGINADA
+# ============================================================================
+class UserListResponse(BaseModel):
+    """Resposta paginada de listagem."""
+    items: list[UserList]
+    total: int
+    page: int
+    page_size: int
+    total_pages: int
+
+    @computed_field
+    @property
+    def has_next(self) -> bool:
+        return self.page < self.total_pages
+
+    @computed_field
+    @property
+    def has_previous(self) -> bool:
+        return self.page > 1
+```
+
+---
+
+#### Resumo da Evolucao
+
+| Nivel | O que adicionou | Quando usar |
+|-------|-----------------|-------------|
+| 1. Basico | Campos + tipos | Prototipo rapido |
+| 2. Intermediario | `from_attributes` | Integracao com ORM |
+| 3. Avancado | Create/Update/Response separados | APIs REST |
+| 4. Estado da Arte | Validacoes, computed, relacionamentos | Producao |
+
+---
+
+#### Teste de Validacao
+
+```python
+# Teste seus schemas ANTES de usar na API!
+from schemas.user_schemas import UserCreate, UserUpdate, UserResponse
+
+# Teste Create
+try:
+    user = UserCreate(
+        user_full_name="Joao",  # Erro: falta sobrenome
+        user_email="joao@email.com",
+        user_password="123",  # Erro: muito curta
+        user_team_id=1
+    )
+except Exception as e:
+    print(f"Validacao falhou: {e}")
+
+# Teste valido
+user = UserCreate(
+    user_full_name="Joao da Silva",
+    user_email="joao@email.com",
+    user_password="Senha123!",
+    user_team_id=1
+)
+print(user.model_dump())
+
+# Teste Update vazio
+try:
+    update = UserUpdate()  # Erro: nenhum campo
+except Exception as e:
+    print(f"Update vazio: {e}")
+```
+
+---
+
 ### Entendendo o Problema de Serialização
 
 Quando você retorna dados de uma API, precisa resolver vários desafios:
@@ -6571,6 +9512,151 @@ class UserUpdate(BaseModel):
     user_email: str | None = None
     user_photo: str | None = None
     is_active: bool | None = None
+```
+
+### Dependency Injection (Injeção de Dependências) - O Que É?
+
+Antes de ver o código, você precisa entender este conceito fundamental.
+
+**Problema:** Como um endpoint obtém uma conexão com o banco?
+
+```python
+# ❌ ERRADO: Criar conexão manualmente em cada endpoint
+@app.get("/users")
+def list_users():
+    db = Session()  # Cria conexão
+    try:
+        users = db.query(User).all()
+        return users
+    finally:
+        db.close()  # Tem que lembrar de fechar!
+
+@app.get("/teams")
+def list_teams():
+    db = Session()  # Código duplicado...
+    try:
+        teams = db.query(Team).all()
+        return teams
+    finally:
+        db.close()  # Código duplicado...
+```
+
+**Problemas:**
+- Código duplicado em TODOS os endpoints
+- Fácil esquecer de fechar a conexão (vazamento)
+- Difícil de testar (não dá pra substituir por mock)
+
+**Solução: Dependency Injection**
+
+```python
+# ✅ CORRETO: FastAPI "injeta" a dependência automaticamente
+@app.get("/users")
+def list_users(db: Session = Depends(get_db)):  # ← FastAPI fornece o db
+    users = db.query(User).all()
+    return users  # Não precisa fechar! FastAPI cuida disso.
+
+@app.get("/teams")
+def list_teams(db: Session = Depends(get_db)):  # ← Mesmo padrão
+    teams = db.query(Team).all()
+    return teams
+```
+
+**O que `Depends(get_db)` faz?**
+
+1. Antes de chamar seu endpoint, FastAPI chama `get_db()`
+2. O resultado é "injetado" no parâmetro `db`
+3. Seu código usa `db` normalmente
+4. Depois do endpoint, FastAPI executa o cleanup (fecha conexão)
+
+**A função get_db:**
+
+```python
+# infra/configs/connection.py
+
+def get_db():
+    """
+    Dependency que fornece uma Session por request.
+
+    Uso:
+        @app.get("/users")
+        def list_users(db: Session = Depends(get_db)):
+            ...
+
+    O que acontece:
+        1. FastAPI chama get_db() ANTES do endpoint
+        2. yield db → db é passado para o endpoint
+        3. Endpoint executa
+        4. Código após yield executa (cleanup)
+    """
+    db = Session()
+    try:
+        yield db      # ← "Pausa" aqui, db vai pro endpoint
+        db.commit()   # ← Se tudo OK, commit
+    except:
+        db.rollback() # ← Se erro, rollback
+        raise
+    finally:
+        db.close()    # ← Sempre fecha a conexão
+```
+
+**Fluxo visual:**
+
+```
+Request HTTP: GET /users
+         │
+         ▼
+┌─────────────────────────────────────────┐
+│ FastAPI vê: Depends(get_db)             │
+│                                         │
+│ 1. Chama get_db()                       │
+│ 2. get_db() cria Session e faz yield   │
+│ 3. Session é passada para o endpoint    │
+└────────────────┬────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────┐
+│ Seu endpoint executa                    │
+│                                         │
+│ def list_users(db: Session):            │
+│     return db.query(User).all()         │
+└────────────────┬────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────┐
+│ FastAPI continua get_db()               │
+│                                         │
+│ - commit() se sucesso                   │
+│ - rollback() se erro                    │
+│ - close() sempre                        │
+└─────────────────────────────────────────┘
+                 │
+                 ▼
+         Response HTTP
+```
+
+**Por que "Injeção de Dependências"?**
+
+O endpoint **não cria** suas dependências - elas são **injetadas** de fora.
+
+| Sem DI | Com DI |
+|--------|--------|
+| Endpoint cria o que precisa | Endpoint **recebe** o que precisa |
+| Acoplamento forte | Acoplamento fraco |
+| Difícil testar | Fácil testar (mock) |
+| Código duplicado | Código reutilizável |
+
+**Testando com DI:**
+
+```python
+# Em testes, você pode "injetar" um banco de teste!
+def get_test_db():
+    """Usa banco de teste ao invés do real."""
+    db = TestSession()
+    yield db
+    db.close()
+
+# Substitui a dependência nos testes
+app.dependency_overrides[get_db] = get_test_db
 ```
 
 ### Uso com FastAPI
@@ -6946,6 +10032,1149 @@ user4 = User.model_validate_json('{"id": 3, "name": "Carlos", "email": "c@e.com"
 
 ---
 
+## 3.2.1 Aprofundamento: model_dump() e model_dump_json()
+
+Estes dois métodos são **essenciais** para trabalhar com APIs. Domine-os completamente.
+
+### model_dump() - Convertendo Schema para Dicionário
+
+```python
+from pydantic import BaseModel, Field
+from datetime import datetime
+from enum import Enum
+
+class Status(Enum):
+    ATIVO = "ativo"
+    INATIVO = "inativo"
+
+class UserResponse(BaseModel):
+    id: int
+    name: str
+    email: str
+    status: Status
+    created_at: datetime
+    team_id: int | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+# Criando instância
+user = UserResponse(
+    id=1,
+    name="Matheus",
+    email="m@e.com",
+    status=Status.ATIVO,
+    created_at=datetime(2024, 1, 15, 10, 30),
+    team_id=None
+)
+
+# ═══════════════════════════════════════════════════════════════════════════
+# model_dump() BÁSICO
+# ═══════════════════════════════════════════════════════════════════════════
+user.model_dump()
+# Resultado:
+# {
+#     'id': 1,
+#     'name': 'Matheus',
+#     'email': 'm@e.com',
+#     'status': <Status.ATIVO: 'ativo'>,  ← Enum como objeto!
+#     'created_at': datetime(2024, 1, 15, 10, 30),  ← datetime como objeto!
+#     'team_id': None
+# }
+
+# ═══════════════════════════════════════════════════════════════════════════
+# model_dump(mode="json") - Para serialização JSON
+# ═══════════════════════════════════════════════════════════════════════════
+user.model_dump(mode="json")
+# Resultado:
+# {
+#     'id': 1,
+#     'name': 'Matheus',
+#     'email': 'm@e.com',
+#     'status': 'ativo',  ← Enum convertido para string!
+#     'created_at': '2024-01-15T10:30:00',  ← datetime como ISO string!
+#     'team_id': None
+# }
+
+# ═══════════════════════════════════════════════════════════════════════════
+# OPÇÕES IMPORTANTES
+# ═══════════════════════════════════════════════════════════════════════════
+
+# 1. exclude_none=True - Remove campos com valor None
+user.model_dump(mode="json", exclude_none=True)
+# Resultado: team_id não aparece pois é None
+# {'id': 1, 'name': 'Matheus', 'email': 'm@e.com', 'status': 'ativo', 'created_at': '2024-01-15T10:30:00'}
+
+# 2. exclude={"campo"} - Remove campos específicos
+user.model_dump(mode="json", exclude={"email", "created_at"})
+# {'id': 1, 'name': 'Matheus', 'status': 'ativo', 'team_id': None}
+
+# 3. include={"campo"} - Inclui APENAS estes campos
+user.model_dump(mode="json", include={"id", "name"})
+# {'id': 1, 'name': 'Matheus'}
+
+# 4. exclude_unset=True - Remove campos que não foram setados explicitamente
+# Útil para PATCH (atualização parcial)
+class UserUpdate(BaseModel):
+    name: str | None = None
+    email: str | None = None
+
+update = UserUpdate(name="Novo Nome")  # email não foi setado
+update.model_dump(exclude_unset=True)
+# {'name': 'Novo Nome'}  ← email não aparece!
+
+# 5. by_alias=True - Usa o alias definido no Field
+class UserAPI(BaseModel):
+    user_name: str = Field(alias="userName")  # API usa camelCase
+
+    model_config = ConfigDict(populate_by_name=True)
+
+u = UserAPI(user_name="Matheus")
+u.model_dump()              # {'user_name': 'Matheus'}
+u.model_dump(by_alias=True) # {'userName': 'Matheus'}  ← Usa o alias!
+```
+
+### model_dump_json() - Convertendo Direto para JSON String
+
+```python
+# model_dump_json() combina model_dump(mode="json") + json.dumps()
+
+user.model_dump_json()
+# '{"id":1,"name":"Matheus","email":"m@e.com","status":"ativo","created_at":"2024-01-15T10:30:00","team_id":null}'
+
+# Com formatação
+user.model_dump_json(indent=2)
+# {
+#   "id": 1,
+#   "name": "Matheus",
+#   ...
+# }
+
+# Com opções
+user.model_dump_json(indent=2, exclude={"email"}, exclude_none=True)
+```
+
+### Quando Usar Cada Um
+
+| Situação | Método | Por quê |
+|----------|--------|---------|
+| Retornar de endpoint FastAPI | Nenhum! | FastAPI serializa automaticamente |
+| Passar para outro service | `model_dump()` | Mantém tipos Python |
+| Salvar em cache Redis | `model_dump_json()` | Redis armazena strings |
+| Enviar para API externa | `model_dump(mode="json")` | Tipos JSON puros |
+| Log estruturado | `model_dump_json()` | String para logging |
+| Atualização parcial (PATCH) | `model_dump(exclude_unset=True)` | Só campos alterados |
+
+### Padrão Real em Services
+
+```python
+class UserService:
+    def __init__(self, repository: UserRepository):
+        self.repository = repository
+
+    def update_user(self, user_id: int, data: UserUpdate, db: Session) -> UserResponse:
+        # exclude_unset=True: só atualiza campos que foram passados
+        updates = data.model_dump(exclude_unset=True)
+
+        if not updates:
+            raise ValueError("Nenhum campo para atualizar")
+
+        user = self.repository.update(db, user_id, **updates)
+        return UserResponse.model_validate(user)
+```
+
+---
+
+## 3.2.2 Exemplo Prático End-to-End: User + Team
+
+Este exemplo mostra o fluxo **completo** de uma feature, do banco de dados até a API. Use como referência para suas implementações.
+
+### Estrutura de Arquivos
+
+```
+projeto/
+├── infra/
+│   ├── configs/
+│   │   ├── settings.py      # Variáveis de ambiente centralizadas
+│   │   ├── database.py      # Base class
+│   │   └── connection.py    # Conexão com banco
+│   ├── entities/
+│   │   ├── team.py          # Entity Team
+│   │   └── user.py          # Entity User
+│   └── repositories/
+│       ├── team_repository.py
+│       └── user_repository.py
+├── schemas/
+│   ├── team_schemas.py      # Schemas de Team
+│   └── user_schemas.py      # Schemas de User
+├── services/
+│   ├── team_service.py      # Lógica de negócio de Team
+│   └── user_service.py      # Lógica de negócio de User
+└── api/
+    └── routes/
+        ├── team_routes.py   # Endpoints de Team
+        └── user_routes.py   # Endpoints de User
+```
+
+### CAMADA 1: Entity (infra/entities/)
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# infra/entities/team.py - ESTRUTURA DO BANCO
+# ═══════════════════════════════════════════════════════════════════════════
+from sqlalchemy import String, Integer, ForeignKey, Enum
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from enum import Enum as PyEnum
+from infra.configs.database import Base
+
+
+class Area(PyEnum):
+    TI = "ti"
+    RH = "rh"
+    FINANCEIRO = "financeiro"
+
+
+class Team(Base):
+    __tablename__ = "teams"
+
+    # Campos específicos
+    team_name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    team_description: Mapped[str | None] = mapped_column(String, nullable=True, init=False)
+    team_area: Mapped[Area] = mapped_column(Enum(Area), nullable=False)
+
+    # FK para gerente (outro User)
+    team_manager_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL", use_alter=True),
+        nullable=True,
+        init=False
+    )
+
+    # Relationships
+    manager: Mapped["User | None"] = relationship(
+        foreign_keys=[team_manager_id],
+        back_populates="managed_team",
+        lazy="raise",
+        init=False
+    )
+    team_members: Mapped[list["User"]] = relationship(
+        foreign_keys="[User.user_team_id]",
+        back_populates="team",
+        lazy="raise",
+        init=False,
+        default_factory=list  # ← Cada instância tem sua própria lista!
+    )
+```
+
+### O que é default_factory?
+
+```python
+# ❌ ERRADO - Todas as instâncias compartilham A MESMA lista
+team_members: Mapped[list["User"]] = relationship(..., default=[])
+
+team1 = Team(...)
+team2 = Team(...)
+team1.team_members.append(user1)
+print(team2.team_members)  # [user1] ← PROBLEMA! team2 tem o mesmo user!
+
+# ✅ CORRETO - Cada instância tem SUA PRÓPRIA lista
+team_members: Mapped[list["User"]] = relationship(..., default_factory=list)
+
+team1 = Team(...)
+team2 = Team(...)
+team1.team_members.append(user1)
+print(team2.team_members)  # [] ← Correto! Lista independente
+```
+
+**Por que isso acontece?** Em Python, `default=[]` cria UMA lista na definição da classe, e todas as instâncias apontam para ela. `default_factory=list` chama `list()` para cada instância, criando listas separadas.
+
+### CAMADA 2: Repository (infra/repositories/)
+
+#### O Que É Repository?
+
+Repository é um padrão de design que **abstrai o acesso a dados**. O resto da aplicação não sabe se os dados vêm de PostgreSQL, MongoDB, ou API externa.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     REPOSITORY PATTERN                                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   Service                    Repository                    Database         │
+│   ┌───────┐                 ┌──────────┐                 ┌───────────┐     │
+│   │       │ ─── get(1) ───► │          │ ─── SELECT ───► │           │     │
+│   │       │ ◄── User ────── │          │ ◄── row ─────── │           │     │
+│   └───────┘                 └──────────┘                 └───────────┘     │
+│                                                                             │
+│   Service não conhece SQL   Repository traduz para SQL   Banco executa     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### BaseRepository com Generics
+
+Criamos um **BaseRepository genérico** que implementa operações comuns a TODAS as entidades. Generics permitem criar classes que funcionam com **qualquer tipo**, mantendo type safety.
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# ANATOMIA DO GENERIC
+# ═══════════════════════════════════════════════════════════════════════════
+from typing import TypeVar, Generic, Type
+
+# TypeVar: Define um "placeholder" para um tipo
+# - "T" é apenas um nome (pode ser qualquer coisa)
+# - bound=Base significa "T deve herdar de Base"
+T = TypeVar("T", bound=Base)
+
+# Type[T]: Significa "a CLASSE em si, não uma instância"
+# - Type[User] = a classe User
+# - User = uma instância de User
+
+class BaseRepository(Generic[T]):
+    # Generic[T] indica que a classe é parametrizada por T
+
+    def __init__(self, model: Type[T]):
+        # model é a CLASSE (User, Team, etc.)
+        self.model = model
+
+    def select_by_id(self, id: int) -> T | None:
+        # Retorna uma INSTÂNCIA do tipo T
+        ...
+```
+
+#### BaseRepository - Implementação Estado da Arte
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# infra/repositories/base_repository.py - VERSÃO FINAL
+# ═══════════════════════════════════════════════════════════════════════════
+"""
+Repositório base com operações CRUD e suporte a soft delete.
+
+Regra de Ouro:
+- NUNCA execute DELETE real no banco
+- Use soft_delete() que marca active=INATIVO
+- Todas as queries filtram por active != INATIVO automaticamente
+"""
+from datetime import datetime
+from typing import TypeVar, Generic, Type, List, Optional
+
+from sqlalchemy.orm import Session
+from infra.configs.connection import DBConnectionHandler
+from infra.configs.database import Base, Status
+
+T = TypeVar("T", bound=Base)
+
+
+class BaseRepository(Generic[T]):
+    """
+    Repositório base genérico com CRUD e soft delete.
+
+    Características:
+    - Gerencia própria conexão via context manager
+    - Soft delete automático em todas as queries
+    - Auditoria de updated_by/deleted_by
+    - Métodos para restauração de registros
+
+    Uso:
+        class UserRepository(BaseRepository[User]):
+            def __init__(self):
+                super().__init__(User)
+
+            def select_by_email(self, email: str) -> dict | None:
+                with DBConnectionHandler() as db:
+                    data = self._base_query(db.session).filter(
+                        User.user_email == email
+                    ).first()
+                    return data.to_dict() if data else None
+    """
+
+    def __init__(self, model: Type[T]):
+        self.model = model
+
+    # =========================================================================
+    # QUERIES BASE (com filtro de soft delete)
+    # =========================================================================
+
+    def _base_query(self, session: Session):
+        """Query base que filtra registros soft-deleted."""
+        return session.query(self.model).filter(self.model.active != Status.INATIVO)
+
+    def _base_query_all(self, session: Session):
+        """Query que inclui TODOS os registros (inclusive soft-deleted)."""
+        return session.query(self.model)
+
+    # =========================================================================
+    # SELECT
+    # =========================================================================
+
+    def select_all(self, include_inactive: bool = False) -> List[dict]:
+        """Retorna todos os registros ativos."""
+        with DBConnectionHandler() as db:
+            if include_inactive:
+                data = self._base_query_all(db.session).all()
+            else:
+                data = self._base_query(db.session).all()
+            return [item.to_dict() for item in data]
+
+    def select_by_id(self, id: int, include_inactive: bool = False) -> Optional[dict]:
+        """Retorna registro por ID."""
+        with DBConnectionHandler() as db:
+            if include_inactive:
+                query = self._base_query_all(db.session)
+            else:
+                query = self._base_query(db.session)
+            data = query.filter(self.model.id == id).first()
+            return data.to_dict() if data else None
+
+    def exists(self, id: int) -> bool:
+        """Verifica se registro existe (e está ativo)."""
+        with DBConnectionHandler() as db:
+            return self._base_query(db.session).filter(
+                self.model.id == id
+            ).first() is not None
+
+    def count(self, include_inactive: bool = False) -> int:
+        """Conta registros."""
+        with DBConnectionHandler() as db:
+            if include_inactive:
+                return self._base_query_all(db.session).count()
+            return self._base_query(db.session).count()
+
+    # =========================================================================
+    # INSERT
+    # =========================================================================
+
+    def insert(self, entity: T) -> int:
+        """Insere nova entidade. Retorna ID."""
+        with DBConnectionHandler() as db:
+            db.session.add(entity)
+            db.session.flush()
+            db.session.refresh(entity)
+            return entity.id
+
+    # =========================================================================
+    # UPDATE
+    # =========================================================================
+
+    def update(self, id: int, updated_by: Optional[int] = None, **kwargs) -> bool:
+        """Atualiza campos específicos de um registro."""
+        with DBConnectionHandler() as db:
+            query = self._base_query(db.session).filter(self.model.id == id)
+            if query.first() is None:
+                return False
+            if updated_by:
+                kwargs['updated_by'] = updated_by
+            query.update(kwargs)
+            return True
+
+    # =========================================================================
+    # SOFT DELETE
+    # =========================================================================
+
+    def soft_delete(self, id: int, deleted_by: Optional[int] = None) -> bool:
+        """Marca registro como inativo (soft delete)."""
+        with DBConnectionHandler() as db:
+            query = self._base_query(db.session).filter(self.model.id == id)
+            if query.first() is None:
+                return False
+            query.update({
+                self.model.active: Status.INATIVO,
+                self.model.deleted_at: datetime.now(),
+                self.model.deleted_by: deleted_by
+            })
+            return True
+
+    def restore(self, id: int) -> bool:
+        """Restaura registro soft-deleted."""
+        with DBConnectionHandler() as db:
+            query = self._base_query_all(db.session).filter(
+                self.model.id == id,
+                self.model.active == Status.INATIVO
+            )
+            if query.first() is None:
+                return False
+            query.update({
+                self.model.active: Status.ATIVO,
+                self.model.deleted_at: None,
+                self.model.deleted_by: None
+            })
+            return True
+
+    def hard_delete(self, id: int) -> bool:
+        """Remove registro PERMANENTEMENTE. Use com cautela!"""
+        with DBConnectionHandler() as db:
+            query = db.session.query(self.model).filter(self.model.id == id)
+            if query.first() is None:
+                return False
+            query.delete()
+            return True
+```
+
+#### Implementando Repository Específico
+
+Com o BaseRepository pronto, repositories específicos ficam mínimos:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# infra/repositories/user_repository.py
+# ═══════════════════════════════════════════════════════════════════════════
+from infra.configs.connection import DBConnectionHandler
+from infra.entities.user import User, UserStatus
+from infra.repositories.base_repository import BaseRepository
+
+
+class UserRepository(BaseRepository[User]):
+    """
+    Repositório para operações com User.
+
+    Herda de BaseRepository:
+    - select_all(), select_by_id(), exists(), count()
+    - insert(), update()
+    - soft_delete(), restore(), hard_delete()
+    """
+
+    def __init__(self):
+        super().__init__(User)
+
+    # =========================================================================
+    # MÉTODOS ESPECÍFICOS DE USER
+    # =========================================================================
+
+    def create(self, user_full_name: str, user_email: str, user_team_id: int,
+               user_role: str, user_login: str) -> int:
+        """Cria um novo usuário. Retorna ID."""
+        user = User(
+            user_full_name=user_full_name,
+            user_email=user_email,
+            user_team_id=user_team_id,
+            user_role=user_role,
+            user_login=user_login
+        )
+        return self.insert(user)
+
+    def select_by_email(self, email: str) -> dict | None:
+        """Busca usuário por email."""
+        with DBConnectionHandler() as db:
+            data = self._base_query(db.session).filter(
+                User.user_email == email
+            ).first()
+            return data.to_dict() if data else None
+
+    def select_by_team(self, team_id: int) -> list[dict]:
+        """Retorna usuários de um time específico."""
+        with DBConnectionHandler() as db:
+            data = self._base_query(db.session).filter(
+                User.user_team_id == team_id
+            ).all()
+            return [item.to_dict() for item in data]
+
+    def update_status(self, user_id: int, status: UserStatus) -> bool:
+        """Atualiza o status operacional do usuário."""
+        return self.update(user_id, user_status=status)
+```
+
+#### Diagrama de Herança
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    HIERARQUIA DE REPOSITORIES                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│                      BaseRepository[T]                                       │
+│                      (Generic, abstrato)                                     │
+│                            │                                                 │
+│         ┌─────────────────┼─────────────────┐                               │
+│         │                 │                 │                               │
+│         ▼                 ▼                 ▼                               │
+│   UserRepository    TeamRepository    TicketRepository                       │
+│   [User]            [Team]            [Ticket]                              │
+│         │                 │                 │                               │
+│         ▼                 ▼                 ▼                               │
+│   - select_by_email  - select_by_area  - select_by_status                   │
+│   - select_by_team   - select_active   - select_by_user                     │
+│   - update_status    - add_member      - assign_to                          │
+│                                                                             │
+│   HERDAM: select_all, select_by_id, insert, update, soft_delete, restore    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### CAMADA 3: Schemas (schemas/)
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# schemas/team_schemas.py - VALIDAÇÃO E SERIALIZAÇÃO
+# ═══════════════════════════════════════════════════════════════════════════
+from pydantic import BaseModel, Field, ConfigDict, field_validator
+from datetime import datetime
+from enum import Enum
+
+
+class Area(str, Enum):
+    """Enum que serializa como string automaticamente."""
+    TI = "ti"
+    RH = "rh"
+    FINANCEIRO = "financeiro"
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SCHEMAS DE ENTRADA (Request)
+# ═══════════════════════════════════════════════════════════════════════════
+
+class TeamCreate(BaseModel):
+    """Schema para CRIAR time. Campos obrigatórios para criação."""
+    team_name: str = Field(..., min_length=2, max_length=100)
+    team_area: Area
+    team_description: str | None = None
+
+    # Lista de IDs para associações N-N
+    member_ids: list[int] = Field(default_factory=list)
+
+    @field_validator('team_name')
+    @classmethod
+    def validate_team_name(cls, v: str) -> str:
+        """Remove espaços extras e valida."""
+        v = v.strip()
+        if not v:
+            raise ValueError('Nome do time não pode ser vazio')
+        return v
+
+
+class TeamUpdate(BaseModel):
+    """
+    Schema para ATUALIZAR time.
+    Todos os campos são opcionais (PATCH).
+    """
+    team_name: str | None = Field(None, min_length=2, max_length=100)
+    team_area: Area | None = None
+    team_description: str | None = None
+    team_manager_id: int | None = None
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SCHEMAS DE SAÍDA (Response)
+# ═══════════════════════════════════════════════════════════════════════════
+
+class TeamSimple(BaseModel):
+    """Schema mínimo para referências."""
+    id: int
+    team_name: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UserSimple(BaseModel):
+    """Schema mínimo de User para evitar recursão."""
+    id: int
+    user_full_name: str
+    user_email: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TeamResponse(BaseModel):
+    """Schema padrão de resposta."""
+    id: int
+    team_name: str
+    team_description: str | None
+    team_area: Area
+    team_manager_id: int | None
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TeamWithMembers(TeamResponse):
+    """Schema com membros incluídos (eager loading necessário!)."""
+    manager: UserSimple | None = None
+    team_members: list[UserSimple] = Field(default_factory=list)
+
+
+class TeamList(BaseModel):
+    """Schema para listagem paginada."""
+    items: list[TeamResponse]
+    total: int
+    page: int
+    per_page: int
+```
+
+### CAMADA 4: Service (services/)
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# services/team_service.py - LÓGICA DE NEGÓCIO
+# ═══════════════════════════════════════════════════════════════════════════
+from sqlalchemy.orm import Session
+from infra.repositories.team_repository import TeamRepository
+from schemas.team_schemas import TeamCreate, TeamUpdate, TeamResponse, TeamWithMembers
+
+
+class TeamServiceError(Exception):
+    """Exceção base para erros do TeamService."""
+    pass
+
+
+class TeamNotFoundError(TeamServiceError):
+    """Time não encontrado."""
+    pass
+
+
+class TeamHasActiveMembersError(TeamServiceError):
+    """Não pode deletar time com membros ativos."""
+    pass
+
+
+class TeamService:
+    """
+    Service: LÓGICA DE NEGÓCIO.
+    - Valida regras de negócio
+    - Orquestra operações
+    - Converte Entity ↔ Schema
+    - NÃO conhece HTTP (status codes, etc.)
+    """
+
+    def __init__(self, repository: TeamRepository):
+        self.repository = repository
+
+    def get_team(self, db: Session, team_id: int) -> TeamResponse:
+        """Busca time por ID."""
+        team = self.repository.get_by_id(db, team_id)
+        if not team:
+            raise TeamNotFoundError(f"Time {team_id} não encontrado")
+
+        # Converte Entity → Schema
+        return TeamResponse.model_validate(team)
+
+    def get_team_with_members(self, db: Session, team_id: int) -> TeamWithMembers:
+        """Busca time com membros (eager loading)."""
+        team = self.repository.get_by_id_with_members(db, team_id)
+        if not team:
+            raise TeamNotFoundError(f"Time {team_id} não encontrado")
+
+        # Converte Entity → Schema (inclui relacionamentos)
+        return TeamWithMembers.model_validate(team)
+
+    def create_team(self, db: Session, data: TeamCreate) -> TeamResponse:
+        """
+        Cria novo time.
+
+        Fluxo:
+        1. Schema (validado pelo Pydantic) → dict
+        2. Repository cria Entity
+        3. Entity → Schema de resposta
+        """
+        # Schema → dict (exclui member_ids que será tratado separadamente)
+        team_data = data.model_dump(exclude={"member_ids"})
+
+        # Repository cria Entity
+        team = self.repository.create(db, **team_data)
+
+        # TODO: Associar member_ids se fornecidos
+
+        # Entity → Schema de resposta
+        return TeamResponse.model_validate(team)
+
+    def update_team(self, db: Session, team_id: int, data: TeamUpdate) -> TeamResponse:
+        """Atualiza time existente."""
+        team = self.repository.get_by_id(db, team_id)
+        if not team:
+            raise TeamNotFoundError(f"Time {team_id} não encontrado")
+
+        # Pega APENAS campos que foram setados (PATCH behavior)
+        updates = data.model_dump(exclude_unset=True)
+
+        if not updates:
+            # Nada para atualizar, retorna como está
+            return TeamResponse.model_validate(team)
+
+        team = self.repository.update(db, team, **updates)
+        return TeamResponse.model_validate(team)
+
+    def delete_team(self, db: Session, team_id: int, deleted_by: int) -> None:
+        """
+        Soft delete de time.
+
+        REGRA DE NEGÓCIO: Não pode deletar time com membros ativos.
+        """
+        team = self.repository.get_by_id_with_members(db, team_id)
+        if not team:
+            raise TeamNotFoundError(f"Time {team_id} não encontrado")
+
+        # Regra de negócio: verificar membros ativos
+        active_members = [m for m in team.team_members if m.deleted_at is None]
+        if active_members:
+            raise TeamHasActiveMembersError(
+                f"Time tem {len(active_members)} membros ativos. "
+                "Remova ou transfira os membros antes de deletar."
+            )
+
+        self.repository.soft_delete(db, team, deleted_by)
+```
+
+### CAMADA 5: API (api/routes/)
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# api/routes/team_routes.py - ENDPOINTS HTTP
+# ═══════════════════════════════════════════════════════════════════════════
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from infra.configs.connection import get_db
+from infra.repositories.team_repository import TeamRepository
+from services.team_service import (
+    TeamService,
+    TeamNotFoundError,
+    TeamHasActiveMembersError
+)
+from schemas.team_schemas import (
+    TeamCreate,
+    TeamUpdate,
+    TeamResponse,
+    TeamWithMembers
+)
+
+router = APIRouter(prefix="/teams", tags=["Teams"])
+
+
+def get_team_service() -> TeamService:
+    """Dependency Injection do TeamService."""
+    return TeamService(TeamRepository())
+
+
+@router.post("/", response_model=TeamResponse, status_code=status.HTTP_201_CREATED)
+def create_team(
+    data: TeamCreate,  # ← Pydantic valida automaticamente
+    db: Session = Depends(get_db),
+    service: TeamService = Depends(get_team_service)
+):
+    """
+    Cria novo time.
+
+    Fluxo:
+    1. FastAPI valida request body com TeamCreate (Pydantic)
+    2. Service executa lógica de negócio
+    3. Service retorna TeamResponse
+    4. FastAPI serializa para JSON automaticamente
+    """
+    return service.create_team(db, data)
+
+
+@router.get("/{team_id}", response_model=TeamResponse)
+def get_team(
+    team_id: int,
+    db: Session = Depends(get_db),
+    service: TeamService = Depends(get_team_service)
+):
+    """Busca time por ID."""
+    try:
+        return service.get_team(db, team_id)
+    except TeamNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/{team_id}/members", response_model=TeamWithMembers)
+def get_team_with_members(
+    team_id: int,
+    db: Session = Depends(get_db),
+    service: TeamService = Depends(get_team_service)
+):
+    """Busca time com lista de membros."""
+    try:
+        return service.get_team_with_members(db, team_id)
+    except TeamNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.patch("/{team_id}", response_model=TeamResponse)
+def update_team(
+    team_id: int,
+    data: TeamUpdate,
+    db: Session = Depends(get_db),
+    service: TeamService = Depends(get_team_service)
+):
+    """Atualiza time (PATCH - parcial)."""
+    try:
+        return service.update_team(db, team_id, data)
+    except TeamNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.delete("/{team_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_team(
+    team_id: int,
+    db: Session = Depends(get_db),
+    service: TeamService = Depends(get_team_service),
+    current_user_id: int = 1  # TODO: pegar do token JWT
+):
+    """
+    Soft delete de time.
+
+    Retorna 204 No Content em caso de sucesso.
+    Retorna 409 Conflict se time tiver membros ativos.
+    """
+    try:
+        service.delete_team(db, team_id, deleted_by=current_user_id)
+    except TeamNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except TeamHasActiveMembersError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+```
+
+### Fluxo Visual Completo
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    FLUXO: POST /teams (criar time)                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. Request HTTP                                                            │
+│     POST /teams                                                             │
+│     {"team_name": "Performance", "team_area": "ti"}                         │
+│                              │                                              │
+│                              ▼                                              │
+│  2. FastAPI + Pydantic                                                      │
+│     TeamCreate valida automaticamente                                       │
+│     - team_name tem min 2 chars? ✓                                          │
+│     - team_area é enum válido? ✓                                            │
+│                              │                                              │
+│                              ▼                                              │
+│  3. API Layer (team_routes.py)                                              │
+│     @router.post("/")                                                       │
+│     def create_team(data: TeamCreate, ...):                                 │
+│         return service.create_team(db, data)                                │
+│                              │                                              │
+│                              ▼                                              │
+│  4. Service Layer (team_service.py)                                         │
+│     def create_team(self, db, data):                                        │
+│         team_data = data.model_dump(exclude={"member_ids"})                 │
+│         team = self.repository.create(db, **team_data)                      │
+│         return TeamResponse.model_validate(team)                            │
+│                              │                                              │
+│                              ▼                                              │
+│  5. Repository Layer (team_repository.py)                                   │
+│     def create(self, db, **data):                                           │
+│         team = Team(**data)  # Entity                                       │
+│         db.add(team)                                                        │
+│         db.flush()                                                          │
+│         return team                                                         │
+│                              │                                              │
+│                              ▼                                              │
+│  6. Entity Layer (team.py)                                                  │
+│     Team(team_name="Performance", team_area=Area.TI)                        │
+│     INSERT INTO teams (team_name, team_area, ...) VALUES (...)              │
+│                              │                                              │
+│                              ▼                                              │
+│  7. Response                                                                │
+│     TeamResponse serializa automaticamente                                  │
+│     {"id": 1, "team_name": "Performance", "team_area": "ti", ...}           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Regra de Ouro: Quem Conhece Quem
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   API       │ ──► │  Service    │ ──► │ Repository  │ ──► │  Entity     │
+│  (Routes)   │     │             │     │             │     │             │
+│             │     │             │     │             │     │             │
+│ Conhece:    │     │ Conhece:    │     │ Conhece:    │     │ Conhece:    │
+│ - Service   │     │ - Repository│     │ - Entity    │     │ - Base      │
+│ - Schemas   │     │ - Schemas   │     │ - Session   │     │ - SQLAlch.  │
+│ - FastAPI   │     │ - Exceptions│     │             │     │             │
+└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
+      │                   │                   │                   │
+      └───────────────────┴───────────────────┴───────────────────┘
+                                 │
+                    ↓ Seta NUNCA aponta para cima! ↓
+
+        Repository NÃO conhece Service
+        Service NÃO conhece API
+        Entity NÃO conhece ninguém acima
+```
+
+---
+
+## 3.2.3 Soft Delete Estratégico (Sem NULLs!)
+
+Sua abordagem é correta: soft delete **não deve deixar dados órfãos**.
+
+### O Problema com Soft Delete Tradicional
+
+```python
+# ❌ Soft delete ingênuo que deixa NULL
+def soft_delete_team(team_id):
+    team = db.get(Team, team_id)
+    team.deleted_at = datetime.now()
+
+    # E os membros? Ficam apontando para um time "deletado"
+    # E os projetos? Ficam com team_id de um time que não existe mais
+```
+
+### Sua Abordagem: Inativação Controlada
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# ESTRATÉGIA: INATIVAR, NÃO APAGAR
+# ═══════════════════════════════════════════════════════════════════════════
+
+class Status(PyEnum):
+    ATIVO = "ativo"
+    INATIVO = "inativo"      # Cadastro desativado temporariamente
+    SUSPENSO = "suspenso"    # Cadastro suspenso por algum motivo
+    BLOQUEADO = "bloqueado"  # Cadastro bloqueado por violação
+    EXCLUIDO = "excluido"    # Soft delete - para auditoria
+
+# Base com campos de auditoria COMPLETOS
+class Base(MappedAsDataclass, DeclarativeBase):
+    __abstract__ = True
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, init=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), init=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now(), init=False)
+
+    # Auditoria de criação/atualização
+    created_by: Mapped[int | None] = mapped_column(Integer, nullable=True, init=False)
+    updated_by: Mapped[int | None] = mapped_column(Integer, nullable=True, init=False)
+
+    # Soft delete com auditoria
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True, init=False)
+    deleted_by: Mapped[int | None] = mapped_column(Integer, nullable=True, init=False)
+
+    # Status que controla o comportamento
+    active: Mapped[Status] = mapped_column(Enum(Status), default=Status.ATIVO, init=False)
+```
+
+### Regras de Negócio para Delete
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# services/team_service.py
+# ═══════════════════════════════════════════════════════════════════════════
+
+class TeamService:
+    def delete_team(self, db: Session, team_id: int, deleted_by: int) -> None:
+        """
+        Soft delete de time.
+
+        REGRAS:
+        1. Time não pode ser deletado se tiver MEMBROS ATIVOS
+        2. Time não pode ser deletado se tiver PROJETOS EM ANDAMENTO
+        3. Registros históricos (projetos encerrados) permanecem intactos
+        """
+        team = self.repository.get_by_id_with_relations(db, team_id)
+        if not team:
+            raise TeamNotFoundError(f"Time {team_id} não encontrado")
+
+        # Verificar membros ativos
+        active_members = [m for m in team.team_members if m.active == Status.ATIVO]
+        if active_members:
+            raise TeamHasActiveMembersError(
+                f"Time tem {len(active_members)} membros ativos. "
+                "Transfira os membros para outro time antes de deletar."
+            )
+
+        # Verificar projetos em andamento
+        active_projects = [
+            p for p in team.team_projects
+            if p.project_status not in [ProjectStatus.ENCERRADO, ProjectStatus.CANCELADO]
+        ]
+        if active_projects:
+            raise TeamHasActiveProjectsError(
+                f"Time tem {len(active_projects)} projetos em andamento. "
+                "Finalize ou transfira os projetos antes de deletar."
+            )
+
+        # Soft delete
+        self.repository.soft_delete(db, team, deleted_by)
+```
+
+### Queries que Respeitam Soft Delete
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# infra/repositories/team_repository.py
+# ═══════════════════════════════════════════════════════════════════════════
+
+class TeamRepository:
+    def get_all_active(self, db: Session) -> list[Team]:
+        """Lista APENAS times ativos (padrão para uso normal)."""
+        stmt = select(Team).where(Team.active == Status.ATIVO)
+        return list(db.scalars(stmt).all())
+
+    def get_all_including_deleted(self, db: Session) -> list[Team]:
+        """Lista TODOS os times (para auditoria/admin)."""
+        return list(db.scalars(select(Team)).all())
+
+    def get_by_id_active(self, db: Session, team_id: int) -> Team | None:
+        """Busca time ativo por ID."""
+        stmt = select(Team).where(
+            Team.id == team_id,
+            Team.active == Status.ATIVO
+        )
+        return db.scalars(stmt).first()
+
+    def get_deleted_between(
+        self,
+        db: Session,
+        start_date: datetime,
+        end_date: datetime
+    ) -> list[Team]:
+        """Relatório de times deletados em um período (auditoria)."""
+        stmt = select(Team).where(
+            Team.deleted_at.between(start_date, end_date)
+        )
+        return list(db.scalars(stmt).all())
+```
+
+### Reativação de Cadastro
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════
+# Permite recadastramento/reativação
+# ═══════════════════════════════════════════════════════════════════════════
+
+class TeamService:
+    def reactivate_team(self, db: Session, team_id: int, reactivated_by: int) -> TeamResponse:
+        """
+        Reativa um time que foi soft deleted.
+
+        Útil para:
+        - Correção de deleção acidental
+        - Reativação de equipes sazonais
+        - Recuperação de dados
+        """
+        team = self.repository.get_by_id(db, team_id)  # Busca mesmo deletados
+        if not team:
+            raise TeamNotFoundError(f"Time {team_id} não encontrado")
+
+        if team.active == Status.ATIVO:
+            raise TeamAlreadyActiveError("Time já está ativo")
+
+        # Reativar
+        team.active = Status.ATIVO
+        team.deleted_at = None
+        team.deleted_by = None
+        team.updated_by = reactivated_by
+
+        db.flush()
+        db.refresh(team)
+
+        return TeamResponse.model_validate(team)
+```
+
+### Resumo: Seu Soft Delete
+
+| Aspecto | Abordagem |
+|---------|-----------|
+| **O que acontece no DELETE** | Status muda para EXCLUIDO |
+| **Dados são apagados?** | NÃO, nunca |
+| **FKs ficam NULL?** | NÃO, integridade mantida |
+| **Pode recadastrar?** | SIM, reativar o registro |
+| **Auditoria** | deleted_at + deleted_by sempre preenchidos |
+| **Performance** | Índice em `active` para queries |
+| **Histórico** | 100% preservado |
+
+---
+
 ## 3.3 Services - Camada de Negócio
 
 ### Arquitetura em Camadas
@@ -7031,6 +11260,637 @@ class UserRepository:
         self.db.delete(user)
         self.db.flush()
 ```
+
+---
+
+### BaseRepository - Padrão Genérico (Do Básico ao Estado da Arte)
+
+O código acima funciona, mas tem um problema: **você vai repetir o mesmo código em TODOS os repositórios**. CRUD é sempre igual: `get_by_id`, `create`, `update`, `delete`. A solução é criar uma **classe base genérica** que todos herdam.
+
+#### Nível 1: Entendendo o Problema (BÁSICO)
+
+Sem BaseRepository, você tem duplicação massiva:
+
+```python
+# user_repository.py
+class UserRepository:
+    def __init__(self, db: Session):
+        self.db = db
+
+    def get_by_id(self, id: int) -> User | None:
+        return self.db.get(User, id)
+
+    def create(self, user: User) -> User:
+        self.db.add(user)
+        self.db.flush()
+        return user
+
+# team_repository.py - MESMO CÓDIGO!
+class TeamRepository:
+    def __init__(self, db: Session):
+        self.db = db
+
+    def get_by_id(self, id: int) -> Team | None:
+        return self.db.get(Team, id)
+
+    def create(self, team: Team) -> Team:
+        self.db.add(team)
+        self.db.flush()
+        return team
+
+# ticket_repository.py - MESMO CÓDIGO!
+# project_repository.py - MESMO CÓDIGO!
+# ... 10 repositórios com código idêntico
+```
+
+**Problemas**:
+- Violação do DRY (Don't Repeat Yourself)
+- Bug em um lugar = bug em todos (ou esquece de arrumar em alguns)
+- Manutenção impossível
+
+---
+
+#### Nível 2: Entendendo Generic e TypeVar (INTERMEDIÁRIO)
+
+Para criar uma classe base, precisamos de **Generic** - um recurso do Python que permite criar classes que funcionam com "qualquer tipo".
+
+**O que é TypeVar?**
+
+```python
+from typing import TypeVar
+
+# Cria uma "variável de tipo" chamada T
+T = TypeVar("T")
+
+# T pode ser qualquer coisa: int, str, User, Team...
+def primeiro_elemento(lista: list[T]) -> T:
+    return lista[0]
+
+# Python infere o tipo automaticamente:
+numeros = [1, 2, 3]
+resultado = primeiro_elemento(numeros)  # resultado é int
+
+nomes = ["Ana", "Bob"]
+resultado = primeiro_elemento(nomes)    # resultado é str
+```
+
+**O que é bound?**
+
+`bound` restringe T para ser uma classe específica ou subclasse dela:
+
+```python
+from typing import TypeVar
+from infra.configs.database import Base
+
+# T DEVE ser subclasse de Base (User, Team, Ticket...)
+T = TypeVar("T", bound=Base)
+
+# Isso garante que T sempre terá os atributos de Base:
+# - id
+# - active
+# - created_at
+# - deleted_at
+# etc.
+```
+
+**O que é Generic?**
+
+`Generic[T]` permite que uma classe seja parametrizada por um tipo:
+
+```python
+from typing import Generic, TypeVar
+
+T = TypeVar("T")
+
+class Caixa(Generic[T]):
+    def __init__(self, conteudo: T):
+        self.conteudo = conteudo
+
+    def abrir(self) -> T:
+        return self.conteudo
+
+# Uso:
+caixa_int = Caixa[int](42)          # T = int
+valor = caixa_int.abrir()            # valor é int
+
+caixa_str = Caixa[str]("presente")  # T = str
+texto = caixa_str.abrir()            # texto é str
+```
+
+---
+
+#### Nível 3: Criando BaseRepository (AVANÇADO)
+
+Agora que entendemos Generic e TypeVar, vamos criar o BaseRepository:
+
+```python
+# infra/repositories/base_repository.py
+"""
+Repositório base com operações CRUD e suporte a soft delete.
+
+Por que usar BaseRepository?
+1. DRY: Não repete código CRUD em cada repositório
+2. Consistência: Todos os repositórios funcionam igual
+3. Soft Delete: Automático em todas as entidades
+4. Manutenção: Corrige uma vez, corrige em todos
+"""
+from datetime import datetime
+from typing import TypeVar, Generic, Type, List, Optional
+
+from sqlalchemy.orm import Session
+
+from infra.configs.connection import DBConnectionHandler
+from infra.configs.database import Base, Status
+
+# T é restrito a subclasses de Base
+# Isso garante que T sempre terá: id, active, deleted_at, etc.
+T = TypeVar("T", bound=Base)
+
+
+class BaseRepository(Generic[T]):
+    """
+    Repositório base genérico com CRUD e soft delete.
+
+    Generic[T] significa: "Esta classe trabalha com um tipo T"
+    Quando você herda: class UserRepository(BaseRepository[User])
+    O Python substitui T por User automaticamente.
+    """
+
+    def __init__(self, model: Type[T]):
+        """
+        Args:
+            model: A classe da entidade (User, Team, Ticket, etc.)
+
+        Type[T] significa: "o tipo T em si, não uma instância de T"
+        - T = User (uma instância)
+        - Type[T] = classe User (a classe em si)
+        """
+        self.model = model
+```
+
+**Entendendo `Type[T]` vs `T`**:
+
+```python
+# T = uma instância do tipo
+user: User = User(name="João")  # user é uma instância
+
+# Type[T] = a classe em si
+model: Type[User] = User        # model é a classe User
+
+# No repository:
+def get_by_id(self, id: int) -> T:
+    # self.model é Type[T] (a classe)
+    # O retorno é T (uma instância)
+    return self.db.query(self.model).get(id)
+```
+
+---
+
+#### Nível 4: BaseRepository Completo (ESTADO DA ARTE)
+
+O código completo com todas as operações:
+
+```python
+# infra/repositories/base_repository.py
+from datetime import datetime
+from typing import TypeVar, Generic, Type, List, Optional
+
+from sqlalchemy.orm import Session
+
+from infra.configs.connection import DBConnectionHandler
+from infra.configs.database import Base, Status
+
+T = TypeVar("T", bound=Base)
+
+
+class BaseRepository(Generic[T]):
+    """
+    Repositório base genérico com CRUD e soft delete.
+
+    Uso:
+        class UserRepository(BaseRepository[User]):
+            def __init__(self):
+                super().__init__(User)
+
+            # Métodos específicos de User aqui...
+    """
+
+    def __init__(self, model: Type[T]):
+        self.model = model
+
+    # =========================================================================
+    # QUERIES BASE (com filtro de soft delete automático)
+    # =========================================================================
+
+    def _base_query(self, session: Session):
+        """
+        Query base que filtra registros soft-deleted automaticamente.
+
+        TODAS as queries públicas usam este método como base.
+        Isso garante que registros "deletados" nunca apareçam acidentalmente.
+        """
+        return session.query(self.model).filter(
+            self.model.active != Status.INATIVO
+        )
+
+    def _base_query_all(self, session: Session):
+        """
+        Query que inclui TODOS os registros (inclusive soft-deleted).
+
+        Uso: Relatórios de auditoria, restore de registros.
+        """
+        return session.query(self.model)
+
+    # =========================================================================
+    # SELECT (Leitura)
+    # =========================================================================
+
+    def select_all(self, include_inactive: bool = False) -> List[dict]:
+        """
+        Retorna todos os registros ativos.
+
+        Args:
+            include_inactive: Se True, inclui registros soft-deleted
+
+        Returns:
+            Lista de dicionários (não entidades ORM!)
+
+        Por que retornar dict?
+        - Evita problemas de session detached
+        - Serializável diretamente para JSON
+        - Mais seguro para APIs
+        """
+        with DBConnectionHandler() as db:
+            if include_inactive:
+                data = self._base_query_all(db.session).all()
+            else:
+                data = self._base_query(db.session).all()
+            return [item.to_dict() for item in data]
+
+    def select_by_id(self, id: int, include_inactive: bool = False) -> Optional[dict]:
+        """
+        Retorna registro por ID.
+
+        Args:
+            id: ID do registro
+            include_inactive: Se True, busca inclusive em soft-deleted
+
+        Returns:
+            Dicionário do registro ou None se não encontrado
+        """
+        with DBConnectionHandler() as db:
+            if include_inactive:
+                query = self._base_query_all(db.session)
+            else:
+                query = self._base_query(db.session)
+            data = query.filter(self.model.id == id).first()
+            return data.to_dict() if data else None
+
+    def exists(self, id: int) -> bool:
+        """Verifica se registro existe (e está ativo)."""
+        with DBConnectionHandler() as db:
+            return (
+                self._base_query(db.session)
+                .filter(self.model.id == id)
+                .first() is not None
+            )
+
+    def count(self, include_inactive: bool = False) -> int:
+        """Conta registros."""
+        with DBConnectionHandler() as db:
+            if include_inactive:
+                return self._base_query_all(db.session).count()
+            return self._base_query(db.session).count()
+
+    # =========================================================================
+    # INSERT (Criação)
+    # =========================================================================
+
+    def insert(self, entity: T) -> int:
+        """
+        Insere uma nova entidade.
+
+        Args:
+            entity: Instância da entidade a ser inserida
+
+        Returns:
+            ID do registro criado
+
+        Importante:
+        - flush() envia para o banco mas não commita
+        - refresh() busca o ID gerado pelo banco
+        - O commit é feito automaticamente pelo context manager
+        """
+        with DBConnectionHandler() as db:
+            db.session.add(entity)
+            db.session.flush()
+            db.session.refresh(entity)
+            return entity.id
+
+    # =========================================================================
+    # UPDATE (Atualização)
+    # =========================================================================
+
+    def update(self, id: int, updated_by: Optional[int] = None, **kwargs) -> bool:
+        """
+        Atualiza campos específicos de um registro.
+
+        Args:
+            id: ID do registro
+            updated_by: ID do usuário que está atualizando (auditoria)
+            **kwargs: Campos a serem atualizados
+
+        Returns:
+            True se atualizou, False se não encontrou
+
+        Exemplo:
+            repo.update(1, updated_by=admin_id, name="Novo Nome", status=Status.ATIVO)
+        """
+        with DBConnectionHandler() as db:
+            query = self._base_query(db.session).filter(self.model.id == id)
+            if query.first() is None:
+                return False
+
+            if updated_by:
+                kwargs['updated_by'] = updated_by
+
+            query.update(kwargs)
+            return True
+
+    # =========================================================================
+    # SOFT DELETE (Deleção Lógica)
+    # =========================================================================
+
+    def soft_delete(self, id: int, deleted_by: Optional[int] = None) -> bool:
+        """
+        Marca registro como inativo (soft delete).
+
+        NUNCA deleta fisicamente! Apenas marca:
+        - active = INATIVO
+        - deleted_at = agora
+        - deleted_by = quem deletou
+
+        Args:
+            id: ID do registro
+            deleted_by: ID do usuário que está deletando (auditoria)
+
+        Returns:
+            True se deletou, False se não encontrou
+        """
+        with DBConnectionHandler() as db:
+            query = self._base_query(db.session).filter(self.model.id == id)
+            if query.first() is None:
+                return False
+
+            query.update({
+                self.model.active: Status.INATIVO,
+                self.model.deleted_at: datetime.now(),
+                self.model.deleted_by: deleted_by
+            })
+            return True
+
+    def restore(self, id: int) -> bool:
+        """
+        Restaura registro soft-deleted.
+
+        Reverte o soft delete:
+        - active = ATIVO
+        - deleted_at = None
+        - deleted_by = None
+
+        Args:
+            id: ID do registro
+
+        Returns:
+            True se restaurou, False se não encontrou
+        """
+        with DBConnectionHandler() as db:
+            query = self._base_query_all(db.session).filter(
+                self.model.id == id,
+                self.model.active == Status.INATIVO
+            )
+            if query.first() is None:
+                return False
+
+            query.update({
+                self.model.active: Status.ATIVO,
+                self.model.deleted_at: None,
+                self.model.deleted_by: None
+            })
+            return True
+
+    # =========================================================================
+    # HARD DELETE (Usar com EXTREMA cautela!)
+    # =========================================================================
+
+    def hard_delete(self, id: int) -> bool:
+        """
+        Remove registro PERMANENTEMENTE do banco.
+
+        ATENÇÃO: Use apenas em casos excepcionais!
+        - Dados de teste
+        - LGPD (direito ao esquecimento)
+        - Registros corrompidos
+
+        Prefira SEMPRE soft_delete()!
+
+        Args:
+            id: ID do registro
+
+        Returns:
+            True se deletou, False se não encontrou
+        """
+        with DBConnectionHandler() as db:
+            query = db.session.query(self.model).filter(self.model.id == id)
+            if query.first() is None:
+                return False
+            query.delete()
+            return True
+
+    # =========================================================================
+    # MÉTODOS AUXILIARES (para subclasses)
+    # =========================================================================
+
+    def get_entity_by_id(self, id: int, include_inactive: bool = False) -> Optional[T]:
+        """
+        Retorna a entidade ORM (não dict) para manipulação.
+
+        Use quando precisar:
+        - Modificar relacionamentos
+        - Acessar propriedades computadas
+        - Passar para Services
+
+        Args:
+            id: ID do registro
+            include_inactive: Se True, inclui registros soft-deleted
+
+        Returns:
+            Entidade ORM ou None
+        """
+        with DBConnectionHandler() as db:
+            if include_inactive:
+                query = self._base_query_all(db.session)
+            else:
+                query = self._base_query(db.session)
+            return query.filter(self.model.id == id).first()
+```
+
+---
+
+#### Nível 5: Herdando BaseRepository (IMPLEMENTAÇÃO)
+
+Com o BaseRepository pronto, criar repositórios específicos é trivial:
+
+```python
+# infra/repositories/user_repository.py
+from infra.repositories.base_repository import BaseRepository
+from infra.entities.user import User
+
+class UserRepository(BaseRepository[User]):
+    """
+    Repositório de User.
+
+    Herda de BaseRepository[User]:
+    - T = User
+    - Todos os métodos CRUD já funcionam automaticamente
+    - Só adiciona métodos ESPECÍFICOS de User
+    """
+
+    def __init__(self):
+        # Passa a classe User para o BaseRepository
+        super().__init__(User)
+
+    # =========================================================================
+    # MÉTODOS ESPECÍFICOS DE USER (não existem no BaseRepository)
+    # =========================================================================
+
+    def get_by_email(self, email: str) -> dict | None:
+        """Busca user por email."""
+        with DBConnectionHandler() as db:
+            user = (
+                self._base_query(db.session)
+                .filter(User.user_email == email)
+                .first()
+            )
+            return user.to_dict() if user else None
+
+    def get_by_team(self, team_id: int) -> list[dict]:
+        """Lista users de um time específico."""
+        with DBConnectionHandler() as db:
+            users = (
+                self._base_query(db.session)
+                .filter(User.user_team_id == team_id)
+                .all()
+            )
+            return [u.to_dict() for u in users]
+
+    def create(
+        self,
+        full_name: str,
+        email: str,
+        password_hash: str,
+        team_id: int,
+        role: str,
+        tipo: str,
+        created_by: int | None = None
+    ) -> int:
+        """
+        Cria um novo usuário.
+
+        Este método existe porque User tem campos específicos
+        que não podem ser criados genericamente.
+        """
+        user = User(
+            user_full_name=full_name,
+            user_email=email,
+            user_password=password_hash,
+            user_team_id=team_id,
+            user_role=role,
+            user_tipo=tipo
+        )
+        user.created_by = created_by
+        return self.insert(user)  # Usa o método herdado!
+```
+
+```python
+# infra/repositories/team_repository.py
+from infra.repositories.base_repository import BaseRepository
+from infra.entities.team import Team
+
+class TeamRepository(BaseRepository[Team]):
+    """Repositório de Team."""
+
+    def __init__(self):
+        super().__init__(Team)
+
+    def get_by_name(self, name: str) -> dict | None:
+        """Busca time por nome."""
+        with DBConnectionHandler() as db:
+            team = (
+                self._base_query(db.session)
+                .filter(Team.team_name == name)
+                .first()
+            )
+            return team.to_dict() if team else None
+
+    def create(self, name: str, manager_id: int | None = None, created_by: int | None = None) -> int:
+        """Cria um novo time."""
+        team = Team(team_name=name, team_manager_id=manager_id)
+        team.created_by = created_by
+        return self.insert(team)
+```
+
+---
+
+#### Resumo: O Que BaseRepository Oferece
+
+| Método | Descrição | Soft Delete? |
+|--------|-----------|--------------|
+| `select_all()` | Lista todos | Sim, filtra inativos |
+| `select_by_id()` | Busca por ID | Sim, filtra inativos |
+| `exists()` | Verifica existência | Sim, só ativos |
+| `count()` | Conta registros | Configurável |
+| `insert()` | Cria registro | N/A |
+| `update()` | Atualiza campos | Sim, só ativos |
+| `soft_delete()` | Marca como inativo | É o soft delete! |
+| `restore()` | Restaura deletado | Reverte soft delete |
+| `hard_delete()` | Deleta permanente | Ignora |
+| `get_entity_by_id()` | Retorna ORM entity | Configurável |
+
+---
+
+#### Diagrama de Herança
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        HIERARQUIA DE REPOSITORIES                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│                         BaseRepository[T]                                   │
+│                    ┌────────────┴────────────┐                              │
+│                    │    T = bound=Base       │                              │
+│                    │                         │                              │
+│                    │ - select_all()          │                              │
+│                    │ - select_by_id()        │                              │
+│                    │ - insert()              │                              │
+│                    │ - update()              │                              │
+│                    │ - soft_delete()         │                              │
+│                    │ - restore()             │                              │
+│                    │ - hard_delete()         │                              │
+│                    └────────────┬────────────┘                              │
+│                                 │                                           │
+│         ┌───────────────────────┼───────────────────────┐                   │
+│         │                       │                       │                   │
+│         ▼                       ▼                       ▼                   │
+│  UserRepository[User]   TeamRepository[Team]   TicketRepository[Ticket]    │
+│  - get_by_email()       - get_by_name()        - get_by_status()           │
+│  - get_by_team()        - get_with_members()   - get_by_user()             │
+│  - create(...)          - create(...)          - create(...)               │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
 
 ### Service (Lógica de Negócio)
 
@@ -11282,6 +16142,140 @@ Sem Git, você tem:
 
 **Git resolve isso** mantendo histórico completo, permitindo voltar a qualquer versão, trabalhar em paralelo e colaborar com outros desenvolvedores.
 
+### Seu Primeiro Projeto: Do Zero ao GitHub
+
+Se você nunca usou Git, siga este guia **passo a passo**:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    SEU PRIMEIRO COMMIT - PASSO A PASSO                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. CONFIGURAR GIT (uma vez por máquina)                                    │
+│     git config --global user.name "Seu Nome"                                │
+│     git config --global user.email "seu@email.com"                          │
+│                                                                             │
+│  2. NAVEGAR ATÉ O PROJETO                                                   │
+│     cd C:\dev\meu_projeto                                                   │
+│                                                                             │
+│  3. INICIALIZAR O REPOSITÓRIO                                               │
+│     git init                                                                │
+│                                                                             │
+│  4. ADICIONAR ARQUIVOS                                                      │
+│     git add .                                                               │
+│                                                                             │
+│  5. FAZER O PRIMEIRO COMMIT                                                 │
+│     git commit -m "feat: Primeiro commit do projeto"                        │
+│                                                                             │
+│  6. CRIAR REPOSITÓRIO NO GITHUB (site)                                      │
+│     → Vá em github.com → New repository → NÃO inicialize com README         │
+│                                                                             │
+│  7. CONECTAR AO GITHUB (uma vez por projeto)                                │
+│     git remote add origin https://github.com/usuario/repo.git               │
+│                                                                             │
+│  8. ENVIAR PARA O GITHUB                                                    │
+│     git push -u origin main                                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Executando no terminal:**
+
+```bash
+# 1. Configuração (uma vez por máquina)
+git config --global user.name "Matheus Beck"
+git config --global user.email "matheus@empresa.com"
+
+# 2. Navegar até o projeto
+cd C:\dev\portal_chamados_projetos
+
+# 3. Inicializar Git (cria pasta oculta .git)
+git init
+# Saída: Initialized empty Git repository in C:/dev/portal_chamados_projetos/.git/
+
+# 4. Verificar o que vai ser commitado
+git status
+# Saída: lista de arquivos em vermelho (não rastreados)
+
+# 5. Adicionar TODOS os arquivos para staging
+git add .
+
+# 6. Verificar novamente
+git status
+# Saída: lista de arquivos em verde (prontos para commit)
+
+# 7. Fazer o commit
+git commit -m "feat: Primeiro commit do projeto"
+# Saída: [main (root-commit) abc1234] feat: Primeiro commit do projeto
+#        15 files changed, 500 insertions(+)
+
+# 8. Criar repositório no GitHub (pelo site)
+# → github.com → New → Nome: portal_chamados_projetos
+# → NÃO marcar "Add README" → Create repository
+# → Copiar a URL: https://github.com/seuusuario/portal_chamados_projetos.git
+
+# 9. Conectar ao repositório remoto
+git remote add origin https://github.com/seuusuario/portal_chamados_projetos.git
+
+# 10. Enviar para o GitHub
+git push -u origin main
+# Saída: Counting objects... Writing objects... Branch 'main' set up to track...
+```
+
+### Convenções de Nomes para Repositórios
+
+| Formato | Exemplo | Quando Usar |
+|---------|---------|-------------|
+| `snake_case` | `portal_chamados_projetos` | Python, projetos internos |
+| `kebab-case` | `portal-chamados-projetos` | Mais comum no GitHub, pacotes npm |
+| `PascalCase` | `PortalChamadosProjetos` | Projetos .NET, Java |
+
+**Recomendações**:
+
+```
+✅ BONS NOMES:
+- portal-chamados-api (descritivo, kebab-case)
+- ticket-management-system (em inglês, claro)
+- empresa-projeto-modulo (namespace da empresa)
+
+❌ EVITAR:
+- projeto1 (não descritivo)
+- MEUPROJETOFINAL (CAPS, sem separação)
+- my-awesome-project (muito genérico)
+- test123 (parece temporário)
+```
+
+### Fluxo Diário: Salvar Seu Trabalho
+
+Após o setup inicial, seu fluxo diário é:
+
+```bash
+# 1. Verificar o que mudou
+git status
+
+# 2. Ver as mudanças em detalhes (opcional)
+git diff
+
+# 3. Adicionar mudanças
+git add .                 # Tudo
+git add arquivo.py        # Arquivo específico
+git add infra/            # Pasta específica
+
+# 4. Commitar
+git commit -m "feat(tickets): add priority field to ticket model"
+
+# 5. Enviar para GitHub
+git push
+```
+
+**Atalho para commit rápido** (adiciona e commita arquivos já rastreados):
+
+```bash
+git commit -am "fix(auth): correct password validation regex"
+# -a = adiciona automaticamente arquivos modificados (não novos!)
+# -m = mensagem
+```
+
 ### Comandos Básicos
 
 ```bash
@@ -13295,6 +18289,3435 @@ class Settings(BaseSettings):
 
 ---
 
+# MÓDULO 9: USER - DO ZERO À PRODUÇÃO (Tutorial Completo)
+
+Este modulo e o **coracao do tutorial**. Aqui voce vai construir User passando por TODAS as camadas, do basico ao estado da arte. Ao terminar, voce tera um modelo completo que serve de referencia para construir qualquer outra entidade.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    JORNADA COMPLETA: USER                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  9.1 Entity        → Estrutura da tabela no banco                          │
+│       │                                                                     │
+│       ▼                                                                     │
+│  9.2 Repository    → Acesso a dados (CRUD + queries)                       │
+│       │                                                                     │
+│       ▼                                                                     │
+│  9.3 Exceptions    → Erros customizados                                    │
+│       │                                                                     │
+│       ▼                                                                     │
+│  9.4 Schemas       → Validacao entrada/saida (Pydantic)                    │
+│       │                                                                     │
+│       ▼                                                                     │
+│  9.5 Service       → Logica de negocio                                     │
+│       │                                                                     │
+│       ▼                                                                     │
+│  9.6 API           → Endpoints HTTP                                        │
+│       │                                                                     │
+│       ▼                                                                     │
+│  9.7 Tests         → Validacao de tudo                                     │
+│                                                                             │
+│  Cada secao evolui: BASICO → INTERMEDIARIO → AVANCADO → ESTADO DA ARTE    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Por que User como exemplo central?**
+
+User e a entidade mais complexa porque possui:
+- Relacionamentos N-1 (pertence a um Team)
+- Relacionamentos 1-N (pode gerenciar um Team)
+- Relacionamentos N-N (acesso a Reports)
+- Autenticacao (password hash)
+- Autorizacao (roles)
+- Status operacional (ativo, suspenso, ferias)
+- Soft delete
+- Auditoria (created_by, updated_by)
+
+Se voce entender User completamente, todas as outras entidades serao triviais.
+
+---
+
+## 9.1 User Entity - Do Basico ao Estado da Arte
+
+### NIVEL 1: Entity Minima (BASICO)
+
+A entity mais simples que funciona:
+
+```python
+# infra/entities/user.py - NIVEL 1: BASICO
+"""
+Entity User - Nivel 1: Minimo funcional.
+
+O que tem:
+- Campos obrigatorios basicos
+- Heranca de Base (id, timestamps, soft delete)
+
+O que NAO tem ainda:
+- Relacionamentos
+- Enums
+- Validacoes
+"""
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
+
+from infra.configs.database import Base
+
+
+class User(Base):
+    """Usuario do sistema - versao minima."""
+    __tablename__ = "users"
+
+    # Campos basicos
+    user_full_name: Mapped[str] = mapped_column(String(200))
+    user_email: Mapped[str] = mapped_column(String(200), unique=True)
+    user_password: Mapped[str] = mapped_column(String(200))
+
+# Uso:
+# user = User(user_full_name="Joao Silva", user_email="joao@email.com", user_password="hash")
+```
+
+**O que voce aprendeu**:
+- Entity herda de `Base` (que fornece id, timestamps, soft delete)
+- Campos sao declarados com `Mapped[tipo]` + `mapped_column()`
+- `__tablename__` define o nome da tabela no banco
+
+**Teste basico**:
+```python
+# Crie o arquivo e rode: alembic revision --autogenerate -m "create users"
+# Depois: alembic upgrade head
+# Verifique se a tabela foi criada no banco
+```
+
+---
+
+### NIVEL 2: Com Foreign Keys (INTERMEDIARIO)
+
+Adicionando relacionamento com Team:
+
+```python
+# infra/entities/user.py - NIVEL 2: Com FK
+"""
+Entity User - Nivel 2: Com Foreign Key.
+
+O que adicionou:
+- FK para Team (user_team_id)
+- Relacionamento basico
+
+O que NAO tem ainda:
+- Enums de status
+- Relacionamentos complexos
+- Campos de auditoria customizados
+"""
+from sqlalchemy import String, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from infra.configs.database import Base
+
+
+class User(Base):
+    """Usuario do sistema - com relacionamento basico."""
+    __tablename__ = "users"
+
+    # Campos basicos
+    user_full_name: Mapped[str] = mapped_column(String(200))
+    user_email: Mapped[str] = mapped_column(String(200), unique=True)
+    user_password: Mapped[str] = mapped_column(String(200))
+
+    # NOVO: Foreign Key para Team
+    user_team_id: Mapped[int] = mapped_column(
+        ForeignKey("teams.id", ondelete="RESTRICT"),  # RESTRICT porque usamos soft delete
+        nullable=False
+    )
+
+    # NOVO: Relationship para navegacao
+    team: Mapped["Team"] = relationship(
+        back_populates="members",
+        lazy="raise",  # Obriga eager loading explicito
+        init=False     # Nao passa no construtor
+    )
+```
+
+**O que mudou**:
+- `ForeignKey("teams.id", ondelete="RESTRICT")` - referencia a tabela teams
+- `ondelete="RESTRICT"` - bloqueia delete do team se tiver users (importante para soft delete!)
+- `relationship()` - permite navegar `user.team` para obter o objeto Team
+- `lazy="raise"` - forca voce a fazer eager loading explicito (evita N+1)
+- `init=False` - nao passa team no construtor (MappedAsDataclass requirement)
+
+**Teste**:
+```python
+# Apos criar Team entity e rodar migrations:
+with DBConnectionHandler() as db:
+    team = db.session.query(Team).first()
+    user = User(
+        user_full_name="Joao Silva",
+        user_email="joao@email.com",
+        user_password="hash",
+        user_team_id=team.id
+    )
+    db.session.add(user)
+    db.session.flush()
+    print(f"User criado: {user.id}")
+```
+
+---
+
+### NIVEL 3: Com Enums e Multiplos Relacionamentos (AVANCADO)
+
+Adicionando status operacional e relacionamentos complexos:
+
+```python
+# infra/entities/user.py - NIVEL 3: Avancado
+"""
+Entity User - Nivel 3: Avancado.
+
+O que adicionou:
+- Enum de status operacional
+- Enum de roles
+- Relacionamento para Team que o user gerencia
+- foreign_keys para resolver ambiguidade
+
+O que NAO tem ainda:
+- Relacionamentos N-N
+- Campos extras de perfil
+"""
+from enum import Enum as PyEnum
+
+from sqlalchemy import String, ForeignKey, Integer
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from infra.configs.database import Base, Status
+
+
+# Enums especificos de User
+class UserStatus(PyEnum):
+    """Status operacional do usuario (diferente de Status de soft delete)."""
+    ATIVO = "ativo"
+    SUSPENSO = "suspenso"
+    BLOQUEADO = "bloqueado"
+    FERIAS = "ferias"
+    AFASTADO = "afastado"
+
+
+class UserRole(PyEnum):
+    """Papel do usuario no sistema."""
+    ADMIN = "admin"
+    MANAGER = "manager"
+    ANALYST = "analyst"
+    USER = "user"
+
+
+class UserTipo(PyEnum):
+    """Tipo de usuario."""
+    INTERNO = "interno"
+    EXTERNO = "externo"
+    TERCEIRO = "terceiro"
+
+
+class User(Base):
+    """Usuario do sistema - versao avancada."""
+    __tablename__ = "users"
+
+    # =========================================================================
+    # CAMPOS BASICOS
+    # =========================================================================
+    user_full_name: Mapped[str] = mapped_column(String(200))
+    user_email: Mapped[str] = mapped_column(String(200), unique=True)
+    user_password: Mapped[str] = mapped_column(String(200))
+
+    # Campos opcionais
+    user_photo: Mapped[str | None] = mapped_column(String(500), nullable=True, default=None)
+    user_corporative_id: Mapped[int | None] = mapped_column(Integer, nullable=True, default=None)
+
+    # =========================================================================
+    # ENUMS
+    # =========================================================================
+    user_status: Mapped[UserStatus] = mapped_column(
+        default=UserStatus.ATIVO,
+        init=False
+    )
+    user_role: Mapped[UserRole] = mapped_column(
+        default=UserRole.USER,
+        init=False
+    )
+    user_tipo: Mapped[UserTipo] = mapped_column(
+        default=UserTipo.INTERNO,
+        init=False
+    )
+
+    # =========================================================================
+    # FOREIGN KEYS
+    # =========================================================================
+    # FK 1: Time do qual o user e membro
+    user_team_id: Mapped[int] = mapped_column(
+        ForeignKey("teams.id", ondelete="RESTRICT"),
+        nullable=False
+    )
+
+    # =========================================================================
+    # RELATIONSHIPS
+    # =========================================================================
+    # Relationship 1: Meu time (a FK esta AQUI em User)
+    team: Mapped["Team"] = relationship(
+        foreign_keys=[user_team_id],  # Especifica qual FK usar (resolve ambiguidade)
+        back_populates="members",
+        lazy="raise",
+        init=False
+    )
+
+    # Relationship 2: Time que eu gerencio (a FK esta em TEAM.team_manager_id)
+    managed_team: Mapped["Team | None"] = relationship(
+        foreign_keys="[Team.team_manager_id]",  # FK em outra classe = string
+        back_populates="manager",
+        lazy="raise",
+        init=False,
+        default=None
+    )
+```
+
+**O que mudou**:
+- **Enums separados**: `UserStatus` (operacional) vs `Status` (soft delete da Base)
+- **foreign_keys**: Resolve ambiguidade quando ha multiplas FKs entre User e Team
+- **Regra do foreign_keys**:
+  - FK na MESMA classe: `foreign_keys=[user_team_id]` (variavel)
+  - FK em OUTRA classe: `foreign_keys="[Team.team_manager_id]"` (string)
+
+**Teste**:
+```python
+with DBConnectionHandler() as db:
+    user = User(
+        user_full_name="Joao Silva",
+        user_email="joao@email.com",
+        user_password="hash",
+        user_team_id=1
+    )
+    # Modificar campos com default APOS criar o objeto
+    user.user_status = UserStatus.ATIVO
+    user.user_role = UserRole.ANALYST
+
+    db.session.add(user)
+    db.session.flush()
+
+    # Verificar enum
+    print(f"Status: {user.user_status.value}")  # "ativo"
+    print(f"Role: {user.user_role.value}")      # "analyst"
+```
+
+---
+
+### NIVEL 4: Estado da Arte (PRODUCAO)
+
+A versao completa com todos os relacionamentos e configuracoes:
+
+```python
+# infra/entities/user.py - NIVEL 4: ESTADO DA ARTE
+"""
+Entity User - Versao completa para producao.
+
+Inclui:
+- Todos os campos necessarios
+- Todos os relacionamentos (N-1, 1-N, N-N)
+- Enums completos
+- Configuracoes de performance (indices)
+- Documentacao completa
+"""
+from enum import Enum as PyEnum
+from typing import TYPE_CHECKING
+
+from sqlalchemy import String, ForeignKey, Integer, Index
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from infra.configs.database import Base, Status
+
+# TYPE_CHECKING evita imports circulares
+if TYPE_CHECKING:
+    from infra.entities.team import Team
+    from infra.entities.message import Message
+    from infra.entities.ticket import Ticket
+    from infra.entities.report import Report
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ENUMS
+# ═══════════════════════════════════════════════════════════════════════════
+class UserStatus(PyEnum):
+    """
+    Status operacional do usuario.
+
+    Diferente de Status (soft delete) da Base:
+    - Status: ATIVO/INATIVO (registro existe ou foi "deletado")
+    - UserStatus: Estado operacional do usuario ativo
+
+    Valores:
+    - ATIVO: Usuario trabalhando normalmente
+    - SUSPENSO: Temporariamente sem acesso (investigacao, etc)
+    - BLOQUEADO: Bloqueado por tentativas de login
+    - FERIAS: Em ferias (nao recebe atribuicoes)
+    - AFASTADO: Afastado (licenca medica, etc)
+    """
+    ATIVO = "ativo"
+    SUSPENSO = "suspenso"
+    BLOQUEADO = "bloqueado"
+    FERIAS = "ferias"
+    AFASTADO = "afastado"
+
+
+class UserRole(PyEnum):
+    """
+    Papel do usuario para autorizacao.
+
+    Hierarquia: ADMIN > MANAGER > ANALYST > USER
+    """
+    ADMIN = "admin"       # Acesso total
+    MANAGER = "manager"   # Gerencia equipes
+    ANALYST = "analyst"   # Cria e edita conteudo
+    USER = "user"         # Apenas visualiza
+
+
+class UserTipo(PyEnum):
+    """Tipo de vinculo do usuario."""
+    INTERNO = "interno"     # Funcionario CLT
+    EXTERNO = "externo"     # Cliente
+    TERCEIRO = "terceiro"   # Prestador de servico
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ENTITY
+# ═══════════════════════════════════════════════════════════════════════════
+class User(Base):
+    """
+    Usuario do sistema.
+
+    Relacionamentos:
+    - N-1: Pertence a um Team (user_team_id)
+    - 1-N: Pode gerenciar um Team (managed_team)
+    - 1-N: Envia Mensagens (messages_sent)
+    - N-N: Acesso a Reports (reports - via tabela de associacao)
+
+    Indices:
+    - user_email: Busca por email (login)
+    - user_team_id: Busca por time
+    - user_status + active: Filtros combinados
+    """
+    __tablename__ = "users"
+
+    # Indices para performance
+    __table_args__ = (
+        Index("ix_users_email", "user_email"),
+        Index("ix_users_team", "user_team_id"),
+        Index("ix_users_status_active", "user_status", "active"),
+    )
+
+    # =========================================================================
+    # CAMPOS OBRIGATORIOS
+    # =========================================================================
+    user_full_name: Mapped[str] = mapped_column(
+        String(200),
+        doc="Nome completo do usuario"
+    )
+    user_email: Mapped[str] = mapped_column(
+        String(200),
+        unique=True,
+        doc="Email unico (usado para login)"
+    )
+    user_password: Mapped[str] = mapped_column(
+        String(200),
+        doc="Hash da senha (NUNCA armazene senha em texto puro!)"
+    )
+
+    # =========================================================================
+    # CAMPOS OPCIONAIS
+    # =========================================================================
+    user_photo: Mapped[str | None] = mapped_column(
+        String(500),
+        nullable=True,
+        default=None,
+        doc="URL da foto de perfil"
+    )
+    user_corporative_id: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True,
+        default=None,
+        doc="ID no sistema corporativo (integracao)"
+    )
+    user_notification_preferences: Mapped[str | None] = mapped_column(
+        String(500),
+        nullable=True,
+        default=None,
+        doc="Preferencias de notificacao (JSON string)"
+    )
+
+    # =========================================================================
+    # ENUMS (com defaults)
+    # =========================================================================
+    user_status: Mapped[UserStatus] = mapped_column(
+        default=UserStatus.ATIVO,
+        init=False,
+        doc="Status operacional"
+    )
+    user_role: Mapped[UserRole] = mapped_column(
+        default=UserRole.USER,
+        init=False,
+        doc="Papel para autorizacao"
+    )
+    user_tipo: Mapped[UserTipo] = mapped_column(
+        default=UserTipo.INTERNO,
+        init=False,
+        doc="Tipo de vinculo"
+    )
+
+    # =========================================================================
+    # FOREIGN KEYS
+    # =========================================================================
+    user_team_id: Mapped[int] = mapped_column(
+        ForeignKey("teams.id", ondelete="RESTRICT"),
+        nullable=False,
+        doc="ID do time ao qual pertence"
+    )
+
+    # =========================================================================
+    # RELATIONSHIPS
+    # =========================================================================
+
+    # --- N-1: Meu time ---
+    team: Mapped["Team"] = relationship(
+        foreign_keys=[user_team_id],
+        back_populates="members",
+        lazy="raise",
+        init=False
+    )
+
+    # --- 1-N: Time que gerencio ---
+    managed_team: Mapped["Team | None"] = relationship(
+        foreign_keys="[Team.team_manager_id]",
+        back_populates="manager",
+        lazy="raise",
+        init=False,
+        default=None
+    )
+
+    # --- 1-N: Mensagens que enviei ---
+    messages_sent: Mapped[list["Message"]] = relationship(
+        foreign_keys="[Message.message_user_id]",
+        back_populates="user",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # --- N-N: Reports que tenho acesso (via tabela de associacao) ---
+    # Nota: Este relacionamento usa uma tabela intermediaria
+    # Veja infra/entities/associations.py para a definicao
+    reports: Mapped[list["Report"]] = relationship(
+        secondary="user_report_access",  # Nome da tabela de associacao
+        back_populates="users_with_access",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # =========================================================================
+    # METODOS DE CONVENIENCIA
+    # =========================================================================
+    def __repr__(self) -> str:
+        return f"<User(id={self.id}, email='{self.user_email}', status={self.user_status.value})>"
+
+    @property
+    def is_admin(self) -> bool:
+        """Verifica se usuario e admin."""
+        return self.user_role == UserRole.ADMIN
+
+    @property
+    def is_active_and_available(self) -> bool:
+        """Verifica se usuario esta ativo E disponivel para trabalho."""
+        return (
+            self.active == Status.ATIVO and
+            self.user_status == UserStatus.ATIVO
+        )
+
+    @property
+    def display_name(self) -> str:
+        """Retorna primeiro nome para exibicao."""
+        return self.user_full_name.split()[0] if self.user_full_name else ""
+```
+
+**Checklist de validacao - Entity completa**:
+```
+[X] Herda de Base
+[X] __tablename__ definido
+[X] Todos os campos com tipos corretos
+[X] FKs com ondelete="RESTRICT" (soft delete)
+[X] Relationships com lazy="raise"
+[X] Relationships com foreign_keys quando necessario
+[X] Relationships com init=False e default/default_factory
+[X] Enums definidos
+[X] Indices para campos de busca frequente
+[X] Documentacao nos campos
+[X] Metodos de conveniencia
+```
+
+---
+
+## 9.2 User Repository - Do Basico ao Estado da Arte
+
+### NIVEL 1: Repository Minimo (BASICO)
+
+```python
+# infra/repositories/user_repository.py - NIVEL 1: BASICO
+"""
+Repository User - Nivel 1: Minimo funcional.
+
+O que tem:
+- CRUD basico (sem herdar de BaseRepository)
+- Queries simples
+
+O que NAO tem:
+- Soft delete automatico
+- Heranca de BaseRepository
+"""
+from sqlalchemy.orm import Session
+
+from infra.entities.user import User
+from infra.configs.connection import DBConnectionHandler
+
+
+class UserRepository:
+    """Repository basico para User."""
+
+    def get_by_id(self, id: int) -> User | None:
+        """Busca user por ID."""
+        with DBConnectionHandler() as db:
+            return db.session.query(User).filter(User.id == id).first()
+
+    def get_all(self) -> list[User]:
+        """Lista todos os users."""
+        with DBConnectionHandler() as db:
+            return db.session.query(User).all()
+
+    def create(self, user: User) -> int:
+        """Cria user e retorna ID."""
+        with DBConnectionHandler() as db:
+            db.session.add(user)
+            db.session.flush()
+            db.session.refresh(user)
+            return user.id
+
+# Uso:
+# repo = UserRepository()
+# user_id = repo.create(User(user_full_name="Joao", user_email="j@e.com", user_password="hash", user_team_id=1))
+# user = repo.get_by_id(user_id)
+```
+
+---
+
+### NIVEL 2: Herdando de BaseRepository (INTERMEDIARIO)
+
+```python
+# infra/repositories/user_repository.py - NIVEL 2: Com BaseRepository
+"""
+Repository User - Nivel 2: Herdando de BaseRepository.
+
+O que adicionou:
+- Heranca de BaseRepository[User]
+- Soft delete automatico
+- Metodos genericos herdados
+
+O que NAO tem:
+- Queries especificas de User
+"""
+from infra.repositories.base_repository import BaseRepository
+from infra.entities.user import User
+
+
+class UserRepository(BaseRepository[User]):
+    """
+    Repository de User.
+
+    Herda de BaseRepository[User], entao ja tem:
+    - select_all(include_inactive=False)
+    - select_by_id(id, include_inactive=False)
+    - insert(entity)
+    - update(id, **kwargs)
+    - soft_delete(id, deleted_by=None)
+    - restore(id)
+    - hard_delete(id)
+    - exists(id)
+    - count(include_inactive=False)
+    """
+
+    def __init__(self):
+        # Passa a classe User para o BaseRepository
+        super().__init__(User)
+
+# Uso:
+# repo = UserRepository()
+# users = repo.select_all()           # Lista ativos
+# users = repo.select_all(True)       # Lista todos (incluindo inativos)
+# user = repo.select_by_id(1)         # Busca por ID
+# repo.soft_delete(1, deleted_by=99)  # Soft delete
+# repo.restore(1)                     # Restaura
+```
+
+---
+
+### NIVEL 3: Com Queries Especificas (AVANCADO)
+
+```python
+# infra/repositories/user_repository.py - NIVEL 3: Avancado
+"""
+Repository User - Nivel 3: Com queries especificas.
+
+O que adicionou:
+- get_by_email()
+- get_by_team()
+- get_active_managers()
+- create() com campos especificos
+"""
+from infra.repositories.base_repository import BaseRepository
+from infra.entities.user import User, UserRole, UserStatus
+from infra.configs.connection import DBConnectionHandler
+from infra.configs.database import Status
+
+
+class UserRepository(BaseRepository[User]):
+    """Repository de User com queries especificas."""
+
+    def __init__(self):
+        super().__init__(User)
+
+    # =========================================================================
+    # QUERIES ESPECIFICAS
+    # =========================================================================
+
+    def get_by_email(self, email: str) -> dict | None:
+        """
+        Busca user por email.
+
+        Args:
+            email: Email do usuario
+
+        Returns:
+            Dict do usuario ou None se nao encontrado
+        """
+        with DBConnectionHandler() as db:
+            user = (
+                self._base_query(db.session)
+                .filter(User.user_email == email)
+                .first()
+            )
+            return user.to_dict() if user else None
+
+    def get_by_team(self, team_id: int) -> list[dict]:
+        """
+        Lista users de um time.
+
+        Args:
+            team_id: ID do time
+
+        Returns:
+            Lista de dicts dos usuarios do time
+        """
+        with DBConnectionHandler() as db:
+            users = (
+                self._base_query(db.session)
+                .filter(User.user_team_id == team_id)
+                .all()
+            )
+            return [u.to_dict() for u in users]
+
+    def get_active_managers(self) -> list[dict]:
+        """
+        Lista managers ativos e disponiveis.
+
+        Returns:
+            Lista de managers que podem receber atribuicoes
+        """
+        with DBConnectionHandler() as db:
+            users = (
+                self._base_query(db.session)
+                .filter(User.user_role == UserRole.MANAGER)
+                .filter(User.user_status == UserStatus.ATIVO)
+                .all()
+            )
+            return [u.to_dict() for u in users]
+
+    # =========================================================================
+    # CREATE ESPECIFICO
+    # =========================================================================
+
+    def create(
+        self,
+        full_name: str,
+        email: str,
+        password_hash: str,
+        team_id: int,
+        role: UserRole = UserRole.USER,
+        tipo: str = "interno",
+        created_by: int | None = None
+    ) -> int:
+        """
+        Cria um novo usuario.
+
+        Args:
+            full_name: Nome completo
+            email: Email (deve ser unico)
+            password_hash: Hash da senha (NAO a senha em texto!)
+            team_id: ID do time
+            role: Papel do usuario
+            tipo: Tipo de usuario
+            created_by: ID de quem esta criando
+
+        Returns:
+            ID do usuario criado
+        """
+        user = User(
+            user_full_name=full_name,
+            user_email=email,
+            user_password=password_hash,
+            user_team_id=team_id
+        )
+        user.user_role = role
+        user.created_by = created_by
+
+        return self.insert(user)
+```
+
+---
+
+### NIVEL 4: Estado da Arte (PRODUCAO)
+
+```python
+# infra/repositories/user_repository.py - NIVEL 4: ESTADO DA ARTE
+"""
+Repository User - Versao completa para producao.
+
+Inclui:
+- Todas as queries necessarias
+- Suporte a paginacao
+- Queries com eager loading
+- Queries de busca/filtro
+- Queries de agregacao
+"""
+from typing import Optional
+from sqlalchemy.orm import joinedload
+
+from infra.repositories.base_repository import BaseRepository
+from infra.entities.user import User, UserRole, UserStatus, UserTipo
+from infra.configs.connection import DBConnectionHandler
+from infra.configs.database import Status
+
+
+class UserRepository(BaseRepository[User]):
+    """
+    Repository completo de User.
+
+    Metodos herdados de BaseRepository:
+    - select_all(include_inactive=False) -> list[dict]
+    - select_by_id(id, include_inactive=False) -> dict | None
+    - insert(entity) -> int
+    - update(id, updated_by=None, **kwargs) -> bool
+    - soft_delete(id, deleted_by=None) -> bool
+    - restore(id) -> bool
+    - hard_delete(id) -> bool
+    - exists(id) -> bool
+    - count(include_inactive=False) -> int
+    - get_entity_by_id(id, include_inactive=False) -> User | None
+    """
+
+    def __init__(self):
+        super().__init__(User)
+
+    # =========================================================================
+    # QUERIES DE BUSCA
+    # =========================================================================
+
+    def get_by_email(self, email: str) -> dict | None:
+        """Busca user por email (case insensitive)."""
+        with DBConnectionHandler() as db:
+            user = (
+                self._base_query(db.session)
+                .filter(User.user_email.ilike(email))
+                .first()
+            )
+            return user.to_dict() if user else None
+
+    def email_exists(self, email: str, exclude_id: int | None = None) -> bool:
+        """
+        Verifica se email ja existe.
+
+        Args:
+            email: Email a verificar
+            exclude_id: ID para excluir da busca (usado em update)
+        """
+        with DBConnectionHandler() as db:
+            query = (
+                self._base_query(db.session)
+                .filter(User.user_email.ilike(email))
+            )
+            if exclude_id:
+                query = query.filter(User.id != exclude_id)
+            return query.first() is not None
+
+    def search(
+        self,
+        query: str,
+        limit: int = 10,
+        offset: int = 0
+    ) -> list[dict]:
+        """
+        Busca users por nome ou email.
+
+        Args:
+            query: Termo de busca
+            limit: Maximo de resultados
+            offset: Pular N resultados (paginacao)
+        """
+        with DBConnectionHandler() as db:
+            search_term = f"%{query}%"
+            users = (
+                self._base_query(db.session)
+                .filter(
+                    (User.user_full_name.ilike(search_term)) |
+                    (User.user_email.ilike(search_term))
+                )
+                .limit(limit)
+                .offset(offset)
+                .all()
+            )
+            return [u.to_dict() for u in users]
+
+    # =========================================================================
+    # QUERIES POR FILTRO
+    # =========================================================================
+
+    def get_by_team(self, team_id: int) -> list[dict]:
+        """Lista users de um time."""
+        with DBConnectionHandler() as db:
+            users = (
+                self._base_query(db.session)
+                .filter(User.user_team_id == team_id)
+                .order_by(User.user_full_name)
+                .all()
+            )
+            return [u.to_dict() for u in users]
+
+    def get_by_role(self, role: UserRole) -> list[dict]:
+        """Lista users por role."""
+        with DBConnectionHandler() as db:
+            users = (
+                self._base_query(db.session)
+                .filter(User.user_role == role)
+                .order_by(User.user_full_name)
+                .all()
+            )
+            return [u.to_dict() for u in users]
+
+    def get_by_status(self, status: UserStatus) -> list[dict]:
+        """Lista users por status operacional."""
+        with DBConnectionHandler() as db:
+            users = (
+                self._base_query(db.session)
+                .filter(User.user_status == status)
+                .order_by(User.user_full_name)
+                .all()
+            )
+            return [u.to_dict() for u in users]
+
+    def get_available_for_assignment(self) -> list[dict]:
+        """Lista users disponiveis para receber atribuicoes."""
+        with DBConnectionHandler() as db:
+            users = (
+                self._base_query(db.session)
+                .filter(User.user_status == UserStatus.ATIVO)
+                .filter(User.user_role.in_([UserRole.ANALYST, UserRole.MANAGER]))
+                .order_by(User.user_full_name)
+                .all()
+            )
+            return [u.to_dict() for u in users]
+
+    # =========================================================================
+    # QUERIES COM EAGER LOADING
+    # =========================================================================
+
+    def get_with_team(self, user_id: int) -> dict | None:
+        """Busca user com dados do team incluidos."""
+        with DBConnectionHandler() as db:
+            user = (
+                self._base_query(db.session)
+                .options(joinedload(User.team))
+                .filter(User.id == user_id)
+                .first()
+            )
+            if not user:
+                return None
+
+            result = user.to_dict()
+            result["team"] = user.team.to_dict() if user.team else None
+            return result
+
+    # =========================================================================
+    # QUERIES PAGINADAS
+    # =========================================================================
+
+    def list_paginated(
+        self,
+        page: int = 1,
+        page_size: int = 20,
+        team_id: int | None = None,
+        role: UserRole | None = None,
+        status: UserStatus | None = None
+    ) -> dict:
+        """
+        Lista users com paginacao e filtros.
+
+        Args:
+            page: Numero da pagina (comeca em 1)
+            page_size: Itens por pagina
+            team_id: Filtrar por time
+            role: Filtrar por role
+            status: Filtrar por status
+
+        Returns:
+            {
+                "items": [...],
+                "total": 100,
+                "page": 1,
+                "page_size": 20,
+                "total_pages": 5
+            }
+        """
+        with DBConnectionHandler() as db:
+            query = self._base_query(db.session)
+
+            # Aplicar filtros
+            if team_id:
+                query = query.filter(User.user_team_id == team_id)
+            if role:
+                query = query.filter(User.user_role == role)
+            if status:
+                query = query.filter(User.user_status == status)
+
+            # Contar total
+            total = query.count()
+
+            # Aplicar paginacao
+            offset = (page - 1) * page_size
+            users = (
+                query
+                .order_by(User.user_full_name)
+                .limit(page_size)
+                .offset(offset)
+                .all()
+            )
+
+            return {
+                "items": [u.to_dict() for u in users],
+                "total": total,
+                "page": page,
+                "page_size": page_size,
+                "total_pages": (total + page_size - 1) // page_size
+            }
+
+    # =========================================================================
+    # CREATE
+    # =========================================================================
+
+    def create(
+        self,
+        full_name: str,
+        email: str,
+        password_hash: str,
+        team_id: int,
+        role: UserRole = UserRole.USER,
+        tipo: UserTipo = UserTipo.INTERNO,
+        created_by: int | None = None
+    ) -> int:
+        """
+        Cria um novo usuario.
+
+        Args:
+            full_name: Nome completo
+            email: Email (deve ser unico)
+            password_hash: Hash da senha (NAO a senha em texto!)
+            team_id: ID do time
+            role: Papel do usuario
+            tipo: Tipo de usuario
+            created_by: ID de quem esta criando
+
+        Returns:
+            ID do usuario criado
+
+        Raises:
+            ValueError: Se email ja existe
+        """
+        if self.email_exists(email):
+            raise ValueError(f"Email {email} ja esta em uso")
+
+        user = User(
+            user_full_name=full_name,
+            user_email=email,
+            user_password=password_hash,
+            user_team_id=team_id
+        )
+        user.user_role = role
+        user.user_tipo = tipo
+        user.created_by = created_by
+
+        return self.insert(user)
+
+    # =========================================================================
+    # UPDATE
+    # =========================================================================
+
+    def update_profile(
+        self,
+        user_id: int,
+        updated_by: int,
+        full_name: str | None = None,
+        email: str | None = None,
+        photo: str | None = None
+    ) -> bool:
+        """
+        Atualiza perfil do usuario.
+
+        Args:
+            user_id: ID do usuario
+            updated_by: ID de quem esta atualizando
+            full_name: Novo nome (opcional)
+            email: Novo email (opcional)
+            photo: Nova foto (opcional)
+
+        Returns:
+            True se atualizou, False se nao encontrou
+        """
+        updates = {}
+        if full_name:
+            updates["user_full_name"] = full_name
+        if email:
+            if self.email_exists(email, exclude_id=user_id):
+                raise ValueError(f"Email {email} ja esta em uso")
+            updates["user_email"] = email
+        if photo is not None:
+            updates["user_photo"] = photo
+
+        if not updates:
+            return False
+
+        return self.update(user_id, updated_by=updated_by, **updates)
+
+    def change_team(self, user_id: int, new_team_id: int, updated_by: int) -> bool:
+        """Muda usuario de time."""
+        return self.update(
+            user_id,
+            updated_by=updated_by,
+            user_team_id=new_team_id
+        )
+
+    def change_role(self, user_id: int, new_role: UserRole, updated_by: int) -> bool:
+        """Muda role do usuario."""
+        return self.update(
+            user_id,
+            updated_by=updated_by,
+            user_role=new_role
+        )
+
+    def change_status(self, user_id: int, new_status: UserStatus, updated_by: int) -> bool:
+        """Muda status operacional do usuario."""
+        return self.update(
+            user_id,
+            updated_by=updated_by,
+            user_status=new_status
+        )
+
+    # =========================================================================
+    # AUTENTICACAO (queries especiais)
+    # =========================================================================
+
+    def get_for_auth(self, email: str) -> dict | None:
+        """
+        Busca user para autenticacao (inclui password hash).
+
+        ATENCAO: Este metodo retorna o hash da senha!
+        Use apenas no fluxo de autenticacao.
+        """
+        with DBConnectionHandler() as db:
+            user = (
+                db.session.query(User)
+                .filter(User.user_email.ilike(email))
+                .filter(User.active == Status.ATIVO)
+                .first()
+            )
+            if not user:
+                return None
+
+            return {
+                "id": user.id,
+                "email": user.user_email,
+                "password_hash": user.user_password,
+                "role": user.user_role.value,
+                "status": user.user_status.value
+            }
+```
+
+**Checklist de validacao - Repository completo**:
+```
+[X] Herda de BaseRepository[User]
+[X] Queries de busca (by_email, search)
+[X] Queries de filtro (by_team, by_role, by_status)
+[X] Queries com eager loading
+[X] Queries paginadas
+[X] Create com validacao de email unico
+[X] Updates especificos (profile, team, role, status)
+[X] Query para autenticacao
+[X] Documentacao nos metodos
+```
+
+---
+
+## 9.3 User Exceptions - Erros Customizados
+
+### Por que Exceptions Customizadas?
+
+```python
+# ❌ SEM exceptions customizadas
+def create_user(email: str):
+    if email_exists(email):
+        raise ValueError("Email ja existe")  # Generico demais!
+
+# ✅ COM exceptions customizadas
+def create_user(email: str):
+    if email_exists(email):
+        raise EmailAlreadyExistsError(email)  # Especifico!
+```
+
+### Estrutura de Exceptions
+
+```python
+# infra/exceptions.py - Exceptions do sistema
+"""
+Exceptions customizadas do sistema.
+
+Hierarquia:
+- AppException (base)
+  - NotFoundError
+  - AlreadyExistsError
+  - ValidationError
+  - AuthenticationError
+  - AuthorizationError
+  - BusinessRuleError
+"""
+from typing import Any
+
+
+class AppException(Exception):
+    """
+    Exception base do sistema.
+
+    Todas as exceptions customizadas herdam desta.
+    Permite tratamento unificado no error handler.
+    """
+    def __init__(
+        self,
+        message: str,
+        code: str = "APP_ERROR",
+        status_code: int = 400,
+        details: dict[str, Any] | None = None
+    ):
+        self.message = message
+        self.code = code
+        self.status_code = status_code
+        self.details = details or {}
+        super().__init__(self.message)
+
+    def to_dict(self) -> dict:
+        """Converte para dict (para resposta JSON)."""
+        return {
+            "error": {
+                "code": self.code,
+                "message": self.message,
+                "details": self.details
+            }
+        }
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# NOT FOUND
+# ═══════════════════════════════════════════════════════════════════════════
+class NotFoundError(AppException):
+    """Recurso nao encontrado."""
+    def __init__(self, resource: str, identifier: Any):
+        super().__init__(
+            message=f"{resource} nao encontrado: {identifier}",
+            code="NOT_FOUND",
+            status_code=404,
+            details={"resource": resource, "identifier": str(identifier)}
+        )
+
+
+class UserNotFoundError(NotFoundError):
+    """Usuario nao encontrado."""
+    def __init__(self, identifier: Any):
+        super().__init__("Usuario", identifier)
+
+
+class TeamNotFoundError(NotFoundError):
+    """Time nao encontrado."""
+    def __init__(self, identifier: Any):
+        super().__init__("Time", identifier)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ALREADY EXISTS
+# ═══════════════════════════════════════════════════════════════════════════
+class AlreadyExistsError(AppException):
+    """Recurso ja existe."""
+    def __init__(self, resource: str, field: str, value: Any):
+        super().__init__(
+            message=f"{resource} com {field}='{value}' ja existe",
+            code="ALREADY_EXISTS",
+            status_code=409,
+            details={"resource": resource, "field": field, "value": str(value)}
+        )
+
+
+class EmailAlreadyExistsError(AlreadyExistsError):
+    """Email ja esta em uso."""
+    def __init__(self, email: str):
+        super().__init__("Usuario", "email", email)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# VALIDATION
+# ═══════════════════════════════════════════════════════════════════════════
+class ValidationError(AppException):
+    """Erro de validacao."""
+    def __init__(self, message: str, errors: list[dict] | None = None):
+        super().__init__(
+            message=message,
+            code="VALIDATION_ERROR",
+            status_code=422,
+            details={"errors": errors or []}
+        )
+
+
+class InvalidPasswordError(ValidationError):
+    """Senha nao atende criterios."""
+    def __init__(self, reasons: list[str]):
+        super().__init__(
+            message="Senha nao atende os criterios de seguranca",
+            errors=[{"field": "password", "reasons": reasons}]
+        )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# AUTHENTICATION
+# ═══════════════════════════════════════════════════════════════════════════
+class AuthenticationError(AppException):
+    """Erro de autenticacao."""
+    def __init__(self, message: str = "Credenciais invalidas"):
+        super().__init__(
+            message=message,
+            code="AUTHENTICATION_ERROR",
+            status_code=401
+        )
+
+
+class InvalidCredentialsError(AuthenticationError):
+    """Email ou senha incorretos."""
+    def __init__(self):
+        super().__init__("Email ou senha incorretos")
+
+
+class UserInactiveError(AuthenticationError):
+    """Usuario inativo."""
+    def __init__(self):
+        super().__init__("Usuario esta inativo")
+
+
+class UserSuspendedError(AuthenticationError):
+    """Usuario suspenso."""
+    def __init__(self):
+        super().__init__("Usuario esta suspenso")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# AUTHORIZATION
+# ═══════════════════════════════════════════════════════════════════════════
+class AuthorizationError(AppException):
+    """Erro de autorizacao."""
+    def __init__(self, message: str = "Acesso negado"):
+        super().__init__(
+            message=message,
+            code="AUTHORIZATION_ERROR",
+            status_code=403
+        )
+
+
+class InsufficientPermissionsError(AuthorizationError):
+    """Permissoes insuficientes."""
+    def __init__(self, required_role: str):
+        super().__init__(f"Requer permissao de {required_role}")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# BUSINESS RULES
+# ═══════════════════════════════════════════════════════════════════════════
+class BusinessRuleError(AppException):
+    """Violacao de regra de negocio."""
+    def __init__(self, message: str):
+        super().__init__(
+            message=message,
+            code="BUSINESS_RULE_ERROR",
+            status_code=400
+        )
+
+
+class CannotDeleteWithDependenciesError(BusinessRuleError):
+    """Nao pode deletar registro com dependencias."""
+    def __init__(self, resource: str, dependencies: str):
+        super().__init__(
+            f"Nao pode deletar {resource} pois possui {dependencies} vinculados"
+        )
+```
+
+### Uso das Exceptions
+
+```python
+# No Service:
+from infra.exceptions import UserNotFoundError, EmailAlreadyExistsError
+
+class UserService:
+    def get_user(self, user_id: int) -> dict:
+        user = self.repo.select_by_id(user_id)
+        if not user:
+            raise UserNotFoundError(user_id)  # Especifico!
+        return user
+
+    def create_user(self, email: str, ...):
+        if self.repo.email_exists(email):
+            raise EmailAlreadyExistsError(email)  # Especifico!
+        ...
+
+# Na API (error handler):
+from fastapi import Request
+from fastapi.responses import JSONResponse
+from infra.exceptions import AppException
+
+@app.exception_handler(AppException)
+async def app_exception_handler(request: Request, exc: AppException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=exc.to_dict()
+    )
+
+# Resposta automatica:
+# {
+#     "error": {
+#         "code": "NOT_FOUND",
+#         "message": "Usuario nao encontrado: 999",
+#         "details": {"resource": "Usuario", "identifier": "999"}
+#     }
+# }
+```
+
+---
+
+## 9.4 User Schemas - Do Basico ao Estado da Arte
+
+### NIVEL 1: Schema Minimo (BASICO)
+
+```python
+# schemas/user_schemas.py - NIVEL 1: BASICO
+"""
+Schemas User - Nivel 1: Minimo funcional.
+
+O que tem:
+- Schema basico para resposta
+
+O que NAO tem:
+- Validacoes
+- Schemas separados (Create, Update, Response)
+"""
+from pydantic import BaseModel, ConfigDict
+
+
+class UserSchema(BaseModel):
+    """Schema basico de User."""
+    id: int
+    user_full_name: str
+    user_email: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+# Uso:
+# user_schema = UserSchema.model_validate(user_orm)
+# print(user_schema.model_dump())
+```
+
+---
+
+### NIVEL 2: Schemas Separados (INTERMEDIARIO)
+
+```python
+# schemas/user_schemas.py - NIVEL 2: Schemas separados
+"""
+Schemas User - Nivel 2: Create, Update, Response separados.
+"""
+from pydantic import BaseModel, ConfigDict
+from datetime import datetime
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CREATE - Entrada para criacao
+# ═══════════════════════════════════════════════════════════════════════════
+class UserCreate(BaseModel):
+    """Dados para criar usuario."""
+    user_full_name: str
+    user_email: str
+    user_password: str
+    user_team_id: int
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# UPDATE - Entrada para atualizacao (tudo opcional)
+# ═══════════════════════════════════════════════════════════════════════════
+class UserUpdate(BaseModel):
+    """Dados para atualizar usuario (todos opcionais)."""
+    user_full_name: str | None = None
+    user_email: str | None = None
+    user_photo: str | None = None
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# RESPONSE - Saida da API
+# ═══════════════════════════════════════════════════════════════════════════
+class UserResponse(BaseModel):
+    """Dados retornados pela API (SEM senha!)."""
+    id: int
+    user_full_name: str
+    user_email: str
+    user_team_id: int
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+```
+
+---
+
+### NIVEL 3: Com Validacoes (AVANCADO)
+
+```python
+# schemas/user_schemas.py - NIVEL 3: Com validacoes
+"""
+Schemas User - Nivel 3: Com validacoes customizadas.
+"""
+from pydantic import BaseModel, ConfigDict, Field, EmailStr, field_validator
+from datetime import datetime
+import re
+
+
+class UserCreate(BaseModel):
+    """Dados para criar usuario - com validacoes."""
+
+    user_full_name: str = Field(
+        ...,
+        min_length=3,
+        max_length=200,
+        description="Nome completo (min 3 caracteres)"
+    )
+    user_email: EmailStr = Field(
+        ...,
+        description="Email valido"
+    )
+    user_password: str = Field(
+        ...,
+        min_length=8,
+        description="Senha (min 8 caracteres)"
+    )
+    user_team_id: int = Field(
+        ...,
+        gt=0,
+        description="ID do time (deve existir)"
+    )
+
+    @field_validator('user_full_name')
+    @classmethod
+    def validate_full_name(cls, v: str) -> str:
+        """Valida que nome tem pelo menos duas palavras."""
+        if len(v.split()) < 2:
+            raise ValueError('Nome deve ter pelo menos nome e sobrenome')
+        return v.title()  # Capitaliza
+
+    @field_validator('user_password')
+    @classmethod
+    def validate_password_strength(cls, v: str) -> str:
+        """Valida forca da senha."""
+        errors = []
+        if not re.search(r'[A-Z]', v):
+            errors.append('uma letra maiuscula')
+        if not re.search(r'[a-z]', v):
+            errors.append('uma letra minuscula')
+        if not re.search(r'[0-9]', v):
+            errors.append('um numero')
+        if errors:
+            raise ValueError(f'Senha deve conter: {", ".join(errors)}')
+        return v
+```
+
+---
+
+### NIVEL 4: Estado da Arte (PRODUCAO)
+
+```python
+# schemas/user_schemas.py - NIVEL 4: ESTADO DA ARTE
+"""
+Schemas User - Versao completa para producao.
+
+Inclui:
+- Base compartilhada (DRY)
+- Validacoes completas
+- Schemas para todos os casos de uso
+- Schemas com relacionamentos
+- Schema de listagem paginada
+"""
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    EmailStr,
+    field_validator,
+    model_validator,
+    computed_field
+)
+from datetime import datetime
+from typing import Self
+import re
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SCHEMAS AUXILIARES
+# ═══════════════════════════════════════════════════════════════════════════
+class TeamSimple(BaseModel):
+    """Team resumido - evita recursao."""
+    id: int
+    team_name: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# BASE COMPARTILHADA
+# ═══════════════════════════════════════════════════════════════════════════
+class UserBase(BaseModel):
+    """Campos comuns a varios schemas."""
+    user_full_name: str = Field(
+        ...,
+        min_length=3,
+        max_length=200,
+        examples=["Joao da Silva"]
+    )
+    user_email: EmailStr = Field(
+        ...,
+        examples=["joao.silva@empresa.com"]
+    )
+
+    @field_validator('user_full_name')
+    @classmethod
+    def validate_full_name(cls, v: str) -> str:
+        if len(v.split()) < 2:
+            raise ValueError('Nome deve ter nome e sobrenome')
+        return v.title()
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CREATE
+# ═══════════════════════════════════════════════════════════════════════════
+class UserCreate(UserBase):
+    """
+    Dados para criar usuario.
+
+    Validacoes:
+    - Nome: min 3 chars, deve ter sobrenome
+    - Email: formato valido
+    - Senha: min 8 chars, 1 maiuscula, 1 minuscula, 1 numero
+    - Team: deve existir (validado no service)
+    """
+    user_password: str = Field(
+        ...,
+        min_length=8,
+        description="Min 8 chars, 1 maiuscula, 1 minuscula, 1 numero"
+    )
+    user_team_id: int = Field(..., gt=0)
+    user_role: str = Field(default="user", pattern="^(admin|manager|analyst|user)$")
+
+    @field_validator('user_password')
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        errors = []
+        if not re.search(r'[A-Z]', v):
+            errors.append('1 maiuscula')
+        if not re.search(r'[a-z]', v):
+            errors.append('1 minuscula')
+        if not re.search(r'[0-9]', v):
+            errors.append('1 numero')
+        if errors:
+            raise ValueError(f'Senha precisa de: {", ".join(errors)}')
+        return v
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# UPDATE
+# ═══════════════════════════════════════════════════════════════════════════
+class UserUpdate(BaseModel):
+    """
+    Dados para atualizar usuario.
+
+    Todos os campos sao opcionais.
+    Pelo menos um campo deve ser enviado.
+    """
+    user_full_name: str | None = Field(None, min_length=3, max_length=200)
+    user_email: EmailStr | None = None
+    user_photo: str | None = None
+    user_team_id: int | None = Field(None, gt=0)
+
+    @model_validator(mode='after')
+    def at_least_one_field(self) -> Self:
+        """Garante que pelo menos um campo foi enviado."""
+        values = [self.user_full_name, self.user_email, self.user_photo, self.user_team_id]
+        if all(v is None for v in values):
+            raise ValueError('Pelo menos um campo deve ser enviado')
+        return self
+
+
+class UserChangePassword(BaseModel):
+    """Dados para troca de senha."""
+    current_password: str = Field(..., min_length=1)
+    new_password: str = Field(..., min_length=8)
+    confirm_password: str = Field(..., min_length=8)
+
+    @model_validator(mode='after')
+    def passwords_match(self) -> Self:
+        if self.new_password != self.confirm_password:
+            raise ValueError('Senhas nao conferem')
+        return self
+
+
+class UserChangeStatus(BaseModel):
+    """Dados para mudar status."""
+    new_status: str = Field(..., pattern="^(ativo|suspenso|bloqueado|ferias|afastado)$")
+
+
+class UserChangeRole(BaseModel):
+    """Dados para mudar role."""
+    new_role: str = Field(..., pattern="^(admin|manager|analyst|user)$")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# RESPONSE
+# ═══════════════════════════════════════════════════════════════════════════
+class UserResponse(UserBase):
+    """Resposta padrao de usuario (SEM senha!)."""
+    id: int
+    user_team_id: int
+    user_role: str
+    user_status: str
+    user_photo: str | None = None
+    created_at: datetime
+    updated_at: datetime | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+    @computed_field
+    @property
+    def display_name(self) -> str:
+        """Primeiro nome para exibicao."""
+        return self.user_full_name.split()[0]
+
+
+class UserWithTeam(UserResponse):
+    """Resposta com dados do time."""
+    team: TeamSimple | None = None
+
+
+class UserList(BaseModel):
+    """Versao resumida para listagens."""
+    id: int
+    user_full_name: str
+    user_email: str
+    user_role: str
+    user_status: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# LISTAGEM PAGINADA
+# ═══════════════════════════════════════════════════════════════════════════
+class UserListResponse(BaseModel):
+    """Resposta de listagem paginada."""
+    items: list[UserList]
+    total: int
+    page: int
+    page_size: int
+    total_pages: int
+
+    @computed_field
+    @property
+    def has_next(self) -> bool:
+        return self.page < self.total_pages
+
+    @computed_field
+    @property
+    def has_previous(self) -> bool:
+        return self.page > 1
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# AUTENTICACAO
+# ═══════════════════════════════════════════════════════════════════════════
+class LoginRequest(BaseModel):
+    """Dados para login."""
+    email: EmailStr
+    password: str = Field(..., min_length=1)
+
+
+class LoginResponse(BaseModel):
+    """Resposta do login."""
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    expires_in: int
+    user: UserResponse
+```
+
+**Checklist de validacao - Schemas completos**:
+```
+[X] Base compartilhada (DRY)
+[X] UserCreate com validacoes de senha
+[X] UserUpdate com validacao "pelo menos um campo"
+[X] UserResponse sem senha
+[X] UserWithTeam com relacionamento
+[X] UserList para listagens
+[X] UserListResponse paginada
+[X] Schemas de autenticacao
+[X] Schemas de operacoes (ChangePassword, ChangeStatus, ChangeRole)
+```
+
+---
+
+## 9.5 User Service - Do Basico ao Estado da Arte
+
+### NIVEL 1: Service Minimo (BASICO)
+
+```python
+# services/user_service.py - NIVEL 1: BASICO
+"""
+Service User - Nivel 1: Minimo funcional.
+"""
+from infra.repositories.user_repository import UserRepository
+
+
+class UserService:
+    """Service basico de User."""
+
+    def __init__(self):
+        self.repo = UserRepository()
+
+    def get_user(self, user_id: int) -> dict | None:
+        """Busca usuario por ID."""
+        return self.repo.select_by_id(user_id)
+
+    def list_users(self) -> list[dict]:
+        """Lista todos os usuarios."""
+        return self.repo.select_all()
+```
+
+---
+
+### NIVEL 2: Com Validacoes de Negocio (INTERMEDIARIO)
+
+```python
+# services/user_service.py - NIVEL 2: Com validacoes
+"""
+Service User - Nivel 2: Com validacoes de negocio.
+"""
+from infra.repositories.user_repository import UserRepository
+from infra.repositories.team_repository import TeamRepository
+from infra.exceptions import UserNotFoundError, TeamNotFoundError, EmailAlreadyExistsError
+
+
+class UserService:
+    """Service de User com validacoes."""
+
+    def __init__(self):
+        self.repo = UserRepository()
+        self.team_repo = TeamRepository()
+
+    def get_user(self, user_id: int) -> dict:
+        """Busca usuario por ID."""
+        user = self.repo.select_by_id(user_id)
+        if not user:
+            raise UserNotFoundError(user_id)
+        return user
+
+    def create_user(
+        self,
+        full_name: str,
+        email: str,
+        password: str,
+        team_id: int,
+        created_by: int | None = None
+    ) -> dict:
+        """
+        Cria usuario.
+
+        Validacoes:
+        - Email deve ser unico
+        - Team deve existir
+        """
+        # Validar email unico
+        if self.repo.email_exists(email):
+            raise EmailAlreadyExistsError(email)
+
+        # Validar team existe
+        if not self.team_repo.exists(team_id):
+            raise TeamNotFoundError(team_id)
+
+        # Hash da senha (NUNCA armazene senha em texto!)
+        password_hash = self._hash_password(password)
+
+        # Criar
+        user_id = self.repo.create(
+            full_name=full_name,
+            email=email,
+            password_hash=password_hash,
+            team_id=team_id,
+            created_by=created_by
+        )
+
+        return self.repo.select_by_id(user_id)
+
+    def _hash_password(self, password: str) -> str:
+        """Gera hash da senha."""
+        from passlib.context import CryptContext
+        pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        return pwd_context.hash(password)
+```
+
+---
+
+### NIVEL 3: Com Autenticacao e Paginacao (AVANCADO)
+
+```python
+# services/user_service.py - NIVEL 3: Avancado
+"""
+Service User - Nivel 3: Com autenticacao e paginacao.
+
+Adiciona:
+- Autenticacao (login/logout)
+- Tokens JWT
+- Paginacao na listagem
+- Filtros avancados
+"""
+from datetime import datetime, timedelta
+from typing import Optional
+from passlib.context import CryptContext
+from jose import jwt
+
+from infra.configs.settings import settings
+from infra.repositories.user_repository import UserRepository
+from infra.repositories.team_repository import TeamRepository
+from infra.exceptions import (
+    UserNotFoundError,
+    TeamNotFoundError,
+    EmailAlreadyExistsError,
+    InvalidCredentialsError
+)
+
+
+class UserService:
+    """Service de User com autenticacao e paginacao."""
+
+    def __init__(self):
+        self.repo = UserRepository()
+        self.team_repo = TeamRepository()
+        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # AUTENTICACAO
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    def authenticate(self, email: str, password: str) -> dict:
+        """
+        Autentica usuario e retorna tokens.
+
+        Args:
+            email: Email do usuario
+            password: Senha em texto puro
+
+        Returns:
+            dict com access_token e refresh_token
+
+        Raises:
+            InvalidCredentialsError: Se email/senha incorretos
+        """
+        # Buscar usuario por email
+        user = self.repo.select_by_email(email)
+        if not user:
+            raise InvalidCredentialsError()
+
+        # Verificar senha
+        if not self._verify_password(password, user.user_password):
+            raise InvalidCredentialsError()
+
+        # Gerar tokens
+        access_token = self._create_access_token(user.id)
+        refresh_token = self._create_refresh_token(user.id)
+
+        return {
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "token_type": "bearer"
+        }
+
+    def _verify_password(self, plain: str, hashed: str) -> bool:
+        """Verifica se senha confere com hash."""
+        return self.pwd_context.verify(plain, hashed)
+
+    def _create_access_token(self, user_id: int) -> str:
+        """Cria token de acesso (curta duracao)."""
+        expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        payload = {"sub": str(user_id), "exp": expire, "type": "access"}
+        return jwt.encode(payload, settings.SECRET_KEY.get_secret_value(), algorithm="HS256")
+
+    def _create_refresh_token(self, user_id: int) -> str:
+        """Cria token de refresh (longa duracao)."""
+        expire = datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+        payload = {"sub": str(user_id), "exp": expire, "type": "refresh"}
+        return jwt.encode(payload, settings.SECRET_KEY.get_secret_value(), algorithm="HS256")
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # LISTAGEM COM PAGINACAO
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    def list_users(
+        self,
+        page: int = 1,
+        page_size: int = 20,
+        team_id: Optional[int] = None,
+        is_active: Optional[bool] = None,
+        search: Optional[str] = None
+    ) -> dict:
+        """
+        Lista usuarios com paginacao e filtros.
+
+        Args:
+            page: Numero da pagina (comeca em 1)
+            page_size: Itens por pagina (max 100)
+            team_id: Filtrar por time
+            is_active: Filtrar por status ativo
+            search: Buscar por nome/email
+
+        Returns:
+            dict com items, total, page, page_size, pages
+        """
+        # Validar page_size
+        page_size = min(page_size, 100)
+
+        # Buscar com paginacao
+        result = self.repo.list_paginated(
+            page=page,
+            page_size=page_size,
+            team_id=team_id,
+            is_active=is_active,
+            search=search
+        )
+
+        return result
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CRUD (herdado do NIVEL 2)
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    def get_user(self, user_id: int) -> dict:
+        """Busca usuario por ID."""
+        user = self.repo.select_by_id(user_id)
+        if not user:
+            raise UserNotFoundError(user_id)
+        return user
+
+    def create_user(
+        self,
+        full_name: str,
+        email: str,
+        password: str,
+        team_id: int,
+        created_by: int | None = None
+    ) -> dict:
+        """Cria usuario com validacoes."""
+        if self.repo.email_exists(email):
+            raise EmailAlreadyExistsError(email)
+
+        if not self.team_repo.exists(team_id):
+            raise TeamNotFoundError(team_id)
+
+        password_hash = self.pwd_context.hash(password)
+
+        user_id = self.repo.create(
+            full_name=full_name,
+            email=email,
+            password_hash=password_hash,
+            team_id=team_id,
+            created_by=created_by
+        )
+
+        return self.repo.select_by_id(user_id)
+```
+
+**O que mudou do NIVEL 2 para NIVEL 3**:
+- Autenticacao com JWT (login retorna tokens)
+- Verificacao de senha com bcrypt
+- Paginacao na listagem
+- Filtros avancados (team_id, is_active, search)
+- Context de senha como atributo (nao recria a cada chamada)
+
+---
+
+### NIVEL 4: Estado da Arte (PRODUCAO)
+
+```python
+# services/user_service.py - NIVEL 4: ESTADO DA ARTE
+"""
+Service User - Versao completa para producao.
+
+Responsabilidades:
+- Validacoes de negocio
+- Orquestracao de operacoes
+- Hash de senha
+- Autenticacao
+- Autorizacao (verificacao de permissoes)
+"""
+from datetime import datetime, timedelta
+from typing import Any
+
+from passlib.context import CryptContext
+from jose import jwt
+
+from infra.repositories.user_repository import UserRepository
+from infra.repositories.team_repository import TeamRepository
+from infra.entities.user import UserRole, UserStatus
+from infra.exceptions import (
+    UserNotFoundError,
+    TeamNotFoundError,
+    EmailAlreadyExistsError,
+    InvalidCredentialsError,
+    UserInactiveError,
+    UserSuspendedError,
+    InsufficientPermissionsError,
+    ValidationError
+)
+from infra.configs.settings import settings
+
+
+class UserService:
+    """
+    Service completo de User.
+
+    Regras de negocio implementadas:
+    - Email deve ser unico
+    - Team deve existir antes de criar user
+    - Senha deve ser forte
+    - Usuario suspenso/inativo nao pode logar
+    - Apenas admin pode mudar roles
+    - Apenas admin/manager pode deletar usuarios
+    """
+
+    def __init__(self):
+        self.repo = UserRepository()
+        self.team_repo = TeamRepository()
+        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+    # =========================================================================
+    # READ
+    # =========================================================================
+
+    def get_user(self, user_id: int) -> dict:
+        """
+        Busca usuario por ID.
+
+        Raises:
+            UserNotFoundError: Se usuario nao existe
+        """
+        user = self.repo.select_by_id(user_id)
+        if not user:
+            raise UserNotFoundError(user_id)
+        return user
+
+    def get_user_with_team(self, user_id: int) -> dict:
+        """Busca usuario com dados do time."""
+        user = self.repo.get_with_team(user_id)
+        if not user:
+            raise UserNotFoundError(user_id)
+        return user
+
+    def list_users(
+        self,
+        page: int = 1,
+        page_size: int = 20,
+        team_id: int | None = None,
+        role: str | None = None,
+        status: str | None = None
+    ) -> dict:
+        """
+        Lista usuarios com paginacao e filtros.
+
+        Returns:
+            {items: [...], total, page, page_size, total_pages}
+        """
+        role_enum = UserRole(role) if role else None
+        status_enum = UserStatus(status) if status else None
+
+        return self.repo.list_paginated(
+            page=page,
+            page_size=page_size,
+            team_id=team_id,
+            role=role_enum,
+            status=status_enum
+        )
+
+    def search_users(self, query: str, limit: int = 10) -> list[dict]:
+        """Busca usuarios por nome ou email."""
+        return self.repo.search(query, limit=limit)
+
+    # =========================================================================
+    # CREATE
+    # =========================================================================
+
+    def create_user(
+        self,
+        full_name: str,
+        email: str,
+        password: str,
+        team_id: int,
+        role: str = "user",
+        created_by: int | None = None
+    ) -> dict:
+        """
+        Cria usuario.
+
+        Validacoes:
+        - Email unico
+        - Team existe
+        - Role valido
+
+        Raises:
+            EmailAlreadyExistsError: Se email ja existe
+            TeamNotFoundError: Se team nao existe
+        """
+        # Validar email
+        if self.repo.email_exists(email):
+            raise EmailAlreadyExistsError(email)
+
+        # Validar team
+        if not self.team_repo.exists(team_id):
+            raise TeamNotFoundError(team_id)
+
+        # Hash da senha
+        password_hash = self.pwd_context.hash(password)
+
+        # Criar
+        user_id = self.repo.create(
+            full_name=full_name,
+            email=email,
+            password_hash=password_hash,
+            team_id=team_id,
+            role=UserRole(role),
+            created_by=created_by
+        )
+
+        return self.repo.select_by_id(user_id)
+
+    # =========================================================================
+    # UPDATE
+    # =========================================================================
+
+    def update_profile(
+        self,
+        user_id: int,
+        updated_by: int,
+        full_name: str | None = None,
+        email: str | None = None,
+        photo: str | None = None
+    ) -> dict:
+        """
+        Atualiza perfil do usuario.
+
+        Raises:
+            UserNotFoundError: Se usuario nao existe
+            EmailAlreadyExistsError: Se novo email ja existe
+        """
+        if not self.repo.exists(user_id):
+            raise UserNotFoundError(user_id)
+
+        if email and self.repo.email_exists(email, exclude_id=user_id):
+            raise EmailAlreadyExistsError(email)
+
+        self.repo.update_profile(
+            user_id=user_id,
+            updated_by=updated_by,
+            full_name=full_name,
+            email=email,
+            photo=photo
+        )
+
+        return self.repo.select_by_id(user_id)
+
+    def change_password(
+        self,
+        user_id: int,
+        current_password: str,
+        new_password: str
+    ) -> bool:
+        """
+        Troca senha do usuario.
+
+        Raises:
+            UserNotFoundError: Se usuario nao existe
+            InvalidCredentialsError: Se senha atual incorreta
+        """
+        user_auth = self.repo.get_for_auth_by_id(user_id)
+        if not user_auth:
+            raise UserNotFoundError(user_id)
+
+        # Verificar senha atual
+        if not self.pwd_context.verify(current_password, user_auth["password_hash"]):
+            raise InvalidCredentialsError()
+
+        # Atualizar senha
+        new_hash = self.pwd_context.hash(new_password)
+        return self.repo.update(user_id, user_password=new_hash)
+
+    def change_status(
+        self,
+        user_id: int,
+        new_status: str,
+        updated_by: int,
+        actor_role: str
+    ) -> dict:
+        """
+        Muda status do usuario.
+
+        Apenas admin/manager podem mudar status.
+
+        Raises:
+            UserNotFoundError: Se usuario nao existe
+            InsufficientPermissionsError: Se nao tem permissao
+        """
+        if actor_role not in ["admin", "manager"]:
+            raise InsufficientPermissionsError("manager")
+
+        if not self.repo.exists(user_id):
+            raise UserNotFoundError(user_id)
+
+        self.repo.change_status(user_id, UserStatus(new_status), updated_by)
+        return self.repo.select_by_id(user_id)
+
+    def change_role(
+        self,
+        user_id: int,
+        new_role: str,
+        updated_by: int,
+        actor_role: str
+    ) -> dict:
+        """
+        Muda role do usuario.
+
+        Apenas admin pode mudar roles.
+
+        Raises:
+            UserNotFoundError: Se usuario nao existe
+            InsufficientPermissionsError: Se nao e admin
+        """
+        if actor_role != "admin":
+            raise InsufficientPermissionsError("admin")
+
+        if not self.repo.exists(user_id):
+            raise UserNotFoundError(user_id)
+
+        self.repo.change_role(user_id, UserRole(new_role), updated_by)
+        return self.repo.select_by_id(user_id)
+
+    # =========================================================================
+    # DELETE
+    # =========================================================================
+
+    def delete_user(self, user_id: int, deleted_by: int, actor_role: str) -> bool:
+        """
+        Soft delete de usuario.
+
+        Apenas admin/manager podem deletar.
+
+        Raises:
+            UserNotFoundError: Se usuario nao existe
+            InsufficientPermissionsError: Se nao tem permissao
+        """
+        if actor_role not in ["admin", "manager"]:
+            raise InsufficientPermissionsError("manager")
+
+        if not self.repo.exists(user_id):
+            raise UserNotFoundError(user_id)
+
+        return self.repo.soft_delete(user_id, deleted_by=deleted_by)
+
+    # =========================================================================
+    # AUTENTICACAO
+    # =========================================================================
+
+    def authenticate(self, email: str, password: str) -> dict:
+        """
+        Autentica usuario e retorna tokens.
+
+        Raises:
+            InvalidCredentialsError: Se email/senha incorretos
+            UserInactiveError: Se usuario inativo
+            UserSuspendedError: Se usuario suspenso
+        """
+        # Buscar usuario
+        user_auth = self.repo.get_for_auth(email)
+        if not user_auth:
+            raise InvalidCredentialsError()
+
+        # Verificar senha
+        if not self.pwd_context.verify(password, user_auth["password_hash"]):
+            raise InvalidCredentialsError()
+
+        # Verificar status
+        if user_auth["status"] == "inativo":
+            raise UserInactiveError()
+        if user_auth["status"] == "suspenso":
+            raise UserSuspendedError()
+
+        # Gerar tokens
+        access_token = self._create_access_token(user_auth)
+        refresh_token = self._create_refresh_token(user_auth)
+
+        # Buscar dados completos do usuario
+        user = self.repo.select_by_id(user_auth["id"])
+
+        return {
+            "access_token": access_token,
+            "refresh_token": refresh_token,
+            "token_type": "bearer",
+            "expires_in": settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+            "user": user
+        }
+
+    def _create_access_token(self, user_data: dict) -> str:
+        """Cria access token JWT."""
+        expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        to_encode = {
+            "sub": str(user_data["id"]),
+            "email": user_data["email"],
+            "role": user_data["role"],
+            "exp": expire,
+            "type": "access"
+        }
+        return jwt.encode(to_encode, settings.SECRET_KEY, algorithm="HS256")
+
+    def _create_refresh_token(self, user_data: dict) -> str:
+        """Cria refresh token JWT."""
+        expire = datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+        to_encode = {
+            "sub": str(user_data["id"]),
+            "exp": expire,
+            "type": "refresh"
+        }
+        return jwt.encode(to_encode, settings.SECRET_KEY, algorithm="HS256")
+```
+
+**Checklist de validacao - Service completo**:
+```
+[X] CRUD completo
+[X] Validacoes de negocio (email unico, team existe)
+[X] Hash de senha com bcrypt
+[X] Autenticacao com JWT
+[X] Verificacao de permissoes
+[X] Exceptions especificas
+[X] Documentacao nos metodos
+```
+
+---
+
+## 9.6 User API - Do Basico ao Estado da Arte
+
+### NIVEL 1: Endpoint Minimo (BASICO)
+
+```python
+# api/routes/user_routes.py - NIVEL 1: BASICO
+"""
+API de User - Nivel 1: Endpoints minimos.
+
+O mais simples que funciona: um endpoint GET e um POST.
+"""
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+
+from infra.configs.connection import get_db
+from infra.repositories.user_repository import UserRepository
+
+
+router = APIRouter(prefix="/users", tags=["Users"])
+
+
+@router.get("")
+def list_users(db: Session = Depends(get_db)):
+    """Lista todos os usuarios."""
+    repo = UserRepository()
+    return repo.select_all()
+
+
+@router.get("/{user_id}")
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    """Busca usuario por ID."""
+    repo = UserRepository()
+    user = repo.select_by_id(user_id)
+    if not user:
+        return {"error": "Usuario nao encontrado"}
+    return user
+
+
+@router.post("")
+def create_user(
+    full_name: str,
+    email: str,
+    password: str,
+    team_id: int,
+    db: Session = Depends(get_db)
+):
+    """Cria usuario."""
+    repo = UserRepository()
+    user_id = repo.create(
+        full_name=full_name,
+        email=email,
+        password_hash=password,  # NIVEL 1: sem hash ainda!
+        team_id=team_id
+    )
+    return {"id": user_id, "message": "Usuario criado"}
+```
+
+**O que voce aprendeu**:
+- Criar router com prefixo (`/users`)
+- Usar `Depends(get_db)` para injecao de dependencia
+- Endpoints basicos: GET (listar, detalhe) e POST (criar)
+
+**Problemas do NIVEL 1**:
+- Sem validacao de entrada
+- Sem schemas Pydantic
+- Sem tratamento de erros
+- Senha armazenada sem hash!
+
+---
+
+### NIVEL 2: Com Schemas e Service (INTERMEDIARIO)
+
+```python
+# api/routes/user_routes.py - NIVEL 2: Com Schemas
+"""
+API de User - Nivel 2: Com schemas Pydantic e Service.
+
+Adiciona:
+- Schemas de entrada/saida
+- Service para logica de negocio
+- Tratamento de erros basico
+"""
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+
+from infra.configs.connection import get_db
+from services.user_service import UserService
+from schemas.user_schemas import UserCreate, UserResponse, UserUpdate
+
+
+router = APIRouter(prefix="/users", tags=["Users"])
+
+
+def get_service() -> UserService:
+    """Factory para criar service."""
+    return UserService()
+
+
+@router.get("", response_model=list[UserResponse])
+def list_users(service: UserService = Depends(get_service)):
+    """Lista usuarios."""
+    return service.list_users()
+
+
+@router.get("/{user_id}", response_model=UserResponse)
+def get_user(user_id: int, service: UserService = Depends(get_service)):
+    """Busca usuario por ID."""
+    try:
+        return service.get_user(user_id)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.post("", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+def create_user(data: UserCreate, service: UserService = Depends(get_service)):
+    """
+    Cria usuario.
+
+    O schema UserCreate valida:
+    - user_full_name: obrigatorio, min 2 chars
+    - user_email: formato de email valido
+    - user_password: min 8 chars
+    - user_team_id: inteiro positivo
+    """
+    try:
+        return service.create_user(
+            full_name=data.user_full_name,
+            email=data.user_email,
+            password=data.user_password,
+            team_id=data.user_team_id
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.patch("/{user_id}", response_model=UserResponse)
+def update_user(
+    user_id: int,
+    data: UserUpdate,
+    service: UserService = Depends(get_service)
+):
+    """Atualiza usuario."""
+    try:
+        return service.update_user(user_id, data.model_dump(exclude_unset=True))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(user_id: int, service: UserService = Depends(get_service)):
+    """Deleta usuario (soft delete)."""
+    try:
+        service.delete_user(user_id)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+```
+
+**O que mudou do NIVEL 1 para NIVEL 2**:
+- Schemas Pydantic validam entrada/saida
+- Service encapsula logica de negocio
+- response_model garante formato de saida
+- HTTPException para erros
+- status codes corretos (201 para criacao, 204 para delete)
+
+---
+
+### NIVEL 3: Com Autenticacao e Paginacao (AVANCADO)
+
+```python
+# api/routes/user_routes.py - NIVEL 3: Avancado
+"""
+API de User - Nivel 3: Com autenticacao e paginacao.
+
+Adiciona:
+- Autenticacao JWT
+- Endpoints de login
+- Paginacao na listagem
+- Query parameters para filtros
+"""
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.orm import Session
+
+from infra.configs.connection import get_db
+from services.user_service import UserService
+from schemas.user_schemas import (
+    UserCreate,
+    UserResponse,
+    UserUpdate,
+    UserListResponse,
+    LoginRequest,
+    LoginResponse
+)
+from api.dependencies import get_current_user
+
+
+router = APIRouter(prefix="/users", tags=["Users"])
+auth_router = APIRouter(prefix="/auth", tags=["Auth"])
+
+
+def get_service() -> UserService:
+    return UserService()
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# AUTENTICACAO
+# ═══════════════════════════════════════════════════════════════════════════
+@auth_router.post("/login", response_model=LoginResponse)
+def login(data: LoginRequest, service: UserService = Depends(get_service)):
+    """
+    Autentica usuario e retorna tokens JWT.
+
+    - **email**: Email cadastrado
+    - **password**: Senha
+
+    Returns:
+        access_token e refresh_token
+    """
+    try:
+        return service.authenticate(data.email, data.password)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Email ou senha incorretos",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CRUD COM AUTENTICACAO
+# ═══════════════════════════════════════════════════════════════════════════
+@router.get("", response_model=UserListResponse)
+def list_users(
+    page: int = Query(1, ge=1, description="Numero da pagina"),
+    page_size: int = Query(20, ge=1, le=100, description="Itens por pagina"),
+    team_id: int | None = Query(None, description="Filtrar por time"),
+    is_active: bool | None = Query(None, description="Filtrar por status"),
+    search: str | None = Query(None, description="Buscar por nome/email"),
+    current_user: dict = Depends(get_current_user),
+    service: UserService = Depends(get_service)
+):
+    """
+    Lista usuarios com paginacao.
+
+    Requer autenticacao (Bearer token).
+    """
+    return service.list_users(
+        page=page,
+        page_size=page_size,
+        team_id=team_id,
+        is_active=is_active,
+        search=search
+    )
+
+
+@router.get("/{user_id}", response_model=UserResponse)
+def get_user(
+    user_id: int,
+    current_user: dict = Depends(get_current_user),
+    service: UserService = Depends(get_service)
+):
+    """Busca usuario por ID. Requer autenticacao."""
+    try:
+        return service.get_user(user_id)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.post("", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+def create_user(
+    data: UserCreate,
+    current_user: dict = Depends(get_current_user),
+    service: UserService = Depends(get_service)
+):
+    """Cria usuario. Requer autenticacao."""
+    try:
+        return service.create_user(
+            full_name=data.user_full_name,
+            email=data.user_email,
+            password=data.user_password,
+            team_id=data.user_team_id,
+            created_by=current_user["id"]
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.patch("/{user_id}", response_model=UserResponse)
+def update_user(
+    user_id: int,
+    data: UserUpdate,
+    current_user: dict = Depends(get_current_user),
+    service: UserService = Depends(get_service)
+):
+    """Atualiza usuario. Requer autenticacao."""
+    try:
+        return service.update_user(
+            user_id,
+            data.model_dump(exclude_unset=True),
+            updated_by=current_user["id"]
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(
+    user_id: int,
+    current_user: dict = Depends(get_current_user),
+    service: UserService = Depends(get_service)
+):
+    """Soft delete de usuario. Requer autenticacao."""
+    try:
+        service.delete_user(user_id, deleted_by=current_user["id"])
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+```
+
+**O que mudou do NIVEL 2 para NIVEL 3**:
+- Autenticacao JWT em todos os endpoints
+- Endpoint de login (`/auth/login`)
+- Paginacao com Query parameters
+- Filtros opcionais (team_id, is_active, search)
+- Auditoria (created_by, updated_by, deleted_by)
+- Routers separados (users e auth)
+
+---
+
+### NIVEL 4: Estado da Arte (PRODUCAO)
+
+```python
+# api/routes/user_routes.py - ESTADO DA ARTE
+"""
+API Endpoints de User.
+
+Rotas:
+- POST   /users           - Criar usuario
+- GET    /users           - Listar usuarios (paginado)
+- GET    /users/search    - Buscar usuarios
+- GET    /users/{id}      - Detalhes do usuario
+- PATCH  /users/{id}      - Atualizar perfil
+- DELETE /users/{id}      - Soft delete
+- POST   /users/{id}/change-password  - Trocar senha
+- POST   /users/{id}/change-status    - Mudar status
+- POST   /users/{id}/change-role      - Mudar role
+- POST   /auth/login      - Login
+"""
+from fastapi import APIRouter, Depends, Query, status
+from sqlalchemy.orm import Session
+
+from infra.configs.connection import get_db
+from services.user_service import UserService
+from schemas.user_schemas import (
+    UserCreate,
+    UserUpdate,
+    UserResponse,
+    UserWithTeam,
+    UserListResponse,
+    UserChangePassword,
+    UserChangeStatus,
+    UserChangeRole,
+    LoginRequest,
+    LoginResponse
+)
+from api.dependencies import get_current_user, require_admin, require_manager
+
+
+router = APIRouter(prefix="/users", tags=["Users"])
+auth_router = APIRouter(prefix="/auth", tags=["Auth"])
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CREATE
+# ═══════════════════════════════════════════════════════════════════════════
+@router.post(
+    "",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Criar usuario",
+    description="Cria um novo usuario. Email deve ser unico."
+)
+def create_user(
+    data: UserCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Cria usuario.
+
+    - **user_full_name**: Nome completo (min 3 chars, com sobrenome)
+    - **user_email**: Email valido e unico
+    - **user_password**: Senha forte (min 8, maiuscula, minuscula, numero)
+    - **user_team_id**: ID do time (deve existir)
+    """
+    service = UserService()
+    user = service.create_user(
+        full_name=data.user_full_name,
+        email=data.user_email,
+        password=data.user_password,
+        team_id=data.user_team_id,
+        role=data.user_role,
+        created_by=current_user["id"]
+    )
+    return user
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# READ
+# ═══════════════════════════════════════════════════════════════════════════
+@router.get(
+    "",
+    response_model=UserListResponse,
+    summary="Listar usuarios",
+    description="Lista usuarios com paginacao e filtros opcionais."
+)
+def list_users(
+    page: int = Query(1, ge=1, description="Numero da pagina"),
+    page_size: int = Query(20, ge=1, le=100, description="Itens por pagina"),
+    team_id: int | None = Query(None, description="Filtrar por time"),
+    role: str | None = Query(None, description="Filtrar por role"),
+    status: str | None = Query(None, description="Filtrar por status"),
+    current_user: dict = Depends(get_current_user)
+):
+    service = UserService()
+    return service.list_users(
+        page=page,
+        page_size=page_size,
+        team_id=team_id,
+        role=role,
+        status=status
+    )
+
+
+@router.get(
+    "/search",
+    response_model=list[UserResponse],
+    summary="Buscar usuarios",
+    description="Busca usuarios por nome ou email."
+)
+def search_users(
+    q: str = Query(..., min_length=2, description="Termo de busca"),
+    limit: int = Query(10, ge=1, le=50, description="Maximo de resultados"),
+    current_user: dict = Depends(get_current_user)
+):
+    service = UserService()
+    return service.search_users(query=q, limit=limit)
+
+
+@router.get(
+    "/{user_id}",
+    response_model=UserWithTeam,
+    summary="Detalhes do usuario",
+    description="Retorna detalhes do usuario com dados do time."
+)
+def get_user(
+    user_id: int,
+    current_user: dict = Depends(get_current_user)
+):
+    service = UserService()
+    return service.get_user_with_team(user_id)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# UPDATE
+# ═══════════════════════════════════════════════════════════════════════════
+@router.patch(
+    "/{user_id}",
+    response_model=UserResponse,
+    summary="Atualizar perfil",
+    description="Atualiza dados do perfil. Pelo menos um campo obrigatorio."
+)
+def update_user(
+    user_id: int,
+    data: UserUpdate,
+    current_user: dict = Depends(get_current_user)
+):
+    service = UserService()
+    return service.update_profile(
+        user_id=user_id,
+        updated_by=current_user["id"],
+        full_name=data.user_full_name,
+        email=data.user_email,
+        photo=data.user_photo
+    )
+
+
+@router.post(
+    "/{user_id}/change-password",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Trocar senha"
+)
+def change_password(
+    user_id: int,
+    data: UserChangePassword,
+    current_user: dict = Depends(get_current_user)
+):
+    # Usuario so pode trocar propria senha (ou admin)
+    if current_user["id"] != user_id and current_user["role"] != "admin":
+        from infra.exceptions import AuthorizationError
+        raise AuthorizationError("Voce so pode trocar sua propria senha")
+
+    service = UserService()
+    service.change_password(
+        user_id=user_id,
+        current_password=data.current_password,
+        new_password=data.new_password
+    )
+
+
+@router.post(
+    "/{user_id}/change-status",
+    response_model=UserResponse,
+    summary="Mudar status",
+    description="Muda status operacional. Requer admin ou manager."
+)
+def change_status(
+    user_id: int,
+    data: UserChangeStatus,
+    current_user: dict = Depends(require_manager)
+):
+    service = UserService()
+    return service.change_status(
+        user_id=user_id,
+        new_status=data.new_status,
+        updated_by=current_user["id"],
+        actor_role=current_user["role"]
+    )
+
+
+@router.post(
+    "/{user_id}/change-role",
+    response_model=UserResponse,
+    summary="Mudar role",
+    description="Muda role do usuario. Requer admin."
+)
+def change_role(
+    user_id: int,
+    data: UserChangeRole,
+    current_user: dict = Depends(require_admin)
+):
+    service = UserService()
+    return service.change_role(
+        user_id=user_id,
+        new_role=data.new_role,
+        updated_by=current_user["id"],
+        actor_role=current_user["role"]
+    )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# DELETE
+# ═══════════════════════════════════════════════════════════════════════════
+@router.delete(
+    "/{user_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Deletar usuario",
+    description="Soft delete do usuario. Requer admin ou manager."
+)
+def delete_user(
+    user_id: int,
+    current_user: dict = Depends(require_manager)
+):
+    service = UserService()
+    service.delete_user(
+        user_id=user_id,
+        deleted_by=current_user["id"],
+        actor_role=current_user["role"]
+    )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# AUTENTICACAO
+# ═══════════════════════════════════════════════════════════════════════════
+@auth_router.post(
+    "/login",
+    response_model=LoginResponse,
+    summary="Login",
+    description="Autentica usuario e retorna tokens JWT."
+)
+def login(data: LoginRequest):
+    service = UserService()
+    return service.authenticate(
+        email=data.email,
+        password=data.password
+    )
+```
+
+---
+
+## 9.7 User Tests - Validando Tudo
+
+```python
+# tests/test_user.py - Testes completos
+"""
+Testes de User - Cobertura completa.
+
+Execucao:
+    pytest tests/test_user.py -v
+
+Categorias:
+- test_entity_*: Testes da Entity
+- test_repository_*: Testes do Repository
+- test_service_*: Testes do Service
+- test_api_*: Testes da API
+"""
+import pytest
+from fastapi.testclient import TestClient
+
+from infra.configs.database import Base
+from infra.configs.connection import DBConnectionHandler
+from infra.entities.user import User, UserStatus, UserRole
+from infra.entities.team import Team
+from infra.repositories.user_repository import UserRepository
+from services.user_service import UserService
+from infra.exceptions import UserNotFoundError, EmailAlreadyExistsError
+from main import app
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# FIXTURES
+# ═══════════════════════════════════════════════════════════════════════════
+@pytest.fixture
+def db_session():
+    """Cria banco em memoria para testes."""
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    yield session
+
+    session.close()
+
+
+@pytest.fixture
+def sample_team(db_session):
+    """Cria time de teste."""
+    team = Team(team_name="Time Teste")
+    db_session.add(team)
+    db_session.commit()
+    return team
+
+
+@pytest.fixture
+def sample_user(db_session, sample_team):
+    """Cria usuario de teste."""
+    user = User(
+        user_full_name="Usuario Teste",
+        user_email="teste@email.com",
+        user_password="hash123",
+        user_team_id=sample_team.id
+    )
+    db_session.add(user)
+    db_session.commit()
+    return user
+
+
+@pytest.fixture
+def client():
+    """Client para testes de API."""
+    return TestClient(app)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TESTES DE ENTITY
+# ═══════════════════════════════════════════════════════════════════════════
+class TestUserEntity:
+    """Testes da Entity User."""
+
+    def test_create_user_basic(self, db_session, sample_team):
+        """Deve criar usuario com campos obrigatorios."""
+        user = User(
+            user_full_name="Joao Silva",
+            user_email="joao@email.com",
+            user_password="hash123",
+            user_team_id=sample_team.id
+        )
+        db_session.add(user)
+        db_session.commit()
+
+        assert user.id is not None
+        assert user.user_full_name == "Joao Silva"
+        assert user.user_email == "joao@email.com"
+
+    def test_user_default_values(self, db_session, sample_team):
+        """Deve ter valores default corretos."""
+        user = User(
+            user_full_name="Joao Silva",
+            user_email="joao2@email.com",
+            user_password="hash123",
+            user_team_id=sample_team.id
+        )
+        db_session.add(user)
+        db_session.commit()
+
+        assert user.user_status == UserStatus.ATIVO
+        assert user.user_role == UserRole.USER
+        assert user.active.value == "ativo"
+
+    def test_user_to_dict(self, sample_user):
+        """Deve converter para dict corretamente."""
+        user_dict = sample_user.to_dict()
+
+        assert "id" in user_dict
+        assert "user_full_name" in user_dict
+        assert "user_password" in user_dict  # to_dict inclui tudo!
+
+    def test_user_is_active_and_available(self, sample_user):
+        """Deve verificar disponibilidade corretamente."""
+        assert sample_user.is_active_and_available is True
+
+        sample_user.user_status = UserStatus.FERIAS
+        assert sample_user.is_active_and_available is False
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TESTES DE REPOSITORY
+# ═══════════════════════════════════════════════════════════════════════════
+class TestUserRepository:
+    """Testes do Repository User."""
+
+    def test_select_all_excludes_inactive(self):
+        """select_all deve excluir usuarios inativos."""
+        repo = UserRepository()
+
+        # Criar usuarios
+        # ... (setup)
+
+        users = repo.select_all()
+        # Deve retornar apenas ativos
+
+    def test_email_exists(self):
+        """email_exists deve funcionar corretamente."""
+        repo = UserRepository()
+
+        # ... (setup)
+
+        assert repo.email_exists("existente@email.com") is True
+        assert repo.email_exists("novo@email.com") is False
+
+    def test_soft_delete(self):
+        """soft_delete deve marcar como inativo, nao deletar."""
+        repo = UserRepository()
+
+        # ... (setup)
+
+        repo.soft_delete(user_id, deleted_by=1)
+
+        # Deve estar inativo
+        user = repo.select_by_id(user_id, include_inactive=True)
+        assert user["active"] == "inativo"
+
+        # Nao deve aparecer na listagem padrao
+        users = repo.select_all()
+        assert all(u["id"] != user_id for u in users)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TESTES DE SERVICE
+# ═══════════════════════════════════════════════════════════════════════════
+class TestUserService:
+    """Testes do Service User."""
+
+    def test_create_user_success(self):
+        """Deve criar usuario com dados validos."""
+        service = UserService()
+
+        user = service.create_user(
+            full_name="Joao Silva",
+            email="joao@email.com",
+            password="Senha123",
+            team_id=1
+        )
+
+        assert user["user_full_name"] == "Joao Silva"
+
+    def test_create_user_duplicate_email(self):
+        """Deve rejeitar email duplicado."""
+        service = UserService()
+
+        # Criar primeiro
+        service.create_user(
+            full_name="User 1",
+            email="duplicado@email.com",
+            password="Senha123",
+            team_id=1
+        )
+
+        # Tentar criar segundo com mesmo email
+        with pytest.raises(EmailAlreadyExistsError):
+            service.create_user(
+                full_name="User 2",
+                email="duplicado@email.com",
+                password="Senha123",
+                team_id=1
+            )
+
+    def test_get_user_not_found(self):
+        """Deve lancar erro para usuario inexistente."""
+        service = UserService()
+
+        with pytest.raises(UserNotFoundError):
+            service.get_user(99999)
+
+    def test_authenticate_success(self):
+        """Deve autenticar com credenciais validas."""
+        service = UserService()
+
+        # Criar usuario
+        service.create_user(
+            full_name="Auth User",
+            email="auth@email.com",
+            password="Senha123",
+            team_id=1
+        )
+
+        # Autenticar
+        result = service.authenticate("auth@email.com", "Senha123")
+
+        assert "access_token" in result
+        assert "refresh_token" in result
+        assert result["user"]["user_email"] == "auth@email.com"
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TESTES DE API
+# ═══════════════════════════════════════════════════════════════════════════
+class TestUserAPI:
+    """Testes da API User."""
+
+    def test_create_user_201(self, client):
+        """POST /users deve retornar 201."""
+        response = client.post(
+            "/users",
+            json={
+                "user_full_name": "Joao Silva",
+                "user_email": "api@email.com",
+                "user_password": "Senha123",
+                "user_team_id": 1
+            },
+            headers={"Authorization": "Bearer token_valido"}
+        )
+
+        assert response.status_code == 201
+        assert response.json()["user_email"] == "api@email.com"
+
+    def test_create_user_422_invalid_password(self, client):
+        """POST /users deve retornar 422 para senha fraca."""
+        response = client.post(
+            "/users",
+            json={
+                "user_full_name": "Joao Silva",
+                "user_email": "api2@email.com",
+                "user_password": "123",  # Muito curta
+                "user_team_id": 1
+            },
+            headers={"Authorization": "Bearer token_valido"}
+        )
+
+        assert response.status_code == 422
+
+    def test_get_user_404(self, client):
+        """GET /users/{id} deve retornar 404 para inexistente."""
+        response = client.get(
+            "/users/99999",
+            headers={"Authorization": "Bearer token_valido"}
+        )
+
+        assert response.status_code == 404
+
+    def test_login_success(self, client):
+        """POST /auth/login deve retornar tokens."""
+        response = client.post(
+            "/auth/login",
+            json={
+                "email": "usuario@email.com",
+                "password": "Senha123"
+            }
+        )
+
+        assert response.status_code == 200
+        assert "access_token" in response.json()
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# EXECUCAO
+# ═══════════════════════════════════════════════════════════════════════════
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])
+```
+
+**Checklist de validacao - Testes completos**:
+```
+[X] Fixtures para setup
+[X] Testes de Entity
+[X] Testes de Repository
+[X] Testes de Service
+[X] Testes de API
+[X] Testes de casos de erro
+[X] Testes de autenticacao
+```
+
+---
+
+## Resumo: O Caminho Completo de User
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        CHECKLIST: User Completo                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  [X] 9.1 Entity                                                             │
+│      [X] Campos basicos                                                     │
+│      [X] Enums (UserStatus, UserRole, UserTipo)                            │
+│      [X] Foreign Keys com ondelete="RESTRICT"                              │
+│      [X] Relationships com lazy="raise"                                    │
+│      [X] foreign_keys para resolver ambiguidade                            │
+│      [X] Indices para performance                                          │
+│      [X] to_dict() herdado de Base                                         │
+│                                                                             │
+│  [X] 9.2 Repository                                                         │
+│      [X] Herda de BaseRepository[User]                                     │
+│      [X] Metodos CRUD herdados                                             │
+│      [X] Queries especificas (by_email, by_team, etc)                      │
+│      [X] Paginacao                                                         │
+│      [X] Soft delete automatico                                            │
+│                                                                             │
+│  [X] 9.3 Exceptions                                                         │
+│      [X] UserNotFoundError                                                 │
+│      [X] EmailAlreadyExistsError                                           │
+│      [X] AuthenticationError                                               │
+│      [X] AuthorizationError                                                │
+│                                                                             │
+│  [X] 9.4 Schemas                                                            │
+│      [X] UserCreate com validacoes                                         │
+│      [X] UserUpdate (todos opcionais)                                      │
+│      [X] UserResponse (sem senha!)                                         │
+│      [X] UserListResponse (paginada)                                       │
+│      [X] LoginRequest/LoginResponse                                        │
+│                                                                             │
+│  [X] 9.5 Service                                                            │
+│      [X] CRUD completo                                                     │
+│      [X] Validacoes de negocio                                             │
+│      [X] Hash de senha com bcrypt                                          │
+│      [X] Autenticacao com JWT                                              │
+│      [X] Verificacao de permissoes                                         │
+│                                                                             │
+│  [X] 9.6 API                                                                │
+│      [X] CRUD endpoints                                                    │
+│      [X] Autenticacao (login)                                              │
+│      [X] Operacoes especiais (change-password, change-status)             │
+│      [X] Documentacao OpenAPI                                              │
+│                                                                             │
+│  [X] 9.7 Tests                                                              │
+│      [X] Testes de Entity                                                  │
+│      [X] Testes de Repository                                              │
+│      [X] Testes de Service                                                 │
+│      [X] Testes de API                                                     │
+│                                                                             │
+│  PRONTO! User esta completo do zero a producao.                            │
+│  Use este modelo para construir Team, Ticket, Project, etc.                │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 # APÊNDICE: REFERÊNCIA RÁPIDA
 
 ---
@@ -13315,7 +21738,7 @@ class Settings(BaseSettings):
 | `time` | `Time` | `TIME` | `TIME` |
 | `dict`/`list` | `JSON` | `JSONB` | `TEXT` |
 | `bytes` | `LargeBinary` | `BYTEA` | `BLOB` |
-| `enum.Enum` | `Enum(MyEnum)` | `VARCHAR` | `VARCHAR` |
+| `PyEnum` | `Enum(MyEnum)` | `VARCHAR` | `VARCHAR` |
 
 ---
 
@@ -13646,5 +22069,5 @@ Você completou uma jornada de **5 PASSOS** para se tornar um desenvolvedor back
 
 **Última atualização**: Janeiro 2026
 
-**Versão**: 4.1.0 (Manual Supremo - Conhecimento Linear, FAQ Integrado aos Módulos)
+**Versão**: 4.2.0 (Manual Supremo - Revisão Completa: Session Detalhado, Alembic Erros, Soft Delete, Git Básico)
 

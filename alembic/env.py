@@ -1,12 +1,12 @@
-# alembic/env.py
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 
 # ══════════════════════════════════════════════════════════════════
-# IMPORTANTE: Importe sua Base e TODAS as entidades
+# IMPORTANTE: Usar mesmas configurações da aplicação
 # ══════════════════════════════════════════════════════════════════
 from infra.configs.database import Base
+from infra.configs.settings import settings  # Centraliza variáveis de ambiente
 
 # Importar todas as entidades para que Alembic as "veja"
 from infra.entities.team import Team
@@ -21,6 +21,13 @@ from infra.entities.associations import *  # Todas as tabelas de associação
 
 # Configuração do Alembic
 config = context.config
+
+# ══════════════════════════════════════════════════════════════════
+# SOBRESCREVER a URL do alembic.ini com a do settings
+# Isso garante que Alembic e aplicação usem o MESMO banco!
+# ══════════════════════════════════════════════════════════════════
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 

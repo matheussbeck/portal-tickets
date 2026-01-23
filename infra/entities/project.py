@@ -1,12 +1,12 @@
 from sqlalchemy import ForeignKey, Integer, Double, String, Boolean, DateTime, Date, func, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime, date
-import enum
+from enum import Enum as PyEnum
 
 from infra.configs.database import Base
 
 
-class ProjectStatus(enum.Enum):
+class ProjectStatus(PyEnum):
     ATIVO = "ativo"
     ABERTO = "aberto"
     PENDENTE = "pendente"
@@ -15,20 +15,20 @@ class ProjectStatus(enum.Enum):
     CANCELADO = "cancelado"
 
 
-class ProjectTags(enum.Enum):
+class ProjectTags(PyEnum):
     ATRIBUIDO = "atribuido"
     ATRASADO = "atrasado"
     NO_PRAZO = "no_prazo"
 
 
-class ProjectPriority(enum.Enum):
+class ProjectPriority(PyEnum):
     MAXIMA = "maxima"
     URGENTE = "urgente"
     NORMAL = "normal"
     BACKLOG = "backlog"
 
 
-class ProjectRiskLevel(enum.Enum):
+class ProjectRiskLevel(PyEnum):
     MUITO_ALTO = "muito_alto"
     ALTO = "alto"
     MEDIO = "medio"
@@ -115,12 +115,12 @@ class Project(Base):
         init=False,
         default=0.0
     )
-    project_approvers_count: Mapped[int] = mapped_column(Integer, default=0)
+    project_approvers_count: Mapped[int] = mapped_column(Integer, default=0, init=False)
 
     # =========================================================================
     # CONFIGURAÇÕES
     # =========================================================================
-    project_public: Mapped[bool] = mapped_column(Boolean, default=True)
+    project_public: Mapped[bool] = mapped_column(Boolean, default=True, init=False)
 
     # =========================================================================
     # DOCUMENTAÇÃO (JSON)
@@ -209,48 +209,6 @@ class Project(Base):
         default_factory=list
     )
 
-    def to_dict(self) -> dict:
-        return {
-            'id': self.id,
-            'project_name': self.project_name,
-            'project_directory': self.project_directory,
-            'project_description': self.project_description,
-            'project_category': self.project_category,
-            'project_methodology': self.project_methodology,
-            'project_tags': self.project_tags.value if self.project_tags else None,
-            'project_priority': self.project_priority.value if self.project_priority else None,
-            'project_risk_level': self.project_risk_level.value if self.project_risk_level else None,
-            'project_team_responsible_id': self.project_team_responsible_id,
-            'project_manager_id': self.project_manager_id,
-            'project_status': self.project_status.value if self.project_status else None,
-            'project_status_changed_at': self.project_status_changed_at.isoformat() if self.project_status_changed_at else None,
-            'project_status_changed_by_id': self.project_status_changed_by_id,
-            'project_start_date': self.project_start_date.isoformat() if self.project_start_date else None,
-            'project_expected_end_date': self.project_expected_end_date.isoformat() if self.project_expected_end_date else None,
-            'project_approved_at': self.project_approved_at.isoformat() if self.project_approved_at else None,
-            'project_real_end_date': self.project_real_end_date.isoformat() if self.project_real_end_date else None,
-            'project_planned_budget': self.project_planned_budget,
-            'project_approved_budget': self.project_approved_budget,
-            'project_spent_budget': self.project_spent_budget,
-            'project_final_budget': self.project_final_budget,
-            'project_completion_percentage': self.project_completion_percentage,
-            'project_approvers_count': self.project_approvers_count,
-            'project_public': self.project_public,
-            'project_scope': self.project_scope,
-            'project_expected_benefits': self.project_expected_benefits,
-            'project_risks': self.project_risks,
-            'project_assumptions': self.project_assumptions,
-            'project_constraints': self.project_constraints,
-            'project_milestones': self.project_milestones,
-            'project_tasks': self.project_tasks,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            'created_by': self.created_by,
-            'updated_by': self.updated_by,
-            'deleted_at': self.deleted_at.isoformat() if self.deleted_at else None,
-            'deleted_by': self.deleted_by,
-            'active': self.active.value if self.active else None
-        }
 
     def __repr__(self) -> str:
         return f"<Project(id={self.id}, project_name='{self.project_name}', project_status='{self.project_status}')>"

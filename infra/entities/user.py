@@ -1,21 +1,37 @@
-from sqlalchemy import ForeignKey, Integer, String, Enum
+from sqlalchemy import ForeignKey, Integer, String, Enum, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-import enum
+from enum import Enum as PyEnum
 
-from infra.configs.database import Base
+from infra.configs.database import Base, Status
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from infra.entities.team import Team
+    from infra.entities.message import Message
+    from infra.entities.ticket import Ticket
+    from infra.entities.report import Report
 
-class UserRoles(enum.Enum):
-    N1 = "atendente"
-    N2 = "solicitante"
-    GESTOR = "gestor"
+class UserRole(PyEnum):
     ADMINISTRADOR = "administrador"
+    GESTOR = "gestor"
+    N2 = "especialista"
+    N1 = "atendente"  
+    USER = "user"
 
 
-class UserTipo(enum.Enum):
+class UserTipo(PyEnum):
     ATENDENTE = "atendente"
     SOLICITANTE = "solicitante"
     ADMINISTRADOR = "administrador"
+
+
+class UserStatus(PyEnum):
+    """Status operacional do usuário (diferente de active que é soft delete)"""
+    ATIVO = "ativo"
+    SUSPENSO = "suspenso"
+    BLOQUEADO = "bloqueado"
+    FERIAS = "ferias"
+    AFASTADO = "afastado"
 
 
 class User(Base):
@@ -50,8 +66,15 @@ class User(Base):
     # =========================================================================
     # CLASSIFICAÇÃO
     # =========================================================================
-    user_role: Mapped[UserRoles] = mapped_column(Enum(UserRoles), nullable=False)
-    user_tipo: Mapped[UserTipo] = mapped_column(Enum(UserTipo), nullable=False)
+    user_role: Mapped[UserRole] = mapped_column(
+        Enum(UserRole), nullable=False)
+    user_tipo: Mapped[UserTipo] = mapped_column(
+        Enum(UserTipo), nullable=False)
+    user_status: Mapped[UserStatus] = mapped_column(
+        Enum(UserStatus),
+        default=UserStatus.ATIVO,
+        init=False
+    )
 
     # =========================================================================
     # CONFIGURAÇÕES
@@ -67,7 +90,7 @@ class User(Base):
     # =========================================================================
 
     # N - 1 (Usuário pertence a um time)
-    team: Mapped["Team | None"] = relationship(
+    team: Mapped["Team"] = relationship(
         foreign_keys=[user_team_id],
         back_populates="team_members",
         lazy="raise",
@@ -80,7 +103,8 @@ class User(Base):
         back_populates="manager",
         uselist=False,
         lazy="raise",
-        init=False
+        init=False,
+        default=None
     )
 
     # 1 - N (Usuário é dono de reports)
@@ -132,6 +156,23 @@ class User(Base):
     tickets_closed: Mapped[list["Ticket"]] = relationship(
         foreign_keys="[Ticket.ticket_closed_by_id]",
         back_populates="closed_by",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # 1 - N (Usuário envio mensagens)
+    messages_sent: Mapped[list["Message"]] = relationship(
+        foreign_keys="[Message.message_user_id]",
+        back_populates="user",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    report_status_changed: Mapped[list["Report"]] = relationship(
+        foreign_keys="[Report.report_status_changed_by_id]",
+        back_populates="status_changed_by",
         lazy="raise",
         init=False,
         default_factory=list
@@ -211,26 +252,25 @@ class User(Base):
         default_factory=list
     )
 
-    def to_dict(self) -> dict:
-        return {
-            'id': self.id,
-            'user_corporative_id': self.user_corporative_id,
-            'user_full_name': self.user_full_name,
-            'user_email': self.user_email,
-            'user_photo': self.user_photo,
-            'user_team_id': self.user_team_id,
-            'user_role': self.user_role.value if self.user_role else None,
-            'user_tipo': self.user_tipo.value if self.user_tipo else None,
-            'user_notification_preferences': self.user_notification_preferences,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            'created_by': self.created_by,
-            'updated_by': self.updated_by,
-            'deleted_at': self.deleted_at.isoformat() if self.deleted_at else None,
-            'deleted_by': self.deleted_by,
-            'active': self.active.value if self.active else None
-        }
-
     def __repr__(self) -> str:
         return f"<User(id={self.id}, user_full_name='{self.user_full_name}', user_email='{self.user_email}')>"
 
+    @property
+    def is_admin(self) -> bool:
+        """Verifica se usuario e admin."""
+        return self.user_role == UserRole.ADMIN
+
+    @property
+    def is_active_and_available(self) -> bool:
+        """Verifica se usuario esta ativo E disponivel para trabalho."""
+        return (
+            self.active == Status.ATIVO and
+            self.user_status == UserStatus.ATIVO
+        )
+
+    @property
+    def display_name(self) -> str:
+        """Retorna primeiro nome para exibicao."""
+        full_name = self.user_full_name.split()
+        first_last_name = f"{full_name[0]} {full_name[-1]}"
+        return first_last_name if self.user_full_name else ""

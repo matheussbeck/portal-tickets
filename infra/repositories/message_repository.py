@@ -1,54 +1,82 @@
+from datetime import datetime
+
 from infra.configs.connection import DBConnectionHandler
 from infra.entities.message import Message
+from infra.repositories.base_repository import BaseRepository
 
 
-class MessageRepository:
-    def select(self):
+class MessageRepository(BaseRepository[Message]):
+    """
+    Repositório para operações com Message.
+
+    Herda de BaseRepository:
+    - select_all(), select_by_id()
+    - insert(), update()
+    - soft_delete(), restore()
+    - count(), exists()
+    """
+
+    def __init__(self):
+        super().__init__(Message)
+
+    # =========================================================================
+    # MÉTODOS ESPECÍFICOS DE MESSAGE
+    # =========================================================================
+
+    def create(self, message_chat_id: int, message_user_id: int, message_content: str,
+               message_type: str = "text", message_is_internal: bool = False) -> int:
+        """
+        Cria uma nova mensagem.
+
+        Args:
+            message_chat_id: ID do chat
+            message_user_id: ID do usuário que enviou
+            message_content: Conteúdo da mensagem
+            message_type: Tipo (text, file, system, status_change)
+            message_is_internal: Se é mensagem interna (não visível para cliente)
+
+        Returns:
+            ID da mensagem criada
+        """
+        message = Message(
+            message_chat_id=message_chat_id,
+            message_user_id=message_user_id,
+            message_content=message_content
+        )
+        # Campos com init=False precisam ser setados após criação
+        message.message_type = message_type
+        message.message_is_internal = message_is_internal
+        return self.insert(message)
+
+    def select_by_chat_id(self, chat_id: int) -> list[dict]:
+        """Retorna mensagens de um chat específico."""
         with DBConnectionHandler() as db:
-            data = db.session.query(Message).all()
+            data = self._base_query(db.session).filter(
+                Message.message_chat_id == chat_id
+            ).order_by(Message.created_at).all()
             return [item.to_dict() for item in data]
 
-    def select_by_id(self, message_id: int):
+    def select_by_user_id(self, user_id: int) -> list[dict]:
+        """Retorna mensagens de um usuário específico."""
         with DBConnectionHandler() as db:
-            data = db.session.query(Message).filter(Message.id == message_id).first()
-            return data.to_dict() if data else None
-
-    def select_by_chat_id(self, chat_id: int):
-        with DBConnectionHandler() as db:
-            data = db.session.query(Message).filter(Message.message_chat_id == chat_id).all()
+            data = self._base_query(db.session).filter(
+                Message.message_user_id == user_id
+            ).all()
             return [item.to_dict() for item in data]
 
-    def insert(self, message_chat_id: int, message_user_id: int, message_content: str,
-               message_type: str = "text", message_is_internal: bool = False):
-        """
-        Obrigatórios: message_chat_id, message_user_id, message_content
-        """
+    def select_public_by_chat_id(self, chat_id: int) -> list[dict]:
+        """Retorna apenas mensagens públicas de um chat."""
         with DBConnectionHandler() as db:
-            data = Message(
-                message_chat_id=message_chat_id,
-                message_user_id=message_user_id,
-                message_content=message_content,
-                message_type=message_type,
-                message_is_internal=message_is_internal
-            )
-            db.session.add(data)
-            db.session.flush()
-            db.session.refresh(data)
-            return data.id
+            data = self._base_query(db.session).filter(
+                Message.message_chat_id == chat_id,
+                Message.message_is_internal == False
+            ).order_by(Message.created_at).all()
+            return [item.to_dict() for item in data]
 
-    def delete(self, message_id: int):
-        with DBConnectionHandler() as db:
-            db.session.query(Message).filter(Message.id == message_id).delete()
-
-    def update(self, message_id: int, **kwargs):
-        """Atualiza campos específicos da mensagem"""
-        with DBConnectionHandler() as db:
-            db.session.query(Message).filter(Message.id == message_id).update(kwargs)
-
-    def update_content(self, message_id: int, message_content: str):
-        from datetime import datetime
-        with DBConnectionHandler() as db:
-            db.session.query(Message).filter(Message.id == message_id).update({
-                Message.message_content: message_content,
-                Message.message_edited_at: datetime.now()
-            })
+    def update_content(self, message_id: int, message_content: str) -> bool:
+        """Atualiza o conteúdo da mensagem."""
+        return self.update(
+            message_id,
+            message_content=message_content,
+            message_edited_at=datetime.now()
+        )

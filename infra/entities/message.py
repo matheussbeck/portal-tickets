@@ -19,7 +19,7 @@ class Message(Base):
     # FOREIGN KEYS
     # =========================================================================
     message_chat_id: Mapped[int] = mapped_column(
-        ForeignKey("chats.id", ondelete="CASCADE"),
+        ForeignKey("chats.id", ondelete="RESTRICT"),
         nullable=False
     )
     message_user_id: Mapped[int] = mapped_column(
@@ -31,7 +31,9 @@ class Message(Base):
     # CONTEÚDO
     # =========================================================================
     message_content: Mapped[str] = mapped_column(String, nullable=False)
-    message_type: Mapped[str] = mapped_column(String, default="text")  # text, file, system, status_change
+    message_type: Mapped[str] = mapped_column(
+        String, default="text", 
+        init=False)  # text, file, system, status_change
     message_attachments: Mapped[str | None] = mapped_column(
         String,
         nullable=True,
@@ -43,7 +45,8 @@ class Message(Base):
     # =========================================================================
     message_is_internal: Mapped[bool] = mapped_column(
         Boolean,
-        default=False
+        default=False, 
+        init=False
     )  # mensagem interna (não visível para cliente)
 
     # =========================================================================
@@ -66,28 +69,11 @@ class Message(Base):
         init=False
     )
     user: Mapped["User"] = relationship(
+        foreign_keys=[message_user_id],
+        back_populates="messages_sent",
         lazy="raise",
         init=False
     )
-
-    def to_dict(self) -> dict:
-        return {
-            'id': self.id,
-            'message_chat_id': self.message_chat_id,
-            'message_user_id': self.message_user_id,
-            'message_content': self.message_content,
-            'message_type': self.message_type,
-            'message_attachments': self.message_attachments,
-            'message_is_internal': self.message_is_internal,
-            'message_edited_at': self.message_edited_at.isoformat() if self.message_edited_at else None,
-            'created_at': self.created_at.isoformat() if self.created_at else None,
-            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            'created_by': self.created_by,
-            'updated_by': self.updated_by,
-            'deleted_at': self.deleted_at.isoformat() if self.deleted_at else None,
-            'deleted_by': self.deleted_by,
-            'active': self.active.value if self.active else None
-        }
 
     def __repr__(self) -> str:
         return f"<Message(id={self.id}, message_chat_id={self.message_chat_id}, message_user_id={self.message_user_id})>"
