@@ -13,8 +13,13 @@ class Status(PyEnum):
     - ATIVO: registro ativo e operacional
     - INATIVO: registro desativado (soft delete)
 
-    Entidades específicas (User, Project, etc.) podem ter
-    seus próprios enums de status operacional.
+    IMPORTANTE: Este enum é para soft delete (registro existe ou não).
+    Entidades específicas (User, Project, etc.) têm seus próprios
+    enums de status OPERACIONAL (ex: UserStatus, ProjectStatus).
+
+    Exemplo:
+        - User com active=INATIVO: foi "deletado" do sistema
+        - User com active=ATIVO e user_status=FERIAS: existe mas está de férias
     """
     ATIVO = "ativo"
     INATIVO = "inativo"
@@ -22,66 +27,109 @@ class Status(PyEnum):
 
 class Base(MappedAsDataclass, DeclarativeBase):
     """
-    Classe base para todas as entidades.
+    Classe base abstrata para todas as entidades do sistema.
 
-    Campos de auditoria:
-    - created_at/by: quando e quem criou
-    - updated_at/by: quando e quem atualizou por último
-    - deleted_at/by: quando e quem fez soft delete
-    - active: status do registro (ATIVO/INATIVO)
+    Fornece campos padrão de auditoria herdados automaticamente
+    por todas as entidades que herdam de Base.
 
-    Nota: created_by, updated_by e deleted_by são Integer simples
-    (não FKs) para evitar ambiguidade nos relationships com User.
-    A integridade é garantida pela aplicação, não pelo banco.
+    Campos Herdados (todos com init=False):
+        id: Chave primária autoincrement
+        created_at: Data/hora de criação (preenchido pelo banco)
+        updated_at: Data/hora da última atualização (auto-update)
+        deleted_at: Data/hora do soft delete (None se ativo)
+        created_by: ID do usuário que criou (sem FK)
+        updated_by: ID do usuário que atualizou (sem FK)
+        deleted_by: ID do usuário que deletou (sem FK)
+        active: Status de soft delete (ATIVO/INATIVO)
+
+    Por que usar Integer em vez de ForeignKey para *_by:
+        Para evitar ambiguidade nos relationships com User.
+        Se fossem FKs, cada entidade teria 3 relationships para User
+        (created_by, updated_by, deleted_by), conflitando com outros.
+        A integridade é garantida pela aplicação, não pelo banco.
+
+    Padrão MappedAsDataclass:
+        - Campos com init=False NÃO aparecem no construtor
+        - Campos sem init=False SÃO obrigatórios no construtor
+        - default/default_factory define valor inicial
+
+    Exemplo de Herança:
+        ```python
+        class User(Base):
+            __tablename__ = "users"
+
+            # Campos específicos do User (obrigatórios no construtor)
+            user_full_name: Mapped[str] = mapped_column(String, nullable=False)
+
+            # Campos opcionais (não aparecem no construtor)
+            user_photo: Mapped[str | None] = mapped_column(String, init=False)
+
+        # Uso:
+        user = User(user_full_name="João")  # id, created_at, etc são automáticos
+        ```
     """
     __abstract__ = True
 
     id: Mapped[int] = mapped_column(
         Integer,
         primary_key=True,
-        init=False
+        init=False,
+        doc="Chave primária autoincrement"
     )
 
-    # Timestamps
+    # =========================================================================
+    # TIMESTAMPS (preenchidos automaticamente pelo banco)
+    # =========================================================================
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
-        init=False
+        init=False,
+        doc="Data/hora de criação (server_default=func.now())"
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
         onupdate=func.now(),
-        init=False
+        init=False,
+        doc="Data/hora da última atualização (onupdate=func.now())"
     )
     deleted_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True),
         nullable=True,
-        init=False
+        init=False,
+        doc="Data/hora do soft delete (None enquanto ativo)"
     )
 
-    # Auditoria de usuários (Integer, não FK para evitar ambiguidade)
+    # =========================================================================
+    # AUDITORIA DE USUÁRIOS (Integer, não FK para evitar ambiguidade)
+    # =========================================================================
     created_by: Mapped[int | None] = mapped_column(
         Integer,
         nullable=True,
-        init=False
+        init=False,
+        doc="ID do User que criou (preenchido pela aplicação)"
     )
     updated_by: Mapped[int | None] = mapped_column(
         Integer,
         nullable=True,
-        init=False
+        init=False,
+        doc="ID do User que fez última atualização"
     )
     deleted_by: Mapped[int | None] = mapped_column(
         Integer,
         nullable=True,
-        init=False
+        init=False,
+        doc="ID do User que fez soft delete"
     )
 
-    # Soft delete
+    # =========================================================================
+    # SOFT DELETE
+    # =========================================================================
     active: Mapped[Status] = mapped_column(
         Enum(Status),
         default=Status.ATIVO,
-        init=False
+        init=False,
+        doc="Status de soft delete: ATIVO (existe) ou INATIVO (deletado)"
     )
 
     # =========================================================================

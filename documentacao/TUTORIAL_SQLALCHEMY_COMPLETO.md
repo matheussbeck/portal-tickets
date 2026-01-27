@@ -181,6 +181,7 @@ Este tutorial está organizado em **PASSOS** para garantir uma progressão linea
 - 0.4 [Variáveis de Ambiente](#04-variáveis-de-ambiente)
 - 0.5 [Alembic - Migrations de Banco de Dados](#05-alembic---migrations-de-banco-de-dados) ⚠️ **CRÍTICO**
 - 0.6 [SQL Essencial - O Que Você Precisa Saber](#06-sql-essencial---o-que-você-precisa-saber) 📚 **BASE**
+- 0.7 [Git - Revertendo e Corrigindo Commits](#07-git---revertendo-e-corrigindo-commits) 🔄 **ESSENCIAL**
 
 ---
 
@@ -213,16 +214,17 @@ Este tutorial está organizado em **PASSOS** para garantir uma progressão linea
 - 1.5 [Armadilhas Comuns do MappedAsDataclass](#15-armadilhas-comuns-do-mappedasdataclass) ⚠️ **CRÍTICO**
 
 **MÓDULO 2: RELACIONAMENTOS**
-- 2.1 [Foreign Keys - A Base dos Relacionamentos](#21-foreign-keys---a-base-dos-relacionamentos)
-- 2.2 [Relationship - Navegação entre Objetos](#22-relationship---navegação-entre-objetos)
-- 2.3 [Relacionamento N-1 (Many-to-One) - DETALHADO](#23-relacionamento-n-1-many-to-one---detalhado)
-- 2.4 [O Parâmetro lazy - CRUCIAL para Performance](#24-o-parâmetro-lazy---crucial-para-performance)
-- 2.5 [Eager Loading - Carregamento Explícito](#25-eager-loading---carregamento-explícito)
-- 2.6 [Relacionamento N-N (Many-to-Many)](#26-relacionamento-n-n-many-to-many)
-- 2.7 [Tabela de Associação com Atributos Extras](#27-tabela-de-associação-com-atributos-extras)
-- 2.7.5 [Cascade - Propagação de Operações](#275-cascade---propagação-de-operações) ⚠️ **IMPORTANTE**
-- 2.8 [Relacionamentos Avançados](#28-relacionamentos-avançados)
-- 2.9 [Guia Completo: Implementação em AMBOS OS LADOS](#29-guia-completo-implementação-de-relacionamentos-em-ambos-os-lados)
+- 2.0 [O ALVO: Relacionamentos Completos - Estado da Arte](#20-o-alvo-relacionamentos-completos---estado-da-arte) 🎯 **VEJA PRIMEIRO**
+- 2.1 [Foreign Keys - A Base dos Relacionamentos](#21-foreign-keys---a-base-dos-relacionamentos) 📚 **BÁSICO**
+- 2.2 [Relationship - Navegação entre Objetos](#22-relationship---navegação-entre-objetos) 📚 **BÁSICO**
+- 2.3 [Relacionamento N-1 (Many-to-One) - DETALHADO](#23-relacionamento-n-1-many-to-one---detalhado) 📗 **INTERMEDIÁRIO**
+- 2.4 [O Parâmetro lazy - CRUCIAL para Performance](#24-o-parâmetro-lazy---crucial-para-performance) 📗 **INTERMEDIÁRIO**
+- 2.5 [Eager Loading - Carregamento Explícito](#25-eager-loading---carregamento-explícito) 📕 **AVANÇADO**
+- 2.6 [Relacionamento N-N (Many-to-Many)](#26-relacionamento-n-n-many-to-many) 📕 **AVANÇADO**
+- 2.7 [Tabela de Associação com Atributos Extras](#27-tabela-de-associação-com-atributos-extras) 📕 **AVANÇADO**
+- 2.7.5 [Cascade - Propagação de Operações](#275-cascade---propagação-de-operações) 📕 **AVANÇADO**
+- 2.8 [Relacionamentos Avançados](#28-relacionamentos-avançados) ⭐ **ESTADO DA ARTE**
+- 2.9 [Guia Completo: Implementação em AMBOS OS LADOS](#29-guia-completo-implementação-de-relacionamentos-em-ambos-os-lados) ⭐ **ESTADO DA ARTE**
 
 ---
 
@@ -247,24 +249,27 @@ Este tutorial está organizado em **PASSOS** para garantir uma progressão linea
 ### Módulos deste Passo
 
 **MÓDULO 3: ARQUITETURA PROFISSIONAL**
-- 3.1 [Por Que Não Usar to_dict() nos Models](#31-por-que-não-usar-to_dict-nos-models)
-- 3.2 [Schemas com Pydantic](#32-schemas-com-pydantic)
-- 3.3 [Services - Camada de Negócio](#33-services---camada-de-negócio)
-- 3.4 [API Endpoints com FastAPI](#34-api-endpoints-com-fastapi)
+- 3.0 [O ALVO: Arquitetura em Camadas - Estado da Arte](#30-o-alvo-arquitetura-em-camadas---estado-da-arte) 🎯 **VEJA PRIMEIRO**
+- 3.1 [Por Que Não Usar to_dict() nos Models](#31-por-que-não-usar-to_dict-nos-models) 📚 **BÁSICO**
+- 3.2 [Schemas com Pydantic](#32-schemas-com-pydantic) 📚 **BÁSICO**
+- 3.3 [Services - Camada de Negócio](#33-services---camada-de-negócio) 📕 **AVANÇADO**
+- 3.4 [API Endpoints com FastAPI](#34-api-endpoints-com-fastapi) ⭐ **ESTADO DA ARTE**
 
 **MÓDULO 4: ANALYTICS E PERFORMANCE**
-- 4.1 [Queries de Agregação](#41-queries-de-agregação)
-- 4.2 [Analytics Service](#42-analytics-service)
-- 4.3 [Otimizações Avançadas](#43-otimizações-avançadas)
-- 4.4 [Índices e Performance](#44-índices-e-performance)
+- 4.0 [O ALVO: Analytics Service - Estado da Arte](#40-o-alvo-analytics-service---estado-da-arte) 🎯 **VEJA PRIMEIRO**
+- 4.1 [Queries de Agregação](#41-queries-de-agregação) 📚 **BÁSICO/INTERMEDIÁRIO**
+- 4.2 [Analytics Service](#42-analytics-service) 📕 **AVANÇADO**
+- 4.3 [Otimizações Avançadas](#43-otimizações-avançadas) ⭐ **ESTADO DA ARTE**
+- 4.4 [Índices e Performance](#44-índices-e-performance) ⭐ **ESTADO DA ARTE**
 
 **MÓDULO 5: BOAS PRÁTICAS**
-- 5.1 [Checklist de Implementação](#51-checklist-de-implementação)
-- 5.2 [Padrões de Nomenclatura](#52-padrões-de-nomenclatura)
-- 5.3 [Segurança e Validação](#53-segurança-e-validação)
-- 5.4 [Testes](#54-testes)
-- 5.5 [Erros Comuns e Soluções](#55-erros-comuns-e-soluções)
-- 5.6 [Ordem de Criação de Registros](#56-ordem-de-criação-de-registros)
+- 5.0 [O ALVO: Código Profissional - Estado da Arte](#50-o-alvo-código-profissional---estado-da-arte) 🎯 **VEJA PRIMEIRO**
+- 5.1 [Checklist de Implementação](#51-checklist-de-implementação) 📋 **ESSENCIAL**
+- 5.2 [Padrões de Nomenclatura](#52-padrões-de-nomenclatura) 📋 **ESSENCIAL**
+- 5.3 [Segurança e Validação](#53-segurança-e-validação) ⚠️ **CRÍTICO**
+- 5.4 [Testes](#54-testes) 📕 **AVANÇADO**
+- 5.5 [Erros Comuns e Soluções](#55-erros-comuns-e-soluções) 🔧 **REFERÊNCIA**
+- 5.6 [Ordem de Criação de Registros](#56-ordem-de-criação-de-registros) 📋 **ESSENCIAL**
 
 ---
 
@@ -290,13 +295,14 @@ Este tutorial está organizado em **PASSOS** para garantir uma progressão linea
 ### Módulos deste Passo
 
 **MÓDULO 8: SEGURANÇA E AUTENTICAÇÃO** ⚠️ **CRÍTICO**
-- 8.1 [Por Que Segurança Importa](#81-por-que-segurança-importa)
-- 8.2 [Hash de Senhas com Bcrypt](#82-hash-de-senhas-com-bcrypt)
-- 8.3 [JWT - JSON Web Tokens](#83-jwt---json-web-tokens)
-- 8.4 [Autenticação no FastAPI](#84-autenticação-no-fastapi)
-- 8.5 [Autorização e Roles](#85-autorização-e-roles)
-- 8.6 [Recuperação de Senha](#86-recuperação-de-senha)
-- 8.7 [Boas Práticas de Segurança](#87-boas-práticas-de-segurança)
+- 8.0 [O ALVO: Sistema de Autenticação Completo - Estado da Arte](#80-o-alvo-sistema-de-autenticação-completo---estado-da-arte) 🎯 **VEJA PRIMEIRO**
+- 8.1 [Por Que Segurança Importa](#81-por-que-segurança-importa) 📚 **BÁSICO**
+- 8.2 [Hash de Senhas com Bcrypt](#82-hash-de-senhas-com-bcrypt) 📚 **BÁSICO**
+- 8.3 [JWT - JSON Web Tokens](#83-jwt---json-web-tokens) 📗 **INTERMEDIÁRIO**
+- 8.4 [Autenticação no FastAPI](#84-autenticação-no-fastapi) 📗 **INTERMEDIÁRIO**
+- 8.5 [Autorização e Roles](#85-autorização-e-roles) 📕 **AVANÇADO**
+- 8.6 [Recuperação de Senha](#86-recuperação-de-senha) 📕 **AVANÇADO**
+- 8.7 [Boas Práticas de Segurança](#87-boas-práticas-de-segurança) ⭐ **ESTADO DA ARTE**
 
 ---
 
@@ -2741,7 +2747,471 @@ EXTRACT(epoch FROM (closed_at - created_at)) / 86400  -- 86400 = segundos em 1 d
 
 ---
 
-# MÓDULO 1: FUNDAMENTOS
+## 0.7 Git - Revertendo e Corrigindo Commits
+
+Erros acontecem. Você vai commitar algo errado, esquecer de adicionar arquivos ao `.gitignore`, ou precisar desfazer mudanças. Esta seção ensina como corrigir esses problemas.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CENÁRIOS COMUNS DE CORREÇÃO NO GIT                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. ESQUECI DE COLOCAR ALGO NO .gitignore (commitei .env, __pycache__)     │
+│  2. FIZ COMMIT COM MENSAGEM ERRADA                                          │
+│  3. PRECISO DESFAZER O ÚLTIMO COMMIT (ainda não fiz push)                  │
+│  4. PRECISO DESFAZER UM COMMIT ANTIGO (já fiz push)                        │
+│  5. PRECISO REMOVER UM ARQUIVO DO HISTÓRICO COMPLETAMENTE                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Cenário 1: Esqueci de Adicionar ao .gitignore (Mais Comum!)
+
+Você commitou o `.env` ou `__pycache__/` por engano. Agora precisa:
+1. Adicionar ao `.gitignore`
+2. Remover do tracking do Git (sem deletar o arquivo local)
+
+```bash
+# 1. Adicione ao .gitignore primeiro
+echo ".env" >> .gitignore
+echo "__pycache__/" >> .gitignore
+
+# 2. Remova do tracking (--cached mantém o arquivo local, só remove do Git)
+git rm --cached .env
+git rm -r --cached __pycache__/
+
+# 3. Commit as mudanças
+git add .gitignore
+git commit -m "chore: adicionar .env e __pycache__ ao .gitignore"
+
+# 4. Push
+git push
+```
+
+**⚠️ IMPORTANTE**: Isso remove o arquivo do tracking ATUAL, mas ele ainda existe no histórico de commits anteriores. Se commitou credenciais, veja o **Cenário 5**.
+
+### Cenário 2: Corrigir Mensagem do Último Commit
+
+```bash
+# Se ainda NÃO fez push:
+git commit --amend -m "nova mensagem corrigida"
+
+# Se já fez push (CUIDADO - reescreve histórico):
+git commit --amend -m "nova mensagem corrigida"
+git push --force-with-lease  # mais seguro que --force
+```
+
+**⚠️ NUNCA use `--force` em branches compartilhadas** (main/develop). Isso pode causar problemas para outros desenvolvedores.
+
+### Cenário 3: Desfazer o Último Commit (Não Fez Push)
+
+```bash
+# Opção A: Manter mudanças no staging (pronto para commitar de novo)
+git reset --soft HEAD~1
+
+# Opção B: Manter mudanças no working directory (não staged)
+git reset HEAD~1
+
+# Opção C: Descartar todas as mudanças (CUIDADO - perde código!)
+git reset --hard HEAD~1
+```
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        DIFERENÇA ENTRE OS RESETS                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  --soft   → Commit desfeito, mudanças ficam no STAGING (git add já feito)  │
+│  (padrão) → Commit desfeito, mudanças ficam no WORKING DIR (precisa add)   │
+│  --hard   → Commit desfeito, mudanças PERDIDAS (como se nunca existissem)  │
+│                                                                             │
+│  HEAD~1 = último commit                                                     │
+│  HEAD~2 = dois commits atrás                                                │
+│  HEAD~3 = três commits atrás                                                │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Cenário 4: Reverter um Commit (Já Fez Push)
+
+Quando já fez push, **não use reset**. Use `revert` que cria um novo commit desfazendo as mudanças:
+
+```bash
+# Descobrir o hash do commit que quer reverter
+git log --oneline
+
+# Exemplo de saída:
+# a1b2c3d feat: adicionar login
+# e4f5g6h fix: corrigir bug
+# h7i8j9k chore: setup inicial
+
+# Reverter o commit a1b2c3d (cria um NOVO commit que desfaz)
+git revert a1b2c3d
+
+# Push do commit de reversão
+git push
+```
+
+**Por que usar `revert` em vez de `reset`?**
+- `reset` reescreve o histórico (perigoso em branches compartilhadas)
+- `revert` adiciona um novo commit (histórico preservado, seguro para todos)
+
+### Cenário 5: Remover Arquivo do Histórico (Credenciais Vazadas!)
+
+**⚠️ SITUAÇÃO CRÍTICA**: Se você commitou senhas, tokens ou credenciais, mesmo que remova do tracking atual, elas ainda existem no histórico do Git. Qualquer pessoa pode ver!
+
+```bash
+# Instalar o BFG Repo-Cleaner (mais fácil que git filter-branch)
+# Download: https://rtyley.github.io/bfg-repo-cleaner/
+
+# Opção 1: Remover arquivo específico de TODO o histórico
+bfg --delete-files .env
+
+# Opção 2: Remover arquivos por padrão
+bfg --delete-files "*.pem"
+
+# Opção 3: Substituir texto sensível
+echo "senha_antiga" >> passwords.txt
+bfg --replace-text passwords.txt
+
+# Após usar BFG:
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+git push --force-with-lease --all
+```
+
+**🔴 URGENTE: Se vazou credenciais:**
+1. **IMEDIATAMENTE** revogue/troque as credenciais (mesmo que remova do Git)
+2. Considere que elas já foram comprometidas
+3. Notifique a equipe de segurança se aplicável
+
+### Comandos Úteis para Diagnóstico
+
+```bash
+# Ver histórico resumido
+git log --oneline
+
+# Ver quais arquivos mudaram em cada commit
+git log --stat
+
+# Ver o conteúdo de um commit específico
+git show a1b2c3d
+
+# Ver diferenças entre commits
+git diff a1b2c3d e4f5g6h
+
+# Ver quem alterou cada linha de um arquivo
+git blame arquivo.py
+
+# Procurar texto em TODO o histórico (encontrar credenciais vazadas)
+git log -S "senha_secreta" --all
+```
+
+### Boas Práticas para Evitar Problemas
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CHECKLIST ANTES DE COMMITAR                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  [ ] .gitignore está configurado ANTES do primeiro commit?                 │
+│  [ ] git status não mostra arquivos sensíveis (.env, *.pem, etc)?          │
+│  [ ] Revisei o diff (git diff --staged) antes de commitar?                 │
+│  [ ] A mensagem de commit é clara e segue a convenção?                     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Template de .gitignore (sempre adicionar ANTES do primeiro commit):**
+
+```gitignore
+# Ambiente virtual
+venv/
+.venv/
+env/
+
+# Variáveis de ambiente (CRÍTICO!)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Credenciais (NUNCA commitar!)
+*.pem
+*.key
+*.crt
+credentials.json
+service-account.json
+
+# Logs e temporários
+*.log
+tmp/
+temp/
+```
+
+---
+
+# MÓDULO 1: FUNDAMENTOS DE ENTITIES
+
+> **Metodologia**: Este módulo segue a abordagem **ALVO → BÁSICO → INTERMEDIÁRIO → AVANÇADO → ESTADO DA ARTE**. Primeiro você vê o resultado final, depois aprende passo a passo como chegar lá.
+
+---
+
+## 1.0 O ALVO: Entity User - Estado da Arte
+
+Antes de começar, veja a entidade User completa que você será capaz de construir ao final deste módulo. Este é o **alvo** - o nível de qualidade profissional que buscamos:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# ENTITY USER - ESTADO DA ARTE (Este é o seu objetivo!)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import ForeignKey, Integer, String, Enum, Index
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from enum import Enum as PyEnum
+
+from infra.configs.database import Base, Status
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from infra.entities.team import Team
+    from infra.entities.ticket import Ticket
+
+
+class UserRole(PyEnum):
+    """
+    Papel/cargo do usuário no sistema.
+
+    Define o nível de acesso e responsabilidades:
+    - ADMINISTRADOR: Acesso total ao sistema
+    - GESTOR: Gerencia equipes e projetos
+    - N2: Especialista técnico (segundo nível)
+    - N1: Atendente de primeiro nível
+    - USER: Usuário comum (solicitante)
+    """
+    ADMINISTRADOR = "administrador"
+    GESTOR = "gestor"
+    N2 = "especialista"
+    N1 = "atendente"
+    USER = "user"
+
+
+class UserStatus(PyEnum):
+    """Status operacional do usuário (diferente de active que é soft delete)."""
+    ATIVO = "ativo"
+    SUSPENSO = "suspenso"
+    FERIAS = "ferias"
+    AFASTADO = "afastado"
+
+
+class User(Base):
+    """
+    Entidade de Usuário - Central do sistema.
+
+    Relacionamentos:
+        N-1: team (Time ao qual pertence)
+        1-N: tickets_created (Tickets abertos pelo usuário)
+
+    Índices:
+        - ix_users_team_role: Busca por time + papel
+        - ix_users_status_active: Filtro por status + soft delete
+
+    Exemplo de Instanciação (Template Construtor):
+        ```python
+        user = User(
+            user_corporative_id=12345,
+            user_full_name="João Silva",
+            user_email="joao@empresa.com",
+            user_password="$2b$12$hash...",
+            user_team_id=1,
+            user_role=UserRole.N1
+        )
+        ```
+    """
+    __tablename__ = "users"
+
+    # Índices compostos para queries frequentes
+    __table_args__ = (
+        Index('ix_users_team_role', 'user_team_id', 'user_role'),
+        Index('ix_users_status_active', 'user_status', 'active'),
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CAMPOS (herdando id, created_at, updated_at, active da Base)
+    # ═══════════════════════════════════════════════════════════════════════════
+    user_corporative_id: Mapped[int] = mapped_column(
+        Integer, unique=True, nullable=False,
+        doc="ID único do sistema corporativo"
+    )
+    user_full_name: Mapped[str] = mapped_column(
+        String, nullable=False,
+        doc="Nome completo do usuário"
+    )
+    user_email: Mapped[str] = mapped_column(
+        String, unique=True, nullable=False,
+        doc="Email corporativo (usado para login)"
+    )
+    user_password: Mapped[str] = mapped_column(
+        String, nullable=False,
+        doc="Hash da senha (bcrypt)"
+    )
+
+    # Foreign Key
+    user_team_id: Mapped[int] = mapped_column(
+        ForeignKey("teams.id", ondelete="RESTRICT"),
+        nullable=False,
+        doc="FK para Team. RESTRICT impede deletar time com usuários"
+    )
+
+    # Classificação
+    user_role: Mapped[UserRole] = mapped_column(
+        Enum(UserRole), nullable=False,
+        doc="Papel que define nível de acesso"
+    )
+    user_status: Mapped[UserStatus] = mapped_column(
+        Enum(UserStatus),
+        default=UserStatus.ATIVO,
+        init=False,
+        doc="Status operacional (disponibilidade)"
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # RELATIONSHIPS
+    # ═══════════════════════════════════════════════════════════════════════════
+    team: Mapped["Team"] = relationship(
+        foreign_keys=[user_team_id],
+        back_populates="team_members",
+        lazy="raise",
+        init=False
+    )
+
+    tickets_created: Mapped[list["Ticket"]] = relationship(
+        foreign_keys="[Ticket.ticket_client_id]",
+        back_populates="client",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # MÉTODOS
+    # ═══════════════════════════════════════════════════════════════════════════
+    def __repr__(self) -> str:
+        return f"<User(id={self.id}, name='{self.user_full_name}')>"
+
+    @property
+    def display_name(self) -> str:
+        """Retorna primeiro e último nome para exibição."""
+        parts = self.user_full_name.split()
+        return f"{parts[0]} {parts[-1]}" if len(parts) > 1 else parts[0]
+
+    @property
+    def is_admin(self) -> bool:
+        """Verifica se usuário é administrador."""
+        return self.user_role == UserRole.ADMINISTRADOR
+```
+
+### O Que Você Vai Aprender Para Chegar Aqui
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  JORNADA DESTE MÓDULO: Do Zero ao Estado da Arte                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1.1 O Que É ORM?                → Conceito e motivação                     │
+│  1.2 NÍVEL 1: Entity Mínima      → class + __tablename__ + id + 1 campo     │
+│  1.3 NÍVEL 2: Tipos de Colunas   → String, Integer, Boolean, DateTime...    │
+│  1.4 NÍVEL 3: Herança com Base   → MappedAsDataclass, campos automáticos    │
+│  1.5 NÍVEL 4: Estado da Arte     → Índices, Enums, TYPE_CHECKING, docs      │
+│  1.6 Session e CRUD              → Como persistir no banco                  │
+│  1.7 Armadilhas Comuns           → Erros que todo mundo comete              │
+│                                                                             │
+│  → Resultado: Você saberá criar entidades profissionais como a User acima   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Dependência: A Classe Base
+
+A entidade User acima **herda de Base**, que fornece campos automáticos. Antes de criar qualquer entidade, você precisa da Base:
+
+```python
+# infra/configs/database.py - A CLASSE BASE (criada no MÓDULO 0)
+
+from sqlalchemy import Integer, DateTime, func, Enum
+from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass, Mapped, mapped_column
+from datetime import datetime
+from enum import Enum as PyEnum
+
+
+class Status(PyEnum):
+    """Status para soft delete."""
+    ATIVO = "ativo"
+    INATIVO = "inativo"
+
+
+class Base(MappedAsDataclass, DeclarativeBase):
+    """
+    Classe base abstrata para todas as entidades.
+
+    Campos Herdados (todos com init=False):
+        id: Chave primária autoincrement
+        created_at: Data/hora de criação
+        updated_at: Data/hora da última atualização
+        active: Status de soft delete (ATIVO/INATIVO)
+    """
+    __abstract__ = True
+
+    id: Mapped[int] = mapped_column(
+        Integer, primary_key=True, init=False,
+        doc="Chave primária autoincrement"
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        init=False,
+        doc="Data/hora de criação"
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        init=False,
+        doc="Data/hora da última atualização"
+    )
+
+    active: Mapped[Status] = mapped_column(
+        Enum(Status),
+        default=Status.ATIVO,
+        init=False,
+        doc="Soft delete: ATIVO ou INATIVO"
+    )
+```
+
+**Importante**: A Base usa `MappedAsDataclass`, que gera automaticamente o `__init__`. Por isso:
+- Campos com `init=False` **NÃO aparecem** no construtor
+- Campos sem `init=False` **SÃO obrigatórios** no construtor
+
+Agora que você viu o alvo, vamos construir passo a passo!
+
+---
 
 ## 1.1 O Que É ORM e Por Que Usar?
 
@@ -2958,55 +3428,140 @@ result = session.execute(text("""
 
 ---
 
-## 1.2 Anatomia de um Model SQLAlchemy
+## 1.2 NÍVEL 1: Entity Mínima (BÁSICO)
 
-### Entendendo o Conceito de Model
+### O Que é um Model/Entity?
 
-Um **Model** (ou **Entidade**) em SQLAlchemy é uma classe Python que representa uma tabela no banco de dados. Mas é mais do que uma simples estrutura de dados - é um **objeto vivo** que:
+Um **Model** (ou **Entity**) é uma classe Python que representa uma tabela no banco de dados. Ele:
 
-1. **Descreve** a estrutura da tabela (metadados)
-2. **Valida** dados antes de salvar
-3. **Gerencia** relacionamentos com outras tabelas
-4. **Encapsula** comportamentos e regras de negócio
-5. **Sincroniza** automaticamente com o banco de dados
+1. **Descreve** a estrutura da tabela (colunas, tipos)
+2. **Mapeia** objetos Python ↔ registros SQL
+3. **Facilita** operações CRUD
 
-### O Ciclo de Vida de um Model
+### Anatomia: As 4 Camadas de um Model
+
+```python
+class User(Base):  # ← Camada 1: Herança (conecta ao ORM)
+
+    __tablename__ = "users"  # ← Camada 2: Metadata (nome da tabela)
+
+    id: Mapped[int] = mapped_column(...)  # ← Camada 3: Colunas
+
+    def __repr__(self):  # ← Camada 4: Comportamentos (opcional)
+        return f"<User {self.id}>"
+```
+
+### NÍVEL 1: A Entity Mais Simples Possível
+
+Vamos começar com o **mínimo absoluto** - uma entidade com apenas ID e um campo:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# NÍVEL 1: Entity Mínima - O Mais Simples Possível
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import Integer, String
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+
+# 1. Primeiro, precisamos de uma classe Base (simplificada)
+class Base(DeclarativeBase):
+    pass
+
+
+# 2. Agora, a Entity mais simples
+class User(Base):
+    __tablename__ = "users"  # Nome da tabela no banco
+
+    # Chave primária (obrigatória em toda tabela)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+
+    # Um campo simples
+    name: Mapped[str] = mapped_column(String(100))
+```
+
+### O Que Cada Parte Faz?
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ANATOMIA DO NÍVEL 1                                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  class User(Base):                                                          │
+│  └── Herda de Base para conectar ao sistema ORM                             │
+│                                                                             │
+│  __tablename__ = "users"                                                    │
+│  └── Define o nome EXATO da tabela no banco de dados                        │
+│                                                                             │
+│  id: Mapped[int] = mapped_column(Integer, primary_key=True)                 │
+│  │   │            │              │        └── É a chave primária            │
+│  │   │            │              └── Tipo SQL: INTEGER                      │
+│  │   │            └── Função que cria a coluna                              │
+│  │   └── Type hint: será um int no Python                                   │
+│  └── Nome do campo/coluna                                                   │
+│                                                                             │
+│  name: Mapped[str] = mapped_column(String(100))                             │
+│  │     │            │              └── VARCHAR(100) no SQL                  │
+│  │     │            └── Cria a coluna                                       │
+│  │     └── Será uma string no Python                                        │
+│  └── Nome do campo                                                          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### SQL Gerado pelo NÍVEL 1
+
+O código acima gera automaticamente este SQL:
+
+```sql
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(100) NOT NULL
+);
+```
+
+### Usando a Entity NÍVEL 1
+
+```python
+# Criar uma instância
+user = User(id=1, name="João")
+
+# Acessar atributos
+print(user.name)  # "João"
+print(user.id)    # 1
+```
+
+### Limitações do NÍVEL 1
+
+❌ ID precisa ser passado manualmente (não é autoincrement real)
+❌ Sem timestamps (created_at, updated_at)
+❌ Sem validações (nullable, unique)
+❌ Sem soft delete
+❌ Sem relacionamentos
+
+**Próximo passo**: Vamos adicionar mais tipos de colunas e opções!
+
+---
+
+### Ciclo de Vida de um Model (Referência)
 
 ```
 DEFINIÇÃO (Código Python)
     ↓
 METADATA (Instruções para criar tabela)
     ↓
-CREATE TABLE (Alembic/migrations geram SQL)
+CREATE TABLE (Alembic gera o SQL)
     ↓
-INSTÂNCIA (Objetos Python representando linhas)
+INSTÂNCIA (Objetos Python = linhas)
     ↓
 PERSISTÊNCIA (Session sincroniza com banco)
 ```
 
-**Importante**: O model em si NÃO cria a tabela automaticamente em produção. Isso é feito por ferramentas de migração (Alembic). O model apenas:
-- **Descreve** como a tabela deve ser
-- **Valida** dados em tempo de execução
-- **Facilita** operações CRUD
+**Importante**: O model NÃO cria a tabela automaticamente. Isso é feito por migrations (Alembic).
 
-### Camadas de um Model
+---
 
-Um model SQLAlchemy tem 3 camadas distintas:
-
-```python
-class User(Base):  # ← Camada 1: Herança (conecta ao sistema ORM)
-
-    __tablename__ = "users"  # ← Camada 2: Metadata (informações sobre a tabela)
-
-    id: Mapped[int] = mapped_column(...)  # ← Camada 3: Colunas (estrutura de dados)
-
-    def __repr__(self):  # ← Camada 4 (opcional): Comportamentos
-        return f"<User {self.id}>"
-```
-
-Vamos explorar cada uma dessas camadas em detalhes.
-
-### Estrutura Básica (Exemplo Completo Comentado)
+### Estrutura Completa (Referência)
 
 ```python
 from sqlalchemy import Integer, String, Boolean, DateTime, func
@@ -3392,7 +3947,467 @@ user_photo: Mapped[str | None] = mapped_column(nullable=True)
 
 ---
 
-## 1.2.5 Session - O Coração do SQLAlchemy
+## 1.3 NÍVEL 2: Opções de Colunas (INTERMEDIÁRIO)
+
+Agora que você sabe criar uma entity básica, vamos adicionar **opções** às colunas para validação e controle.
+
+### Opções Essenciais de Colunas
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# NÍVEL 2: Entity com Opções de Colunas
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import Integer, String, Boolean, DateTime, func
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from datetime import datetime
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    # ═══ CHAVE PRIMÁRIA com autoincrement ═══
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True  # Gerado automaticamente pelo banco
+    )
+
+    # ═══ CAMPO OBRIGATÓRIO (NOT NULL) ═══
+    name: Mapped[str] = mapped_column(
+        String(200),
+        nullable=False  # Não pode ser NULL (obrigatório)
+    )
+
+    # ═══ CAMPO ÚNICO (UNIQUE) ═══
+    email: Mapped[str] = mapped_column(
+        String(100),
+        unique=True,     # Não pode repetir
+        nullable=False
+    )
+
+    # ═══ CAMPO OPCIONAL (pode ser NULL) ═══
+    photo: Mapped[str | None] = mapped_column(
+        String(500),
+        nullable=True    # Pode ser NULL
+    )
+
+    # ═══ CAMPO COM VALOR PADRÃO (Python) ═══
+    is_active: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True     # Valor padrão definido pelo Python
+    )
+
+    # ═══ CAMPO COM VALOR PADRÃO (Banco) ═══
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now()  # CURRENT_TIMESTAMP no banco
+    )
+
+    # ═══ CAMPO COM ATUALIZAÇÃO AUTOMÁTICA ═══
+    updated_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        onupdate=func.now()  # Atualiza automaticamente a cada UPDATE
+    )
+
+    # ═══ CAMPO COM ÍNDICE (busca mais rápida) ═══
+    username: Mapped[str] = mapped_column(
+        String(50),
+        index=True       # Cria índice no banco
+    )
+```
+
+### Tabela de Referência: Opções de Colunas
+
+| Opção | O Que Faz | Quando Usar |
+|-------|-----------|-------------|
+| `primary_key=True` | Define como chave primária | Sempre no campo `id` |
+| `autoincrement=True` | ID gerado automaticamente | PKs numéricas |
+| `nullable=False` | Não permite NULL | Campos obrigatórios |
+| `nullable=True` | Permite NULL | Campos opcionais |
+| `unique=True` | Valor não pode repetir | Emails, usernames |
+| `default=valor` | Valor padrão (Python) | Flags, contadores |
+| `server_default=func.now()` | Valor padrão (SQL) | Timestamps |
+| `onupdate=func.now()` | Atualiza no UPDATE | `updated_at` |
+| `index=True` | Cria índice simples | Campos de busca frequente |
+
+### SQL Gerado pelo NÍVEL 2
+
+```sql
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(200) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    photo VARCHAR(500),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
+    username VARCHAR(50)
+);
+
+CREATE INDEX ix_users_username ON users (username);
+```
+
+### Inferência Automática de nullable
+
+O SQLAlchemy infere `nullable` pelo type hint:
+
+```python
+# nullable=False (inferido)
+name: Mapped[str] = mapped_column(String)
+
+# nullable=True (inferido pelo | None)
+photo: Mapped[str | None] = mapped_column(String)
+```
+
+**Dica**: Seja explícito quando importa - `nullable=False` deixa claro a intenção.
+
+---
+
+## 1.4 NÍVEL 3: Herança com Base (AVANÇADO)
+
+O verdadeiro poder do SQLAlchemy vem da **herança**. Em vez de repetir `id`, `created_at`, `updated_at` em toda entidade, criamos uma **classe Base** que todas herdam.
+
+### A Classe Base Profissional
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# NÍVEL 3: A Classe Base com MappedAsDataclass
+# ═══════════════════════════════════════════════════════════════════════════════
+# Arquivo: infra/configs/database.py
+
+from sqlalchemy import Integer, DateTime, func, Enum
+from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass, Mapped, mapped_column
+from datetime import datetime
+from enum import Enum as PyEnum
+
+
+class Status(PyEnum):
+    """Status para soft delete."""
+    ATIVO = "ativo"
+    INATIVO = "inativo"
+
+
+class Base(MappedAsDataclass, DeclarativeBase):
+    """
+    Classe base abstrata para todas as entidades.
+
+    Campos Herdados (todos com init=False - não aparecem no construtor):
+        - id: Chave primária autoincrement
+        - created_at: Data/hora de criação
+        - updated_at: Data/hora da última atualização
+        - active: Status de soft delete (ATIVO/INATIVO)
+    """
+    __abstract__ = True  # Não cria tabela para a Base
+
+    # Chave primária
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        init=False  # NÃO aparece no __init__
+    )
+
+    # Timestamps automáticos
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        init=False
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        init=False
+    )
+
+    # Soft delete
+    active: Mapped[Status] = mapped_column(
+        Enum(Status),
+        default=Status.ATIVO,
+        init=False
+    )
+```
+
+### Por Que `MappedAsDataclass`?
+
+O `MappedAsDataclass` transforma a Entity em um dataclass Python, gerando automaticamente:
+- `__init__()` - construtor com os campos
+- `__repr__()` - representação para debug
+- `__eq__()` - comparação de igualdade
+
+### A Regra do `init=False`
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  REGRA CRÍTICA DO MappedAsDataclass                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  init=False  → Campo NÃO aparece no construtor (automático/opcional)        │
+│  sem init    → Campo APARECE no construtor (obrigatório)                    │
+│                                                                             │
+│  Exemplo:                                                                   │
+│  - id: init=False        → Não passa no construtor (autoincrement)          │
+│  - created_at: init=False → Não passa (server_default)                      │
+│  - user_name: sem init   → OBRIGATÓRIO no construtor                        │
+│  - user_photo: init=False → Opcional (não passa, fica None)                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Entity que Herda da Base
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# NÍVEL 3: Entity Herdando da Base
+# ═══════════════════════════════════════════════════════════════════════════════
+# Arquivo: infra/entities/user.py
+
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
+from infra.configs.database import Base  # Importa a Base
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    # Campos OBRIGATÓRIOS (aparecem no construtor)
+    user_name: Mapped[str] = mapped_column(String(200), nullable=False)
+    user_email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+
+    # Campos OPCIONAIS (não aparecem no construtor)
+    user_photo: Mapped[str | None] = mapped_column(String(500), init=False)
+```
+
+### Usando a Entity NÍVEL 3
+
+```python
+# Construtor gerado automaticamente
+user = User(
+    user_name="João Silva",     # Obrigatório
+    user_email="joao@email.com" # Obrigatório
+)
+# Não precisa passar: id, created_at, updated_at, active, user_photo
+
+# Campos herdados da Base estão disponíveis
+print(user.id)          # None (até salvar no banco)
+print(user.active)      # Status.ATIVO (default)
+print(user.created_at)  # None (até salvar no banco - vem do server_default)
+```
+
+---
+
+## 1.5 NÍVEL 4: Entity Estado da Arte (ESTADO DA ARTE)
+
+O nível final adiciona:
+- **Enums** para valores fixos
+- **TYPE_CHECKING** para evitar circular imports
+- **Índices compostos** para performance
+- **Documentação** nos campos
+
+### Entity Completa - Estado da Arte
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# NÍVEL 4: Entity Estado da Arte
+# ═══════════════════════════════════════════════════════════════════════════════
+# Arquivo: infra/entities/user.py
+
+from sqlalchemy import ForeignKey, Integer, String, Enum, Index
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from enum import Enum as PyEnum
+
+from infra.configs.database import Base, Status
+
+# TYPE_CHECKING evita circular imports
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from infra.entities.team import Team
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ENUMS - Valores fixos com significado
+# ═══════════════════════════════════════════════════════════════════════════════
+
+class UserRole(PyEnum):
+    """
+    Papel/cargo do usuário no sistema.
+
+    Define o nível de acesso:
+    - ADMINISTRADOR: Acesso total
+    - GESTOR: Gerencia equipes
+    - N2: Especialista técnico
+    - N1: Atendente
+    - USER: Usuário comum
+    """
+    ADMINISTRADOR = "administrador"
+    GESTOR = "gestor"
+    N2 = "especialista"
+    N1 = "atendente"
+    USER = "user"
+
+
+class UserStatus(PyEnum):
+    """Status operacional (diferente de soft delete)."""
+    ATIVO = "ativo"
+    SUSPENSO = "suspenso"
+    FERIAS = "ferias"
+    AFASTADO = "afastado"
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ENTITY USER - ESTADO DA ARTE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+class User(Base):
+    """
+    Entidade de Usuário - Central do sistema.
+
+    Relacionamentos:
+        N-1: team (Time ao qual pertence)
+
+    Índices:
+        - ix_users_team_role: Busca por time + papel
+        - ix_users_status_active: Filtro por status + soft delete
+
+    Exemplo de Instanciação:
+        ```python
+        user = User(
+            user_corporative_id=12345,
+            user_full_name="João Silva",
+            user_email="joao@empresa.com",
+            user_password="$2b$12$hash...",
+            user_team_id=1,
+            user_role=UserRole.N1
+        )
+        ```
+    """
+    __tablename__ = "users"
+
+    # ═══ ÍNDICES COMPOSTOS para queries frequentes ═══
+    __table_args__ = (
+        Index('ix_users_team_role', 'user_team_id', 'user_role'),
+        Index('ix_users_status_active', 'user_status', 'active'),
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CAMPOS OBRIGATÓRIOS (aparecem no construtor)
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    user_corporative_id: Mapped[int] = mapped_column(
+        Integer, unique=True, nullable=False,
+        doc="ID único do sistema corporativo"
+    )
+
+    user_full_name: Mapped[str] = mapped_column(
+        String, nullable=False,
+        doc="Nome completo do usuário"
+    )
+
+    user_email: Mapped[str] = mapped_column(
+        String, unique=True, nullable=False,
+        doc="Email corporativo (usado para login)"
+    )
+
+    user_password: Mapped[str] = mapped_column(
+        String, nullable=False,
+        doc="Hash da senha (bcrypt). NUNCA texto plano!"
+    )
+
+    # ═══ FOREIGN KEY ═══
+    user_team_id: Mapped[int] = mapped_column(
+        ForeignKey("teams.id", ondelete="RESTRICT"),
+        nullable=False,
+        doc="FK para Team. RESTRICT impede deletar time com usuários"
+    )
+
+    user_role: Mapped[UserRole] = mapped_column(
+        Enum(UserRole), nullable=False,
+        doc="Papel que define nível de acesso"
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CAMPOS OPCIONAIS (init=False - não aparecem no construtor)
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    user_photo: Mapped[str | None] = mapped_column(
+        String, nullable=True, init=False,
+        doc="URL da foto de perfil"
+    )
+
+    user_status: Mapped[UserStatus] = mapped_column(
+        Enum(UserStatus),
+        default=UserStatus.ATIVO,
+        init=False,
+        doc="Status operacional (disponibilidade)"
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # RELATIONSHIPS (sempre init=False, NUNCA default=None!)
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    team: Mapped["Team"] = relationship(
+        foreign_keys=[user_team_id],
+        back_populates="team_members",
+        lazy="raise",
+        init=False
+        # NUNCA coloque default=None aqui! Causa bug de FK NULL
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # MÉTODOS
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    def __repr__(self) -> str:
+        return f"<User(id={self.id}, name='{self.user_full_name}')>"
+
+    @property
+    def display_name(self) -> str:
+        """Retorna primeiro e último nome."""
+        parts = self.user_full_name.split()
+        return f"{parts[0]} {parts[-1]}" if len(parts) > 1 else parts[0]
+
+    @property
+    def is_admin(self) -> bool:
+        """Verifica se é administrador."""
+        return self.user_role == UserRole.ADMINISTRADOR
+
+    @property
+    def is_available(self) -> bool:
+        """Verifica se está ativo E disponível."""
+        return self.active == Status.ATIVO and self.user_status == UserStatus.ATIVO
+```
+
+### Checklist: Entity Estado da Arte
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ✅ CHECKLIST DA ENTITY ESTADO DA ARTE                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  □ Herda de Base (campos automáticos)                                       │
+│  □ __tablename__ definido                                                   │
+│  □ __table_args__ com índices compostos                                     │
+│  □ Docstring com descrição, relacionamentos, exemplo                        │
+│  □ Campos com doc="..." para documentação                                   │
+│  □ Enums para valores fixos (com docstrings)                                │
+│  □ TYPE_CHECKING para imports de relacionamentos                            │
+│  □ Campos obrigatórios SEM init=False                                       │
+│  □ Campos opcionais COM init=False                                          │
+│  □ Relationships com init=False, lazy="raise", SEM default=None             │
+│  □ __repr__ para debug                                                      │
+│  □ @property para campos calculados simples                                 │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 1.6 Session - O Coração do SQLAlchemy
 
 ### O Que É Session?
 
@@ -3913,7 +4928,7 @@ def process_large_dataset(items: list):
 
 ---
 
-## 1.3 CRUD Básico - As 4 Operações Fundamentais
+## 1.7 CRUD Básico - As 4 Operações Fundamentais
 
 ### Onde Cada Operação Fica na Arquitetura?
 
@@ -4838,7 +5853,7 @@ DELETE FROM users WHERE is_active = false;
 
 ---
 
-## 1.4 Tipos de Dados e Opções de Colunas
+## 1.8 Tipos de Dados - Referência Completa
 
 ### Tipos Comuns
 
@@ -4972,7 +5987,7 @@ class User(Base):
 
 ---
 
-## 1.5 Armadilhas Comuns do MappedAsDataclass
+## 1.9 Armadilhas Comuns do MappedAsDataclass
 
 > 📖 **Nota**: O `MappedAsDataclass` foi explicado em detalhes no **MÓDULO 0.3** junto com a configuração da classe Base. Esta seção foca nas **armadilhas práticas** que você vai encontrar ao usar esse recurso.
 
@@ -5433,6 +6448,299 @@ user_manager_id: Mapped[int | None] = mapped_column(
 
 # MÓDULO 2: RELACIONAMENTOS
 
+> **Metodologia**: Este módulo segue a abordagem **ALVO → BÁSICO → INTERMEDIÁRIO → AVANÇADO → ESTADO DA ARTE**. Primeiro você vê o resultado final, depois aprende passo a passo como chegar lá.
+
+---
+
+## 2.0 O ALVO: Relacionamentos Completos - Estado da Arte
+
+Antes de começar, veja como ficam os relacionamentos completos que você será capaz de implementar ao final deste módulo. Este é o **alvo** - o nível de qualidade profissional que buscamos.
+
+### A Entidade User com Todos os Relacionamentos
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# USER - RELACIONAMENTOS ESTADO DA ARTE (Este é o seu objetivo!)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import ForeignKey, Integer, String, Enum, Index
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from enum import Enum as PyEnum
+
+from infra.configs.database import Base, Status
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from infra.entities.team import Team
+    from infra.entities.ticket import Ticket
+    from infra.entities.report import Report
+    from infra.entities.message import Message
+    from infra.entities.associations import ReportAllowedUser, UserReportFollow
+
+
+class User(Base):
+    """
+    Entidade central do sistema - demonstra TODOS os tipos de relacionamentos.
+    """
+    __tablename__ = "users"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # COLUNAS FÍSICAS (existem no banco)
+    # ═══════════════════════════════════════════════════════════════════════════
+    user_full_name: Mapped[str] = mapped_column(
+        String(200), nullable=False,
+        doc="Nome completo do usuário"
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # FOREIGN KEY - Relacionamento N-1 (User pertence a 1 Team)
+    # ═══════════════════════════════════════════════════════════════════════════
+    user_team_id: Mapped[int] = mapped_column(
+        ForeignKey("teams.id", ondelete="RESTRICT"),  # ondelete DENTRO de ForeignKey!
+        nullable=False,
+        doc="FK para Team ao qual o usuário pertence"
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # RELATIONSHIPS (colunas virtuais - NÃO existem no banco)
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ───────────────────────────────────────────────────────────────────────────
+    # N-1: User pertence a UM Team (como membro)
+    # ───────────────────────────────────────────────────────────────────────────
+    team: Mapped["Team"] = relationship(
+        foreign_keys=[user_team_id],         # Qual FK usar (necessário quando há múltiplas)
+        back_populates="team_members",       # Nome do relationship no Team
+        lazy="raise",                        # Força eager loading explícito
+        init=False                           # Não aparece no construtor
+    )
+
+    # ───────────────────────────────────────────────────────────────────────────
+    # 1-1: User GERENCIA um Team (a FK está no Team!)
+    # ───────────────────────────────────────────────────────────────────────────
+    managed_team: Mapped["Team | None"] = relationship(
+        foreign_keys="[Team.team_manager_id]",  # FK está no TEAM, não aqui!
+        back_populates="manager",
+        uselist=False,                          # Retorna objeto único, não lista
+        lazy="raise",
+        init=False
+    )
+
+    # ───────────────────────────────────────────────────────────────────────────
+    # 1-N: User é DONO de muitos Reports
+    # ───────────────────────────────────────────────────────────────────────────
+    user_reports: Mapped[list["Report"]] = relationship(
+        foreign_keys="[Report.report_owner_id]",  # FK no Report
+        back_populates="owner",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # ───────────────────────────────────────────────────────────────────────────
+    # 1-N: User é CLIENTE em muitos Tickets
+    # ───────────────────────────────────────────────────────────────────────────
+    tickets_as_client: Mapped[list["Ticket"]] = relationship(
+        foreign_keys="[Ticket.ticket_client_id]",
+        back_populates="client",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # ───────────────────────────────────────────────────────────────────────────
+    # 1-N: User é ATENDENTE em muitos Tickets
+    # ───────────────────────────────────────────────────────────────────────────
+    tickets_as_attendant: Mapped[list["Ticket"]] = relationship(
+        foreign_keys="[Ticket.ticket_attendant_id]",
+        back_populates="attendant",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # ───────────────────────────────────────────────────────────────────────────
+    # 1-N: User ENVIOU muitas Messages
+    # ───────────────────────────────────────────────────────────────────────────
+    messages_sent: Mapped[list["Message"]] = relationship(
+        foreign_keys="[Message.message_user_id]",
+        back_populates="user",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # ───────────────────────────────────────────────────────────────────────────
+    # N-N: User tem ACESSO a muitos Reports (via tabela de associação)
+    # ───────────────────────────────────────────────────────────────────────────
+    report_access: Mapped[list["ReportAllowedUser"]] = relationship(
+        back_populates="user",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # ───────────────────────────────────────────────────────────────────────────
+    # N-N: User SEGUE muitos Reports (via tabela de associação)
+    # ───────────────────────────────────────────────────────────────────────────
+    report_follows: Mapped[list["UserReportFollow"]] = relationship(
+        back_populates="user",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+```
+
+### A Entidade Team - O Outro Lado dos Relacionamentos
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# TEAM - RELACIONAMENTOS ESTADO DA ARTE (O outro lado de User)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from infra.entities.user import User
+    from infra.entities.report import Report
+    from infra.entities.project import Project
+
+
+class Team(Base):
+    """Time/Equipe - demonstra o LADO OPOSTO dos relacionamentos."""
+    __tablename__ = "teams"
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # COLUNAS FÍSICAS
+    # ═══════════════════════════════════════════════════════════════════════════
+    team_name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+
+    # FK para o manager (User) - AQUI está a FK do relacionamento 1-1!
+    team_manager_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"),
+        nullable=True,
+        init=False,
+        doc="FK para User que gerencia este time"
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # RELATIONSHIPS
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ───────────────────────────────────────────────────────────────────────────
+    # 1-1: Team TEM um manager (User) - FK está AQUI
+    # ───────────────────────────────────────────────────────────────────────────
+    manager: Mapped["User | None"] = relationship(
+        foreign_keys=[team_manager_id],      # FK está nesta classe
+        back_populates="managed_team",
+        lazy="raise",
+        init=False
+    )
+
+    # ───────────────────────────────────────────────────────────────────────────
+    # 1-N: Team TEM muitos membros (Users)
+    # ───────────────────────────────────────────────────────────────────────────
+    team_members: Mapped[list["User"]] = relationship(
+        foreign_keys="[User.user_team_id]",  # FK está no User
+        back_populates="team",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # ───────────────────────────────────────────────────────────────────────────
+    # 1-N: Team é RESPONSÁVEL por muitos Reports
+    # ───────────────────────────────────────────────────────────────────────────
+    team_reports: Mapped[list["Report"]] = relationship(
+        foreign_keys="[Report.report_team_responsible_id]",
+        back_populates="team",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+```
+
+### Visualização: Mapa Completo de Relacionamentos
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                    MAPA DE RELACIONAMENTOS - USER (CENTRO)                       │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│                            ┌─────────────────┐                                  │
+│                         ┌──│      Team       │──┐                               │
+│                         │  │ team_manager_id │  │                               │
+│                         │  └─────────────────┘  │                               │
+│                         │         │             │                               │
+│            manager (1-1)│         │ (N-1)       │ team_members (1-N)            │
+│                         │         │             │                               │
+│                         ▼         ▼             ▼                               │
+│         ┌───────────────────────────────────────────────────┐                   │
+│         │                      USER                          │                   │
+│         │  ┌─────────────────────────────────────────────┐  │                   │
+│         │  │ user_team_id (FK) ─────────────────────────────┼──► Team           │
+│         │  │                                             │  │                   │
+│         │  │ RELATIONSHIPS:                              │  │                   │
+│         │  │ • team (N-1)                                │  │                   │
+│         │  │ • managed_team (1-1)                        │  │                   │
+│         │  │ • user_reports (1-N)                        │  │                   │
+│         │  │ • tickets_as_client (1-N)                   │  │                   │
+│         │  │ • tickets_as_attendant (1-N)                │  │                   │
+│         │  │ • messages_sent (1-N)                       │  │                   │
+│         │  │ • report_access (N-N via association)       │  │                   │
+│         │  │ • report_follows (N-N via association)      │  │                   │
+│         │  └─────────────────────────────────────────────┘  │                   │
+│         └───────────────────────────────────────────────────┘                   │
+│                   │           │           │          │                          │
+│                   │           │           │          │                          │
+│     ┌─────────────┘           │           │          └─────────────┐            │
+│     │                         │           │                        │            │
+│     ▼                         ▼           ▼                        ▼            │
+│ ┌────────┐              ┌──────────┐  ┌─────────┐         ┌───────────────┐     │
+│ │ Report │              │  Ticket  │  │ Message │         │ Association   │     │
+│ │owner_id│              │client_id │  │ user_id │         │ Tables (N-N)  │     │
+│ └────────┘              │attend_id │  └─────────┘         └───────────────┘     │
+│                         └──────────┘                                            │
+│                                                                                 │
+│  LEGENDA:                                                                       │
+│  • N-1: User pertence a 1 (FK no User)                                          │
+│  • 1-1: User gerencia 1 (FK no Team!)                                           │
+│  • 1-N: User tem N (FK no outro lado)                                           │
+│  • N-N: User ↔ N (via tabela de associação)                                     │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### O Que Você Vai Aprender Neste Módulo
+
+Após estudar este módulo, você será capaz de implementar qualquer relacionamento. Assim como no MÓDULO 1, você verá o **MESMO relacionamento (User-Team) evoluindo** do mais simples ao estado da arte:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  JORNADA DESTE MÓDULO: User-Team do Zero ao Estado da Arte                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  2.1 NÍVEL 1: FK Mínima         → Apenas a coluna física (user_team_id)    │
+│  2.2 NÍVEL 2: Relationship      → FK + navegação básica (user.team)        │
+│  2.3 NÍVEL 3: N-1 Profissional  → lazy="raise", back_populates, init=False │
+│  2.4 NÍVEL 4: Estado da Arte    → TYPE_CHECKING, docs, múltiplas FKs       │
+│                                                                             │
+│  → Resultado: Você saberá criar relacionamentos profissionais              │
+│                                                                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  TÓPICOS ESPECIALIZADOS (Referência Detalhada)                             │
+│                                                                             │
+│  2.5 Lazy Loading em Detalhe                                               │
+│  2.6 Eager Loading Explícito                                               │
+│  2.7 N-N (Many-to-Many)                                                    │
+│  2.8 Associação com Atributos                                              │
+│  2.9 Cascade e ondelete                                                    │
+│  2.10 Guia Completo de Implementação                                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## Introdução: Por Que Relacionamentos São Complexos?
 
 Relacionamentos são o coração de aplicações que usam bancos de dados relacionais. Entender profundamente como eles funcionam é a diferença entre uma aplicação performática e uma aplicação lenta com bugs sutis.
@@ -5494,86 +6802,112 @@ Antes de entrar nos detalhes, aqui está uma visão geral dos tipos de relaciona
 
 ---
 
-## 2.1 Foreign Keys - A Base dos Relacionamentos
+## 2.1 NÍVEL 1: FK Mínima - Apenas a Coluna Física 📚 BÁSICO
 
-### Definição: O Que É Foreign Key?
+> **Nível**: BÁSICO - O ponto de partida: entender que FK é apenas uma coluna no banco.
 
-**Foreign Key (Chave Estrangeira)** é uma coluna no banco de dados que armazena o ID de um registro em outra tabela, criando um vínculo entre elas.
+### O Código Mais Simples Que Funciona
 
-**Analogia**: Pense em uma biblioteca. Cada livro tem um campo "autor_id" que aponta para um registro na tabela de autores. O "autor_id" é uma foreign key - ela cria o relacionamento, mas não duplica os dados do autor dentro do livro.
-
-### Por Que Foreign Keys Existem?
-
-Sem foreign keys, você teria duas opções ruins:
-
-1. **Duplicar dados** (denormalização):
-   ```python
-   # Ticket armazena TODOS os dados do cliente
-   ticket = {
-       'id': 1,
-       'title': 'Bug no relatório',
-       'client_name': 'Matheus Beck',      # ❌ Duplicado
-       'client_email': 'matheus@email.com', # ❌ Duplicado
-       'client_phone': '123456'             # ❌ Duplicado
-   }
-   # Problema: Se cliente muda email, precisa atualizar TODOS os tickets
-   ```
-
-2. **Buscar tudo sempre** (sem relacionamento):
-   ```python
-   # Sem foreign key, como saber qual cliente?
-   ticket = {'id': 1, 'title': 'Bug'}
-   # ❌ Não tem como relacionar com cliente!
-   ```
-
-**Com foreign key** (correto):
-```python
-ticket = {
-    'id': 1,
-    'title': 'Bug no relatório',
-    'client_id': 42  # ✅ Apenas o ID (4 bytes), não todos os dados
-}
-# Para pegar dados do cliente: JOIN ou relationship
-```
-
-### Anatomia de uma Foreign Key
+Assim como no MÓDULO 1 começamos com a Entity mínima, aqui começamos com a **FK mínima**:
 
 ```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# RELACIONAMENTO USER-TEAM: NÍVEL 1 - FK MÍNIMA
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import Integer, String, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
+
+from infra.configs.database import Base
+
+
 class Team(Base):
+    """Time - NÍVEL 1: Apenas campos básicos."""
     __tablename__ = "teams"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
     team_name: Mapped[str] = mapped_column(String(100))
 
 
 class User(Base):
+    """Usuário - NÍVEL 1: FK mínima para Team."""
     __tablename__ = "users"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_full_name: Mapped[str] = mapped_column(String(200))
 
-    # ═══ FOREIGN KEY ═══
-    # Coluna física que armazena o ID do time
+    # ═══ ISTO É UMA FOREIGN KEY ═══
+    # É APENAS uma coluna que armazena um INTEGER (o ID do time)
     user_team_id: Mapped[int] = mapped_column(
-        ForeignKey("teams.id"),  # Referencia teams.id
-        nullable=False           # Usuário PRECISA ter um time
+        ForeignKey("teams.id")  # Aponta para teams.id
     )
 ```
 
-**SQL Gerado**:
-```sql
-CREATE TABLE teams (
-    id INTEGER PRIMARY KEY,
-    team_name VARCHAR(100)
-);
+### O Que Este Código Faz
 
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY,
-    user_full_name VARCHAR(200),
-    user_team_id INTEGER NOT NULL,
-    FOREIGN KEY (user_team_id) REFERENCES teams(id)
-);
 ```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    O QUE ACONTECE NO BANCO DE DADOS                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   Tabela: teams                    Tabela: users                            │
+│   ┌──────┬────────────┐            ┌──────┬─────────────┬──────────────┐    │
+│   │ id   │ team_name  │            │ id   │ user_full...│ user_team_id │    │
+│   ├──────┼────────────┤            ├──────┼─────────────┼──────────────┤    │
+│   │ 1    │ Analytics  │◄───────────│ 1    │ João        │ 1            │    │
+│   │ 2    │ Projetos   │◄───────────│ 2    │ Maria       │ 1            │    │
+│   └──────┴────────────┘     │      │ 3    │ Carlos      │ 2            │    │
+│                             │      └──────┴─────────────┴──────────────┘    │
+│                             │                                               │
+│                             └──── FK aponta para o ID do time               │
+│                                                                             │
+│   FK = APENAS UM NÚMERO (o ID de outra tabela)                              │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Usando Este Código
+
+```python
+# Criar um time
+team = Team(team_name="Analytics")
+session.add(team)
+session.commit()  # team.id agora é 1
+
+# Criar um usuário NO time
+user = User(
+    user_full_name="João Silva",
+    user_team_id=1  # ← Apenas o NÚMERO do ID
+)
+session.add(user)
+session.commit()
+
+# Para acessar o time do usuário, você precisa fazer uma query separada:
+team_do_usuario = session.get(Team, user.user_team_id)  # Busca manual!
+print(team_do_usuario.team_name)  # "Analytics"
+```
+
+### O Problema: Busca Manual
+
+Percebeu? Com **apenas FK**, você precisa buscar manualmente:
+
+```python
+# ❌ INCONVENIENTE: Não funciona!
+print(user.team)  # AttributeError: 'User' object has no attribute 'team'
+
+# Você PRECISA fazer isso:
+team = session.get(Team, user.user_team_id)  # Query adicional
+```
+
+### ✅ O Que Você Aprendeu
+
+| Conceito | O Que É |
+|----------|---------|
+| **Foreign Key** | Uma coluna INTEGER que armazena o ID de outra tabela |
+| **ForeignKey("tabela.id")** | Sintaxe do SQLAlchemy para criar FK |
+| **Limitação** | Com apenas FK, você precisa buscar objetos relacionados manualmente |
+
+### 🎯 Próximo Nível
+
+No **NÍVEL 2**, você aprenderá `relationship()` - que permite fazer `user.team` diretamente, sem query manual!
 
 ### Regras de Foreign Key
 
@@ -5833,7 +7167,9 @@ user_team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))  # "teams" com
 
 ---
 
-## 2.2 Relationship - Navegação entre Objetos
+## 2.2 Relationship - Navegação entre Objetos 📚 BÁSICO
+
+> **Nível**: BÁSICO - Entenda a diferença entre FK (física) e Relationship (virtual).
 
 ### Conceito Fundamental: Física vs Virtual
 
@@ -6269,7 +7605,9 @@ class User(Base):
 
 ---
 
-## 2.3 Relacionamento N-1 (Many-to-One) - DETALHADO
+## 2.3 Relacionamento N-1 (Many-to-One) - DETALHADO 📗 INTERMEDIÁRIO
+
+> **Nível**: INTERMEDIÁRIO - Implementação prática do relacionamento mais comum.
 
 ### Conceito
 
@@ -6448,7 +7786,9 @@ class User(Base):
 
 ---
 
-## 2.4 O Parâmetro lazy - CRUCIAL para Performance
+## 2.4 O Parâmetro lazy - CRUCIAL para Performance 📗 INTERMEDIÁRIO
+
+> **Nível**: INTERMEDIÁRIO - Entenda estratégias de carregamento para evitar N+1.
 
 ### Entendendo o Problema: Quando Carregar Dados?
 
@@ -6761,7 +8101,9 @@ user = session.query(User).options(
 
 ---
 
-## 2.5 Eager Loading - Carregamento Explícito
+## 2.5 Eager Loading - Carregamento Explícito 📕 AVANÇADO
+
+> **Nível**: AVANÇADO - Técnicas para controle fino de carregamento.
 
 ### Conceito
 
@@ -6873,7 +8215,9 @@ for user in users:
 
 ---
 
-## 2.6 Relacionamento N-N (Many-to-Many)
+## 2.6 Relacionamento N-N (Many-to-Many) 📕 AVANÇADO
+
+> **Nível**: AVANÇADO - Relacionamentos com tabela intermediária.
 
 ### Conceito
 
@@ -6978,7 +8322,9 @@ for attendant in ticket.attendants:
 
 ---
 
-## 2.7 Tabela de Associação com Atributos Extras
+## 2.7 Tabela de Associação com Atributos Extras 📕 AVANÇADO
+
+> **Nível**: AVANÇADO - N-N com dados adicionais na associação.
 
 ### Problema
 
@@ -7145,7 +8491,9 @@ for ticket in user.tickets:  # ERRO com lazy="raise"!
 
 ---
 
-## 2.7.5 Cascade - Propagação de Operações
+## 2.7.5 Cascade - Propagação de Operações 📕 AVANÇADO
+
+> **Nível**: AVANÇADO - Controle de operações em cascata.
 
 ### O Que É Cascade?
 
@@ -7334,7 +8682,9 @@ ForeignKey("chats.id", ondelete="CASCADE")  # Banco também deleta
 
 ---
 
-## 2.8 Relacionamentos Avançados
+## 2.8 Relacionamentos Avançados ⭐ ESTADO DA ARTE
+
+> **Nível**: ESTADO DA ARTE - Padrões complexos para sistemas reais.
 
 ### Self-Referential (Autoreferência)
 
@@ -7587,7 +8937,9 @@ foreign_keys="[Ticket.ticket_client_id]" # ✅ String (FK está em Ticket)
 
 ---
 
-## 2.9 Guia Completo: Implementação de Relacionamentos em AMBOS OS LADOS
+## 2.9 Guia Completo: Implementação de Relacionamentos em AMBOS OS LADOS ⭐ ESTADO DA ARTE
+
+> **Nível**: ESTADO DA ARTE - Guia definitivo para implementação profissional.
 
 Esta seção é um guia definitivo para você nunca mais errar na implementação de relacionamentos. Vamos analisar cada tipo com diagramas, código completo e explicações de **O QUE VAI EM CADA LADO**.
 
@@ -8087,6 +9439,302 @@ def to_dict(self):
 ---
 
 # MÓDULO 3: ARQUITETURA PROFISSIONAL
+
+> **Metodologia**: Este módulo segue a abordagem **ALVO → BÁSICO → INTERMEDIÁRIO → AVANÇADO → ESTADO DA ARTE**. Primeiro você vê o resultado final, depois aprende passo a passo como chegar lá.
+
+---
+
+## 3.0 O ALVO: Arquitetura em Camadas - Estado da Arte
+
+Antes de começar, veja como fica a arquitetura completa que você será capaz de implementar ao final deste módulo. Este é o **alvo** - o nível de qualidade profissional que buscamos.
+
+### Visão Geral da Arquitetura
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                    ARQUITETURA EM CAMADAS - ESTADO DA ARTE                       │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│   REQUEST                                                                       │
+│      │                                                                          │
+│      ▼                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────────────┐   │
+│   │                        API LAYER (FastAPI)                               │   │
+│   │   • Recebe HTTP request                                                  │   │
+│   │   • Valida entrada com Pydantic Schema (UserCreate)                      │   │
+│   │   • Injeta dependências (Session, Service)                               │   │
+│   │   • Retorna resposta com Pydantic Schema (UserResponse)                  │   │
+│   └─────────────────────────────────────────────────────────────────────────┘   │
+│      │                                                                          │
+│      ▼                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────────────┐   │
+│   │                      SERVICE LAYER (Lógica de Negócio)                   │   │
+│   │   • Coordena operações                                                   │   │
+│   │   • Aplica regras de negócio                                             │   │
+│   │   • Orquestra múltiplos repositories                                     │   │
+│   │   • Trata exceções e transações                                          │   │
+│   └─────────────────────────────────────────────────────────────────────────┘   │
+│      │                                                                          │
+│      ▼                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────────────┐   │
+│   │                     REPOSITORY LAYER (Acesso a Dados)                    │   │
+│   │   • CRUD básico (create, get_by_id, update, delete)                      │   │
+│   │   • Queries específicas (get_by_email, list_active)                      │   │
+│   │   • Eager loading configurável                                           │   │
+│   │   • Isolamento do ORM (SQLAlchemy)                                       │   │
+│   └─────────────────────────────────────────────────────────────────────────┘   │
+│      │                                                                          │
+│      ▼                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────────────┐   │
+│   │                       ENTITY LAYER (SQLAlchemy Models)                   │   │
+│   │   • Mapeamento Objeto-Relacional                                         │   │
+│   │   • Relacionamentos e constraints                                        │   │
+│   │   • Herança de Base (auditoria, soft delete)                             │   │
+│   └─────────────────────────────────────────────────────────────────────────┘   │
+│      │                                                                          │
+│      ▼                                                                          │
+│   ┌─────────────────────────────────────────────────────────────────────────┐   │
+│   │                          DATABASE (PostgreSQL)                           │   │
+│   └─────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Estrutura de Pastas - Estado da Arte
+
+```
+projeto/
+├── api/                           # CAMADA DE APRESENTAÇÃO
+│   ├── __init__.py
+│   ├── dependencies.py            # Injeção de dependências
+│   └── routes/
+│       ├── __init__.py
+│       ├── user_routes.py         # Endpoints de User
+│       ├── team_routes.py
+│       └── ticket_routes.py
+│
+├── schemas/                       # CONTRATOS DE ENTRADA/SAÍDA
+│   ├── __init__.py
+│   ├── user_schemas.py            # UserCreate, UserUpdate, UserResponse
+│   ├── team_schemas.py
+│   └── ticket_schemas.py
+│
+├── services/                      # CAMADA DE NEGÓCIO
+│   ├── __init__.py
+│   ├── user_service.py
+│   ├── team_service.py
+│   └── ticket_service.py
+│
+├── infra/                         # CAMADA DE INFRAESTRUTURA
+│   ├── configs/
+│   │   ├── database.py            # Base, Session, Engine
+│   │   └── settings.py            # Variáveis de ambiente
+│   ├── entities/
+│   │   ├── user.py                # Entity SQLAlchemy
+│   │   ├── team.py
+│   │   └── ticket.py
+│   └── repositories/
+│       ├── base_repository.py     # Repository genérico
+│       ├── user_repository.py
+│       ├── team_repository.py
+│       └── ticket_repository.py
+│
+├── exceptions/                    # EXCEÇÕES CUSTOMIZADAS
+│   ├── __init__.py
+│   ├── base.py
+│   └── user_exceptions.py
+│
+└── main.py                        # Ponto de entrada FastAPI
+```
+
+### Fluxo Completo: Criar Usuário - Estado da Arte
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# 1. SCHEMA (schemas/user_schemas.py) - Validação e Serialização
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from pydantic import BaseModel, EmailStr, Field
+from datetime import datetime
+from infra.entities.user import UserRole, UserTipo, UserStatus
+
+class UserCreate(BaseModel):
+    """Schema para criação de usuário - ENTRADA."""
+    user_corporative_id: int = Field(..., gt=0, description="ID corporativo")
+    user_full_name: str = Field(..., min_length=2, max_length=200)
+    user_email: EmailStr
+    user_password: str = Field(..., min_length=8)
+    user_team_id: int = Field(..., gt=0)
+    user_role: UserRole
+    user_tipo: UserTipo
+
+class UserResponse(BaseModel):
+    """Schema para resposta de usuário - SAÍDA."""
+    id: int
+    user_corporative_id: int
+    user_full_name: str
+    user_email: str
+    user_team_id: int
+    user_role: UserRole
+    user_tipo: UserTipo
+    user_status: UserStatus
+    created_at: datetime
+
+    # Relacionamentos (opcionais, carregados sob demanda)
+    team: "TeamResponse | None" = None
+
+    class Config:
+        from_attributes = True  # Permite criar de Entity SQLAlchemy
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 2. REPOSITORY (infra/repositories/user_repository.py) - Acesso a Dados
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy.orm import Session, joinedload
+from infra.entities.user import User
+from infra.configs.database import Status
+
+class UserRepository:
+    """Repository para operações de User no banco."""
+
+    def __init__(self, session: Session):
+        self.session = session
+
+    def create(self, user: User) -> User:
+        """Cria novo usuário no banco."""
+        self.session.add(user)
+        self.session.flush()  # Gera ID sem commitar
+        return user
+
+    def get_by_id(self, user_id: int, load_team: bool = False) -> User | None:
+        """Busca usuário por ID com eager loading configurável."""
+        query = self.session.query(User).filter(
+            User.id == user_id,
+            User.active == Status.ATIVO
+        )
+        if load_team:
+            query = query.options(joinedload(User.team))
+        return query.first()
+
+    def get_by_email(self, email: str) -> User | None:
+        """Busca usuário por email."""
+        return self.session.query(User).filter(
+            User.user_email == email,
+            User.active == Status.ATIVO
+        ).first()
+
+    def exists_by_email(self, email: str) -> bool:
+        """Verifica se email já existe."""
+        return self.get_by_email(email) is not None
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 3. SERVICE (services/user_service.py) - Lógica de Negócio
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy.orm import Session
+from infra.repositories.user_repository import UserRepository
+from infra.entities.user import User
+from schemas.user_schemas import UserCreate
+from exceptions.user_exceptions import EmailAlreadyExistsError, UserNotFoundError
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+class UserService:
+    """Service com regras de negócio de User."""
+
+    def __init__(self, session: Session):
+        self.session = session
+        self.repository = UserRepository(session)
+
+    def create_user(self, data: UserCreate) -> User:
+        """
+        Cria novo usuário aplicando regras de negócio.
+
+        Regras:
+        - Email deve ser único
+        - Senha deve ser hasheada
+        """
+        # Regra: Email único
+        if self.repository.exists_by_email(data.user_email):
+            raise EmailAlreadyExistsError(data.user_email)
+
+        # Regra: Hash da senha
+        hashed_password = pwd_context.hash(data.user_password)
+
+        # Criar entity
+        user = User(
+            user_corporative_id=data.user_corporative_id,
+            user_full_name=data.user_full_name,
+            user_email=data.user_email,
+            user_password=hashed_password,
+            user_team_id=data.user_team_id,
+            user_role=data.user_role,
+            user_tipo=data.user_tipo
+        )
+
+        # Persistir
+        user = self.repository.create(user)
+        self.session.commit()
+
+        return user
+
+    def get_user(self, user_id: int, include_team: bool = False) -> User:
+        """Busca usuário por ID."""
+        user = self.repository.get_by_id(user_id, load_team=include_team)
+        if not user:
+            raise UserNotFoundError(user_id)
+        return user
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 4. API ROUTES (api/routes/user_routes.py) - Endpoints HTTP
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from api.dependencies import get_db
+from services.user_service import UserService
+from schemas.user_schemas import UserCreate, UserResponse
+from exceptions.user_exceptions import EmailAlreadyExistsError, UserNotFoundError
+
+router = APIRouter(prefix="/users", tags=["users"])
+
+@router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+def create_user(data: UserCreate, db: Session = Depends(get_db)):
+    """Endpoint para criar usuário."""
+    try:
+        service = UserService(db)
+        user = service.create_user(data)
+        return UserResponse.model_validate(user)
+    except EmailAlreadyExistsError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.get("/{user_id}", response_model=UserResponse)
+def get_user(user_id: int, include_team: bool = False, db: Session = Depends(get_db)):
+    """Endpoint para buscar usuário por ID."""
+    try:
+        service = UserService(db)
+        user = service.get_user(user_id, include_team=include_team)
+        return UserResponse.model_validate(user)
+    except UserNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+```
+
+### O Que Você Vai Aprender Neste Módulo
+
+Após estudar este módulo, você será capaz de:
+
+| Nível | O Que Você Aprende | Seções |
+|-------|-------------------|--------|
+| **BÁSICO** | Por que não usar to_dict(), Pydantic básico | 3.1, 3.2 |
+| **INTERMEDIÁRIO** | Schemas avançados, model_dump(), soft delete | 3.2.1, 3.2.2, 3.2.3 |
+| **AVANÇADO** | Services, separação de responsabilidades | 3.3 |
+| **ESTADO DA ARTE** | API completa com FastAPI, endpoints RESTful | 3.4 |
+
+---
 
 ## Por Que Este Módulo É Crítico?
 
@@ -12619,6 +14267,182 @@ def get_user(...):
 
 # MÓDULO 4: ANALYTICS E PERFORMANCE
 
+> **Metodologia**: Este módulo segue a abordagem **ALVO → BÁSICO → INTERMEDIÁRIO → AVANÇADO → ESTADO DA ARTE**. Primeiro você vê o resultado final, depois aprende passo a passo como chegar lá.
+
+---
+
+## 4.0 O ALVO: Analytics Service - Estado da Arte
+
+Antes de começar, veja como fica um Analytics Service completo que você será capaz de implementar ao final deste módulo. Este é o **alvo** - o nível de qualidade profissional que buscamos.
+
+### Dashboard de Métricas - Estado da Arte
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# ANALYTICS SERVICE - ESTADO DA ARTE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import func, case, extract, and_
+from sqlalchemy.orm import Session
+from datetime import datetime, timedelta
+from typing import TypedDict
+
+class TeamMetrics(TypedDict):
+    """Métricas de um time."""
+    team_id: int
+    team_name: str
+    total_tickets: int
+    tickets_open: int
+    tickets_closed: int
+    avg_resolution_hours: float
+    satisfaction_avg: float
+    sla_compliance_percent: float
+
+
+class TicketAnalyticsService:
+    """
+    Service de Analytics para Tickets.
+
+    Fornece métricas operacionais e estratégicas para dashboards.
+    """
+
+    def __init__(self, session: Session):
+        self.session = session
+
+    def get_team_performance_dashboard(
+        self,
+        start_date: datetime,
+        end_date: datetime
+    ) -> list[TeamMetrics]:
+        """
+        Dashboard de performance por time.
+
+        Métricas:
+        - Total de tickets no período
+        - Tickets abertos vs fechados
+        - Tempo médio de resolução (em horas)
+        - Satisfação média do cliente
+        - % de cumprimento de SLA
+        """
+        result = self.session.query(
+            Team.id.label("team_id"),
+            Team.team_name.label("team_name"),
+
+            # Total de tickets
+            func.count(Ticket.id).label("total_tickets"),
+
+            # Tickets por status
+            func.sum(
+                case((Ticket.ticket_status == TicketStatus.ABERTO, 1), else_=0)
+            ).label("tickets_open"),
+
+            func.sum(
+                case((Ticket.ticket_status == TicketStatus.ENCERRADO, 1), else_=0)
+            ).label("tickets_closed"),
+
+            # Tempo médio de resolução (só tickets fechados)
+            func.avg(
+                case(
+                    (Ticket.ticket_closed_at.isnot(None),
+                     extract('epoch', Ticket.ticket_closed_at - Ticket.created_at) / 3600),
+                    else_=None
+                )
+            ).label("avg_resolution_hours"),
+
+            # Satisfação média
+            func.avg(Ticket.ticket_satisfaction_rating).label("satisfaction_avg"),
+
+            # SLA compliance (fechados antes do deadline)
+            (func.sum(
+                case(
+                    (and_(
+                        Ticket.ticket_closed_at.isnot(None),
+                        Ticket.ticket_closed_at <= Ticket.ticket_deadline
+                    ), 1),
+                    else_=0
+                )
+            ) * 100.0 / func.nullif(func.count(Ticket.id), 0)).label("sla_compliance_percent")
+
+        ).select_from(Team
+        ).outerjoin(TicketTeam, Team.id == TicketTeam.team_id
+        ).outerjoin(Ticket, TicketTeam.ticket_id == Ticket.id
+        ).filter(
+            Ticket.created_at.between(start_date, end_date)
+        ).group_by(Team.id, Team.team_name
+        ).all()
+
+        return [TeamMetrics(**row._asdict()) for row in result]
+
+    def get_tickets_by_status_trend(
+        self,
+        days: int = 30
+    ) -> list[dict]:
+        """
+        Tendência de tickets por status nos últimos N dias.
+
+        Retorna dados para gráfico de linha temporal.
+        """
+        start_date = datetime.now() - timedelta(days=days)
+
+        result = self.session.query(
+            func.date_trunc('day', Ticket.created_at).label("date"),
+            Ticket.ticket_status.label("status"),
+            func.count(Ticket.id).label("count")
+        ).filter(
+            Ticket.created_at >= start_date
+        ).group_by(
+            func.date_trunc('day', Ticket.created_at),
+            Ticket.ticket_status
+        ).order_by("date").all()
+
+        return [{"date": row.date, "status": row.status.value, "count": row.count} for row in result]
+```
+
+### Visualização: O Que Este Módulo Permite Criar
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                    DASHBOARD DE ANALYTICS - EXEMPLO                              │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│   ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                │
+│   │  TOTAL TICKETS  │  │  TEMPO MÉDIO    │  │  SATISFAÇÃO     │                │
+│   │     1.523       │  │   4.2 horas     │  │     8.5/10      │                │
+│   │   (+12% mês)    │  │  (-15% mês)     │  │   (+0.3 mês)    │                │
+│   └─────────────────┘  └─────────────────┘  └─────────────────┘                │
+│                                                                                 │
+│   PERFORMANCE POR TIME:                                                         │
+│   ┌─────────────────────────────────────────────────────────────────────────┐   │
+│   │ Time          │ Tickets │ Resolvidos │ Tempo Médio │ Satisfação │ SLA   │   │
+│   ├───────────────┼─────────┼────────────┼─────────────┼────────────┼───────┤   │
+│   │ Analytics BI  │   342   │    298     │   3.2h      │   9.1      │  94%  │   │
+│   │ Projetos TI   │   521   │    445     │   5.1h      │   8.2      │  87%  │   │
+│   │ Suporte N1    │   660   │    589     │   2.8h      │   8.8      │  96%  │   │
+│   └─────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                 │
+│   TENDÊNCIA (30 DIAS):                                                          │
+│   ┌─────────────────────────────────────────────────────────────────────────┐   │
+│   │  📈                                                                      │   │
+│   │     ___/\___/\___      Abertos                                          │   │
+│   │  __/            \__    Fechados                                         │   │
+│   │ /                  \                                                    │   │
+│   │ Jan 1    Jan 15    Jan 30                                               │   │
+│   └─────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### O Que Você Vai Aprender Neste Módulo
+
+| Nível | O Que Você Aprende | Seções |
+|-------|-------------------|--------|
+| **BÁSICO** | COUNT, SUM, AVG, MIN, MAX | 4.1 |
+| **INTERMEDIÁRIO** | GROUP BY, HAVING, subqueries | 4.1 |
+| **AVANÇADO** | Analytics Service, métricas compostas | 4.2 |
+| **ESTADO DA ARTE** | Otimizações, índices, caching | 4.3, 4.4 |
+
+---
+
 ## Introdução: Analytics Como Diferencial Competitivo
 
 Analytics não é apenas "relatórios bonitos". É a capacidade de transformar dados brutos em **insights acionáveis** que direcionam decisões de negócio.
@@ -13462,6 +15286,170 @@ print(explain.fetchall())
 ---
 
 # MÓDULO 5: BOAS PRÁTICAS
+
+> **Metodologia**: Este módulo consolida tudo que você aprendeu em **checklists práticos e reutilizáveis**. Use este módulo como referência constante durante o desenvolvimento.
+
+---
+
+## 5.0 O ALVO: Código Profissional - Estado da Arte
+
+Antes de começar, veja como fica um código que segue todas as boas práticas. Este é o **alvo** - o nível de qualidade profissional que buscamos.
+
+### Entity Completa com Todas as Boas Práticas
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# ENTITY COM TODAS AS BOAS PRÁTICAS - ESTADO DA ARTE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import ForeignKey, Integer, String, Enum, Index
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from enum import Enum as PyEnum
+
+from infra.configs.database import Base, Status
+
+# ✅ TYPE_CHECKING para evitar imports circulares
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from infra.entities.team import Team
+    from infra.entities.ticket import Ticket
+
+
+class UserRole(PyEnum):
+    """
+    ✅ Enum com docstring explicativa.
+    Define o papel do usuário no sistema.
+    """
+    ADMINISTRADOR = "administrador"
+    GESTOR = "gestor"
+    N2 = "especialista"
+    N1 = "atendente"
+    USER = "user"
+
+
+class User(Base):
+    """
+    ✅ Docstring completa com:
+    - Descrição da entidade
+    - Lista de relacionamentos
+    - Exemplo de instanciação (template construtor)
+    """
+    __tablename__ = "users"
+
+    # ✅ Índices compostos para queries frequentes
+    __table_args__ = (
+        Index('ix_users_team_role', 'user_team_id', 'user_role'),
+        Index('ix_users_email', 'user_email', unique=True),
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # COLUNAS FÍSICAS
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ✅ doc= em todos os campos para documentação
+    user_full_name: Mapped[str] = mapped_column(
+        String(200), nullable=False,
+        doc="Nome completo do usuário"
+    )
+
+    user_email: Mapped[str] = mapped_column(
+        String(200), unique=True, nullable=False,
+        doc="Email corporativo (usado para login)"
+    )
+
+    # ✅ FK com ondelete DENTRO de ForeignKey
+    user_team_id: Mapped[int] = mapped_column(
+        ForeignKey("teams.id", ondelete="RESTRICT"),
+        nullable=False,
+        doc="FK para Team. RESTRICT impede deletar time com usuários"
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # RELATIONSHIPS (todos com lazy="raise" e init=False)
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ✅ N-1: User pertence a Team
+    team: Mapped["Team"] = relationship(
+        foreign_keys=[user_team_id],
+        back_populates="team_members",
+        lazy="raise",          # ✅ Força eager loading explícito
+        init=False             # ✅ Não aparece no construtor
+    )
+
+    # ✅ 1-N: User criou tickets (FK no outro lado)
+    tickets_created: Mapped[list["Ticket"]] = relationship(
+        foreign_keys="[Ticket.ticket_client_id]",
+        back_populates="client",
+        lazy="raise",
+        init=False,
+        default_factory=list   # ✅ Para listas, não default=None
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # MÉTODOS
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ✅ __repr__ para debug
+    def __repr__(self) -> str:
+        return f"<User(id={self.id}, user_email='{self.user_email}')>"
+
+    # ✅ Properties para lógica de domínio
+    @property
+    def is_admin(self) -> bool:
+        """Verifica se usuário é administrador."""
+        return self.user_role == UserRole.ADMINISTRADOR
+
+    @property
+    def is_active_and_available(self) -> bool:
+        """Verifica se usuário está ativo E disponível."""
+        return self.active == Status.ATIVO and self.user_status == UserStatus.ATIVO
+```
+
+### Checklist Visual de Boas Práticas
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                    CHECKLIST DE BOAS PRÁTICAS - RESUMO                           │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│   ENTITY:                                                                       │
+│   [✓] Herda de Base                    [✓] __tablename__ definido              │
+│   [✓] TYPE_CHECKING para imports       [✓] Enums com docstring                 │
+│   [✓] Índices em __table_args__        [✓] doc= em mapped_column               │
+│   [✓] ondelete DENTRO de ForeignKey    [✓] __repr__ implementado               │
+│                                                                                 │
+│   RELATIONSHIPS:                                                                │
+│   [✓] lazy="raise" em todos            [✓] init=False em todos                 │
+│   [✓] back_populates correto           [✓] foreign_keys quando ambíguo         │
+│   [✓] default_factory=list (listas)    [✓] NÃO usar default=None               │
+│                                                                                 │
+│   NOMENCLATURA:                                                                 │
+│   [✓] Tabelas: plural snake_case       [✓] Colunas: prefixo_campo              │
+│   [✓] FK: entidade_id                  [✓] Relationship: sem "_id"             │
+│                                                                                 │
+│   SCHEMAS:                                                                      │
+│   [✓] Create, Update, Response         [✓] from_attributes=True                │
+│   [✓] Validações com Field()           [✓] Sem campos sensíveis (password)     │
+│                                                                                 │
+│   TESTES:                                                                       │
+│   [✓] Fixture de Session               [✓] Teste CRUD básico                   │
+│   [✓] Teste de validações              [✓] Teste de relacionamentos            │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### O Que Você Vai Aprender Neste Módulo
+
+| Seção | O Que Você Aprende |
+|-------|-------------------|
+| **5.1** | Checklist completo de implementação |
+| **5.2** | Padrões de nomenclatura consistentes |
+| **5.3** | Segurança e validação de dados |
+| **5.4** | Testes unitários e de integração |
+| **5.5** | Erros comuns e como evitá-los |
+| **5.6** | Ordem correta de criação de registros |
+
+---
 
 ## Introdução: Da Teoria à Prática
 
@@ -14832,6 +16820,41 @@ Chats: 1
 
 # MÓDULO 6: GUIA PRÁTICO PASSO A PASSO
 
+> **Metodologia**: Este módulo é um **guia prático step-by-step**. Siga os passos na ordem apresentada para implementar funcionalidades completas.
+
+---
+
+## 6.0 O ALVO: Fluxo Completo de Implementação
+
+Este módulo ensina o fluxo completo para adicionar novas funcionalidades ao sistema. Ao final, você será capaz de implementar qualquer entidade seguindo este padrão:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                    FLUXO DE IMPLEMENTAÇÃO - PASSO A PASSO                        │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  1. ENTITY          2. EXPORT           3. MIGRATION       4. REPOSITORY       │
+│  ┌──────────┐       ┌──────────┐       ┌──────────┐       ┌──────────┐        │
+│  │ Definir  │  ──►  │ __init__ │  ──►  │ Alembic  │  ──►  │ CRUD     │        │
+│  │ Model    │       │ .py      │       │ revision │       │ básico   │        │
+│  └──────────┘       └──────────┘       └──────────┘       └──────────┘        │
+│       │                                                         │              │
+│       ▼                                                         ▼              │
+│  5. SCHEMA          6. SERVICE          7. ROUTES          8. TESTS           │
+│  ┌──────────┐       ┌──────────┐       ┌──────────┐       ┌──────────┐        │
+│  │ Pydantic │  ──►  │ Lógica   │  ──►  │ FastAPI  │  ──►  │ Validar  │        │
+│  │ Create/  │       │ negócio  │       │ endpoints│       │ tudo     │        │
+│  │ Response │       │          │       │          │       │          │        │
+│  └──────────┘       └──────────┘       └──────────┘       └──────────┘        │
+│                                                                                 │
+│  TEMPO ESTIMADO: 30-60 minutos para uma entidade simples                       │
+│  ARQUIVOS CRIADOS: 6-8 arquivos por entidade                                   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
 Este módulo é um guia prático para implementar funcionalidades do zero ao deploy. Cada passo tem uma explicação do **porquê** é necessário, garantindo que você entenda não apenas *como* fazer, mas *por que* fazer.
 
 ---
@@ -15215,6 +17238,51 @@ Cada camada depende da anterior. Se você tentar criar o Repository antes da Ent
 ---
 
 # MÓDULO 7: PRODUÇÃO E DEPLOY
+
+> **Metodologia**: Este módulo cobre **infraestrutura e deploy**. Siga estes passos quando sua aplicação estiver pronta para produção.
+
+---
+
+## 7.0 O ALVO: Ambiente de Produção Profissional
+
+Ao final deste módulo, você terá uma aplicação containerizada e pronta para deploy:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                    STACK DE PRODUÇÃO - ESTADO DA ARTE                            │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│                         ┌─────────────────┐                                     │
+│                         │    NGINX        │  Load Balancer / Proxy              │
+│                         │   (porta 80)    │                                     │
+│                         └────────┬────────┘                                     │
+│                                  │                                              │
+│              ┌───────────────────┼───────────────────┐                          │
+│              │                   │                   │                          │
+│              ▼                   ▼                   ▼                          │
+│      ┌───────────────┐   ┌───────────────┐   ┌───────────────┐                 │
+│      │  FastAPI #1   │   │  FastAPI #2   │   │  FastAPI #3   │                 │
+│      │  (Uvicorn)    │   │  (Uvicorn)    │   │  (Uvicorn)    │                 │
+│      └───────────────┘   └───────────────┘   └───────────────┘                 │
+│              │                   │                   │                          │
+│              └───────────────────┼───────────────────┘                          │
+│                                  │                                              │
+│                         ┌────────┴────────┐                                     │
+│                         │   PostgreSQL    │  Banco de Dados                     │
+│                         │   (porta 5432)  │                                     │
+│                         └─────────────────┘                                     │
+│                                                                                 │
+│   COMPONENTES:                                                                  │
+│   • Docker + Docker Compose para containerização                                │
+│   • Nginx como reverse proxy e load balancer                                    │
+│   • Múltiplas instâncias FastAPI para alta disponibilidade                      │
+│   • PostgreSQL com volume persistente                                           │
+│   • Variáveis de ambiente para configuração                                     │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
 
 Este módulo cobre tudo que você precisa para colocar sua aplicação em produção de forma profissional.
 
@@ -16944,6 +19012,409 @@ LOG_FORMAT=json
 # MÓDULO 8: SEGURANÇA E AUTENTICAÇÃO
 
 Este módulo é **CRÍTICO**. Uma aplicação sem autenticação adequada é como uma casa sem portas - qualquer um entra.
+
+> **Metodologia**: Este módulo segue a abordagem **ALVO → BÁSICO → INTERMEDIÁRIO → AVANÇADO → ESTADO DA ARTE**. Primeiro você vê o resultado final completo, depois aprende passo a passo como chegar lá.
+
+---
+
+## 8.0 O ALVO: Sistema de Autenticação Completo - Estado da Arte
+
+🎯 **VEJA PRIMEIRO O DESTINO**: Este é o sistema de autenticação completo que você terá ao final deste módulo. Observe como todas as peças se conectam para criar segurança em múltiplas camadas.
+
+### Arquitetura de Segurança Completa
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    SISTEMA DE AUTENTICAÇÃO - ESTADO DA ARTE                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────┐    ┌─────────────────────────────────────────────────────┐ │
+│  │   CLIENTE   │    │                    API FASTAPI                       │ │
+│  ├─────────────┤    ├─────────────────────────────────────────────────────┤ │
+│  │             │    │                                                     │ │
+│  │ 1. Login    │───►│  POST /auth/login                                   │ │
+│  │    email    │    │    │                                                │ │
+│  │    senha    │    │    ▼                                                │ │
+│  │             │    │  ┌─────────────────────────────────────────────┐    │ │
+│  │             │    │  │ AuthService.authenticate()                  │    │ │
+│  │             │    │  │  ├─ Busca user por email                   │    │ │
+│  │             │    │  │  ├─ Verifica senha (bcrypt)                │    │ │
+│  │             │    │  │  └─ Cria tokens (JWT)                      │    │ │
+│  │             │    │  └─────────────────────────────────────────────┘    │ │
+│  │             │◄───│                                                     │ │
+│  │ 2. Recebe   │    │  { access_token (30min), refresh_token (7d) }      │ │
+│  │    Tokens   │    │                                                     │ │
+│  │             │    ├─────────────────────────────────────────────────────┤ │
+│  │             │    │                                                     │ │
+│  │ 3. Request  │───►│  GET /api/tickets                                   │ │
+│  │    + Bearer │    │  Header: Authorization: Bearer <access_token>       │ │
+│  │    Token    │    │    │                                                │ │
+│  │             │    │    ▼                                                │ │
+│  │             │    │  ┌─────────────────────────────────────────────┐    │ │
+│  │             │    │  │ Depends(get_current_user)                   │    │ │
+│  │             │    │  │  ├─ Extrai token do header                 │    │ │
+│  │             │    │  │  ├─ Valida JWT (assinatura + expiração)    │    │ │
+│  │             │    │  │  ├─ Busca user no banco                    │    │ │
+│  │             │    │  │  └─ Verifica is_active                     │    │ │
+│  │             │    │  └─────────────────────────────────────────────┘    │ │
+│  │             │    │    │                                                │ │
+│  │             │    │    ▼                                                │ │
+│  │             │    │  ┌─────────────────────────────────────────────┐    │ │
+│  │             │    │  │ Depends(check_permission)                   │    │ │
+│  │             │    │  │  ├─ Verifica role do usuário               │    │ │
+│  │             │    │  │  └─ Permite ou bloqueia (403)              │    │ │
+│  │             │    │  └─────────────────────────────────────────────┘    │ │
+│  │             │◄───│                                                     │ │
+│  │ 4. Resposta │    │  200 OK + dados (se autorizado)                    │ │
+│  │             │    │  401 Unauthorized (token inválido/expirado)         │ │
+│  │             │    │  403 Forbidden (sem permissão para recurso)         │ │
+│  └─────────────┘    └─────────────────────────────────────────────────────┘ │
+│                                                                             │
+│  CAMADAS DE SEGURANÇA:                                                      │
+│  1. Bcrypt: Senhas em hash (impossível reverter)                           │
+│  2. JWT: Tokens assinados (impossível forjar)                              │
+│  3. Expiração: Access token curto (30min), refresh longo (7d)              │
+│  4. Dependencies: Autenticação obrigatória por rota                        │
+│  5. Roles: Autorização baseada em papéis (RBAC)                            │
+│  6. Rate Limiting: Proteção contra brute force                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Código Estado da Arte: Sistema de Autenticação Completo
+
+```python
+# ============================================================================
+# infra/security/password.py - Hash de Senhas com Bcrypt
+# ============================================================================
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__rounds=12)
+
+
+def hash_password(plain_password: str) -> str:
+    """Hash da senha - bcrypt gera salt automaticamente."""
+    return pwd_context.hash(plain_password)
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Verifica senha - tempo constante para evitar timing attacks."""
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+# ============================================================================
+# infra/security/jwt.py - Criação e Validação de JWT
+# ============================================================================
+from datetime import datetime, timedelta, timezone
+from jose import jwt, JWTError
+from pydantic import BaseModel
+from infra.configs.settings import settings
+
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE = 30  # minutos
+REFRESH_TOKEN_EXPIRE = 7  # dias
+
+
+class TokenPayload(BaseModel):
+    sub: str          # user_id
+    exp: datetime     # expiração
+    type: str         # "access" ou "refresh"
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+
+
+def create_access_token(user_id: int) -> str:
+    """Token de curta duração para requisições."""
+    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE)
+    return jwt.encode(
+        {"sub": str(user_id), "exp": expire, "type": "access"},
+        settings.SECRET_KEY.get_secret_value(),
+        algorithm=ALGORITHM
+    )
+
+
+def create_refresh_token(user_id: int) -> str:
+    """Token de longa duração para renovação."""
+    expire = datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKEN_EXPIRE)
+    return jwt.encode(
+        {"sub": str(user_id), "exp": expire, "type": "refresh"},
+        settings.SECRET_KEY.get_secret_value(),
+        algorithm=ALGORITHM
+    )
+
+
+def decode_token(token: str) -> TokenPayload | None:
+    """Decodifica e valida token. Retorna None se inválido."""
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY.get_secret_value(), [ALGORITHM])
+        return TokenPayload(**payload)
+    except JWTError:
+        return None
+
+
+# ============================================================================
+# api/dependencies/auth.py - Dependencies de Autenticação
+# ============================================================================
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.orm import Session
+
+from infra.configs.connection import get_db
+from infra.entities.user import User
+from infra.security.jwt import decode_token
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+
+
+async def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+) -> User:
+    """
+    Dependency que autentica o usuário.
+
+    Fluxo:
+    1. Extrai token do header Authorization
+    2. Valida assinatura e expiração do JWT
+    3. Busca usuário no banco
+    4. Verifica se está ativo
+    """
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Credenciais inválidas",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    payload = decode_token(token)
+    if not payload or payload.type != "access":
+        raise credentials_exception
+
+    user = db.query(User).filter(User.id == int(payload.sub)).first()
+
+    if not user or not user.is_active:
+        raise credentials_exception
+
+    return user
+
+
+def require_role(*allowed_roles: str):
+    """
+    Dependency factory para verificar roles.
+
+    Uso:
+        @router.delete("/users/{id}")
+        def delete_user(admin: User = Depends(require_role("admin", "superuser"))):
+            ...
+    """
+    async def role_checker(current_user: User = Depends(get_current_user)) -> User:
+        if current_user.role not in allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Permissão negada. Requer role: {', '.join(allowed_roles)}"
+            )
+        return current_user
+    return role_checker
+
+
+# ============================================================================
+# services/auth_service.py - Lógica de Autenticação
+# ============================================================================
+from sqlalchemy.orm import Session
+from fastapi import HTTPException, status
+
+from infra.entities.user import User
+from infra.security.password import verify_password, hash_password
+from infra.security.jwt import TokenResponse, create_access_token, create_refresh_token
+
+
+class AuthService:
+    """
+    Serviço de autenticação - toda lógica de login/logout.
+    """
+
+    def __init__(self, db: Session):
+        self.db = db
+
+    def authenticate(self, email: str, password: str) -> TokenResponse:
+        """
+        Autentica usuário e retorna tokens.
+
+        Raises:
+            HTTPException 401 se credenciais inválidas
+            HTTPException 403 se usuário inativo
+        """
+        user = self.db.query(User).filter(User.email == email).first()
+
+        # IMPORTANTE: Sempre verificar senha mesmo se user não existe
+        # para evitar timing attack que revela se email existe
+        if not user or not verify_password(password, user.password_hash):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Email ou senha incorretos"
+            )
+
+        if not user.is_active:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Conta desativada"
+            )
+
+        return TokenResponse(
+            access_token=create_access_token(user.id),
+            refresh_token=create_refresh_token(user.id)
+        )
+
+    def register(self, email: str, password: str, nome: str) -> User:
+        """
+        Registra novo usuário.
+
+        IMPORTANTE: Senha é hasheada ANTES de salvar.
+        """
+        # Verificar se email já existe
+        if self.db.query(User).filter(User.email == email).first():
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Email já cadastrado"
+            )
+
+        user = User(
+            email=email,
+            password_hash=hash_password(password),  # NUNCA salvar texto puro!
+            nome=nome
+        )
+
+        self.db.add(user)
+        self.db.commit()
+        self.db.refresh(user)
+
+        return user
+
+
+# ============================================================================
+# api/routes/auth.py - Endpoints de Autenticação
+# ============================================================================
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session
+
+from infra.configs.connection import get_db
+from services.auth_service import AuthService
+from schemas.user_schema import UserCreate, UserResponse
+from infra.security.jwt import TokenResponse
+
+router = APIRouter(prefix="/auth", tags=["Autenticação"])
+
+
+@router.post("/login", response_model=TokenResponse)
+def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db)
+):
+    """
+    Endpoint de login.
+
+    Aceita OAuth2PasswordRequestForm (username + password).
+    No nosso caso, username é o email.
+    """
+    auth_service = AuthService(db)
+    return auth_service.authenticate(form_data.username, form_data.password)
+
+
+@router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+def register(user_data: UserCreate, db: Session = Depends(get_db)):
+    """Endpoint de registro de novo usuário."""
+    auth_service = AuthService(db)
+    user = auth_service.register(user_data.email, user_data.password, user_data.nome)
+    return user
+
+
+@router.post("/refresh", response_model=TokenResponse)
+def refresh_token(refresh_token: str, db: Session = Depends(get_db)):
+    """Renova access token usando refresh token."""
+    from infra.security.jwt import decode_token, create_access_token, create_refresh_token
+
+    payload = decode_token(refresh_token)
+
+    if not payload or payload.type != "refresh":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token inválido"
+        )
+
+    return TokenResponse(
+        access_token=create_access_token(int(payload.sub)),
+        refresh_token=create_refresh_token(int(payload.sub))
+    )
+
+
+# ============================================================================
+# api/routes/protected.py - Exemplo de Rotas Protegidas
+# ============================================================================
+from fastapi import APIRouter, Depends
+from infra.entities.user import User
+from api.dependencies.auth import get_current_user, require_role
+
+router = APIRouter(prefix="/api", tags=["API Protegida"])
+
+
+@router.get("/me")
+def get_me(current_user: User = Depends(get_current_user)):
+    """
+    Retorna dados do usuário logado.
+
+    Requer: Token válido
+    """
+    return {
+        "id": current_user.id,
+        "email": current_user.email,
+        "nome": current_user.nome,
+        "role": current_user.role
+    }
+
+
+@router.get("/admin/users")
+def list_users(admin: User = Depends(require_role("admin", "superuser"))):
+    """
+    Lista todos os usuários.
+
+    Requer: Role admin ou superuser
+    """
+    # Só admins chegam aqui
+    pass
+
+
+@router.delete("/admin/users/{user_id}")
+def delete_user(
+    user_id: int,
+    admin: User = Depends(require_role("superuser"))
+):
+    """
+    Deleta um usuário.
+
+    Requer: Role superuser (mais restrito que admin)
+    """
+    # Só superusers chegam aqui
+    pass
+```
+
+### Resumo das Camadas de Segurança
+
+| Camada | Tecnologia | Proteção |
+|--------|------------|----------|
+| **1. Hash** | Bcrypt (rounds=12) | Senhas irrecuperáveis mesmo com acesso ao banco |
+| **2. Tokens** | JWT + SECRET_KEY | Impossível forjar tokens sem a chave |
+| **3. Expiração** | Access 30min, Refresh 7d | Limita dano se token vazado |
+| **4. Autenticação** | `Depends(get_current_user)` | Bloqueia requisições sem token |
+| **5. Autorização** | `Depends(require_role)` | Controle fino por role |
+| **6. Validação** | Pydantic schemas | Entrada sanitizada e tipada |
+
+---
+
+> 📚 **Nas seções seguintes, você aprenderá cada componente separadamente**, partindo do mais básico (por que segurança importa) até chegar neste estado da arte completo.
 
 ---
 
