@@ -214,17 +214,25 @@ Este tutorial está organizado em **PASSOS** para garantir uma progressão linea
 - 1.5 [Armadilhas Comuns do MappedAsDataclass](#15-armadilhas-comuns-do-mappedasdataclass) ⚠️ **CRÍTICO**
 
 **MÓDULO 2: RELACIONAMENTOS**
-- 2.0 [O ALVO: Relacionamentos Completos - Estado da Arte](#20-o-alvo-relacionamentos-completos---estado-da-arte) 🎯 **VEJA PRIMEIRO**
-- 2.1 [Foreign Keys - A Base dos Relacionamentos](#21-foreign-keys---a-base-dos-relacionamentos) 📚 **BÁSICO**
-- 2.2 [Relationship - Navegação entre Objetos](#22-relationship---navegação-entre-objetos) 📚 **BÁSICO**
-- 2.3 [Relacionamento N-1 (Many-to-One) - DETALHADO](#23-relacionamento-n-1-many-to-one---detalhado) 📗 **INTERMEDIÁRIO**
-- 2.4 [O Parâmetro lazy - CRUCIAL para Performance](#24-o-parâmetro-lazy---crucial-para-performance) 📗 **INTERMEDIÁRIO**
-- 2.5 [Eager Loading - Carregamento Explícito](#25-eager-loading---carregamento-explícito) 📕 **AVANÇADO**
-- 2.6 [Relacionamento N-N (Many-to-Many)](#26-relacionamento-n-n-many-to-many) 📕 **AVANÇADO**
-- 2.7 [Tabela de Associação com Atributos Extras](#27-tabela-de-associação-com-atributos-extras) 📕 **AVANÇADO**
-- 2.7.5 [Cascade - Propagação de Operações](#275-cascade---propagação-de-operações) 📕 **AVANÇADO**
-- 2.8 [Relacionamentos Avançados](#28-relacionamentos-avançados) ⭐ **ESTADO DA ARTE**
-- 2.9 [Guia Completo: Implementação em AMBOS OS LADOS](#29-guia-completo-implementação-de-relacionamentos-em-ambos-os-lados) ⭐ **ESTADO DA ARTE**
+
+*Jornada Progressiva (User-Team evoluindo):*
+- 2.0 [O ALVO: Relacionamentos Completos](#20-o-alvo-relacionamentos-completos---estado-da-arte) 🎯 **VEJA PRIMEIRO**
+- 2.1 [NÍVEL 1: FK Mínima](#21-nível-1-fk-mínima---apenas-a-coluna-física) 📚 **BÁSICO**
+- 2.2 [NÍVEL 2: Relationship Básico](#22-nível-2-relationship-básico---navegação-simples) 📚 **BÁSICO**
+- 2.3 [NÍVEL 3: N-1 Profissional](#23-nível-3-n-1-profissional---controle-total) 📗 **INTERMEDIÁRIO**
+- 2.4 [NÍVEL 4: Estado da Arte](#24-nível-4-estado-da-arte---tudo-junto) 📕 **AVANÇADO**
+
+*Tópicos Especializados (Referência):*
+- 2.5 [Referência: Regras de FK](#25-referência-regras-de-foreign-key)
+- 2.6 [Referência: FK vs Relationship](#26-referência-fk-vs-relationship---física-vs-virtual)
+- 2.7 [Referência: N-1 Detalhado](#27-referência-n-1-many-to-one---detalhes-completos)
+- 2.8 [Referência: Lazy Loading](#28-referência-o-parâmetro-lazy---estratégias-de-carregamento)
+- 2.9 [Referência: Eager Loading](#29-referência-eager-loading---joinedload-vs-selectinload)
+- 2.10 [Referência: N-N Many-to-Many](#210-referência-n-n-many-to-many---tabelas-de-associação)
+- 2.11 [Referência: Associação com Atributos](#211-referência-associação-com-atributos-extras)
+- 2.12 [Referência: Cascade](#212-referência-cascade---propagação-de-operações)
+- 2.13 [Referência: Relacionamentos Avançados](#213-referência-relacionamentos-avançados-self-ref-múltiplas-fks)
+- 2.14 [Referência: Guia Completo](#214-referência-guia-completo-de-implementação-ambos-os-lados)
 
 ---
 
@@ -249,18 +257,34 @@ Este tutorial está organizado em **PASSOS** para garantir uma progressão linea
 ### Módulos deste Passo
 
 **MÓDULO 3: ARQUITETURA PROFISSIONAL**
-- 3.0 [O ALVO: Arquitetura em Camadas - Estado da Arte](#30-o-alvo-arquitetura-em-camadas---estado-da-arte) 🎯 **VEJA PRIMEIRO**
-- 3.1 [Por Que Não Usar to_dict() nos Models](#31-por-que-não-usar-to_dict-nos-models) 📚 **BÁSICO**
-- 3.2 [Schemas com Pydantic](#32-schemas-com-pydantic) 📚 **BÁSICO**
-- 3.3 [Services - Camada de Negócio](#33-services---camada-de-negócio) 📕 **AVANÇADO**
-- 3.4 [API Endpoints com FastAPI](#34-api-endpoints-com-fastapi) ⭐ **ESTADO DA ARTE**
+
+*Jornada Progressiva (CRUD evoluindo em camadas):*
+- 3.0 [O ALVO: Arquitetura em Camadas](#30-o-alvo-arquitetura-em-camadas---estado-da-arte) 🎯 **VEJA PRIMEIRO**
+- 3.1 [NÍVEL 1: Tudo Junto](#31-nível-1-tudo-junto---o-início-ruim) 📚 **BÁSICO**
+- 3.2 [NÍVEL 2: Schemas Pydantic](#32-nível-2-schemas-pydantic---validação-e-serialização) 📚 **BÁSICO**
+- 3.3 [NÍVEL 3: Repository](#33-nível-3-repository---isolamento-do-banco) 📗 **INTERMEDIÁRIO**
+- 3.4 [NÍVEL 4: Estado da Arte](#34-nível-4-estado-da-arte---arquitetura-completa) 📕 **AVANÇADO**
+
+*Tópicos Especializados (Referência):*
+- 3.5 [Referência: Por Que Não to_dict()](#35-referência-por-que-não-usar-to_dict-nos-models)
+- 3.6 [Referência: Schemas em Detalhe](#36-referência-schemas-pydantic-em-detalhe)
+- 3.7 [Referência: Services em Detalhe](#37-referência-services---camada-de-negócio-em-detalhe)
+- 3.8 [Referência: API Endpoints](#38-referência-api-endpoints-com-fastapi-em-detalhe)
 
 **MÓDULO 4: ANALYTICS E PERFORMANCE**
-- 4.0 [O ALVO: Analytics Service - Estado da Arte](#40-o-alvo-analytics-service---estado-da-arte) 🎯 **VEJA PRIMEIRO**
-- 4.1 [Queries de Agregação](#41-queries-de-agregação) 📚 **BÁSICO/INTERMEDIÁRIO**
-- 4.2 [Analytics Service](#42-analytics-service) 📕 **AVANÇADO**
-- 4.3 [Otimizações Avançadas](#43-otimizações-avançadas) ⭐ **ESTADO DA ARTE**
-- 4.4 [Índices e Performance](#44-índices-e-performance) ⭐ **ESTADO DA ARTE**
+
+*Jornada Progressiva (Queries evoluindo):*
+- 4.0 [O ALVO: Analytics Service](#40-o-alvo-analytics-service---estado-da-arte) 🎯 **VEJA PRIMEIRO**
+- 4.1 [NÍVEL 1: COUNT e SUM](#41-nível-1-count-e-sum---agregações-básicas) 📚 **BÁSICO**
+- 4.2 [NÍVEL 2: GROUP BY](#42-nível-2-group-by---agrupando-resultados) 📚 **BÁSICO**
+- 4.3 [NÍVEL 3: CASE e Lógica](#43-nível-3-case-e-lógica-condicional) 📗 **INTERMEDIÁRIO**
+- 4.4 [NÍVEL 4: Estado da Arte](#44-nível-4-estado-da-arte---analytics-service-completo) 📕 **AVANÇADO**
+
+*Tópicos Especializados (Referência):*
+- 4.5 [Referência: Agregações em Detalhe](#45-referência-queries-de-agregação-em-detalhe)
+- 4.6 [Referência: Analytics Patterns](#46-referência-analytics-service-patterns)
+- 4.7 [Referência: Otimizações](#47-referência-otimizações-avançadas)
+- 4.8 [Referência: Índices](#48-referência-índices-e-performance)
 
 **MÓDULO 5: BOAS PRÁTICAS**
 - 5.0 [O ALVO: Código Profissional - Estado da Arte](#50-o-alvo-código-profissional---estado-da-arte) 🎯 **VEJA PRIMEIRO**
@@ -329,18 +353,20 @@ Este tutorial está organizado em **PASSOS** para garantir uma progressão linea
 ### Módulos deste Passo
 
 **MÓDULO 6: GUIA PRÁTICO PASSO A PASSO**
-- 6.1 [Criando uma Nova Entidade](#61-criando-uma-nova-entidade)
-- 6.2 [Criando um Novo Endpoint](#62-criando-um-novo-endpoint)
-- 6.3 [Implementando CRUD Completo](#63-implementando-crud-completo)
+- 6.0 [O ALVO: Fluxo Completo](#60-o-alvo-fluxo-completo-de-implementação) 🎯 **VEJA PRIMEIRO**
+- 6.1 [Criando uma Nova Entidade](#61-criando-uma-nova-entidade) 📚 **BÁSICO**
+- 6.2 [Criando um Novo Endpoint](#62-criando-um-novo-endpoint) 📗 **INTERMEDIÁRIO**
+- 6.3 [Implementando CRUD Completo](#63-implementando-crud-completo) ⭐ **ESTADO DA ARTE**
 
 **MÓDULO 7: PRODUÇÃO E DEPLOY**
-- 7.1 [Docker - Containerização](#71-docker---containerização)
-- 7.2 [Configuração para Produção](#72-configuração-para-produção)
-- 7.3 [Observabilidade (Logging, Prometheus, Grafana)](#73-observabilidade)
-- 7.4 [Configuração do FastAPI para Produção](#74-configuração-do-fastapi-para-produção)
-- 7.5 [Git e GitHub - Versionamento Profissional](#75-git-e-github---versionamento-profissional)
-- 7.6 [CI/CD com GitHub Actions](#76-cicd-com-github-actions) ⚠️ **IMPORTANTE**
-- 7.7 [Checklist de Deploy](#77-checklist-de-deploy)
+- 7.0 [O ALVO: Ambiente de Produção](#70-o-alvo-ambiente-de-produção-profissional) 🎯 **VEJA PRIMEIRO**
+- 7.1 [Docker](#71-docker---containerização) 📚 **BÁSICO**
+- 7.2 [Configuração para Produção](#72-configuração-para-produção) 📗 **INTERMEDIÁRIO**
+- 7.3 [Observabilidade](#73-observabilidade) 📕 **AVANÇADO**
+- 7.4 [FastAPI para Produção](#74-configuração-do-fastapi-para-produção) 📕 **AVANÇADO**
+- 7.5 [Git e GitHub](#75-git-e-github---versionamento-profissional) 📚 **BÁSICO**
+- 7.6 [CI/CD com GitHub Actions](#76-cicd-com-github-actions) ⭐ **ESTADO DA ARTE**
+- 7.7 [Checklist de Deploy](#77-checklist-de-deploy) 📋 **ESSENCIAL**
 
 ---
 
@@ -6909,7 +6935,394 @@ team = session.get(Team, user.user_team_id)  # Query adicional
 
 No **NÍVEL 2**, você aprenderá `relationship()` - que permite fazer `user.team` diretamente, sem query manual!
 
-### Regras de Foreign Key
+---
+
+## 2.2 NÍVEL 2: Relationship Básico - Navegação Simples 📚 BÁSICO
+
+> **Nível**: BÁSICO - Adicione `relationship()` para navegar entre objetos.
+
+### Evoluindo o Código: Adicionando Relationship
+
+Agora vamos adicionar `relationship()` ao nosso User para poder fazer `user.team`:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# RELACIONAMENTO USER-TEAM: NÍVEL 2 - FK + RELATIONSHIP BÁSICO
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import Integer, String, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from infra.configs.database import Base
+
+
+class Team(Base):
+    """Time - NÍVEL 2: Ainda simples."""
+    __tablename__ = "teams"
+
+    team_name: Mapped[str] = mapped_column(String(100))
+
+
+class User(Base):
+    """Usuário - NÍVEL 2: FK + Relationship básico."""
+    __tablename__ = "users"
+
+    user_full_name: Mapped[str] = mapped_column(String(200))
+
+    # FK - coluna física (igual ao NÍVEL 1)
+    user_team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))
+
+    # ═══ NOVO: RELATIONSHIP ═══
+    # Permite navegar diretamente: user.team
+    team: Mapped["Team"] = relationship()
+```
+
+### A Diferença: FK vs Relationship
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    FK vs RELATIONSHIP                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   FOREIGN KEY (user_team_id)              RELATIONSHIP (team)              │
+│   ┌─────────────────────────┐             ┌─────────────────────────┐      │
+│   │ • Coluna FÍSICA         │             │ • Coluna VIRTUAL        │      │
+│   │ • Existe no banco       │             │ • NÃO existe no banco   │      │
+│   │ • Armazena INTEGER      │             │ • "Carrega" o objeto    │      │
+│   │ • user.user_team_id = 1 │             │ • user.team = <Team>    │      │
+│   └─────────────────────────┘             └─────────────────────────┘      │
+│                                                                             │
+│   SQL Gerado: user_team_id INTEGER        SQL Gerado: (nada!)              │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Usando Este Código
+
+```python
+# Criar time e usuário
+team = Team(team_name="Analytics")
+session.add(team)
+session.commit()
+
+user = User(user_full_name="João Silva", user_team_id=team.id)
+session.add(user)
+session.commit()
+
+# ✅ AGORA FUNCIONA: Navegação direta!
+print(user.team.team_name)  # "Analytics"
+
+# A FK ainda existe:
+print(user.user_team_id)    # 1
+```
+
+### O Problema: Carregamento Implícito
+
+Com este código básico, o SQLAlchemy faz queries **automáticas** quando você acessa `user.team`:
+
+```python
+users = session.query(User).all()  # 1 query: SELECT * FROM users
+
+for user in users:
+    print(user.team.team_name)     # N queries! SELECT * FROM teams WHERE id = ?
+
+# Total: N+1 queries (problema de performance!)
+```
+
+### ✅ O Que Você Aprendeu
+
+| Conceito | O Que É |
+|----------|---------|
+| **relationship()** | Cria uma "coluna virtual" para navegar entre objetos |
+| **FK + Relationship** | FK armazena o ID, Relationship carrega o objeto |
+| **Problema N+1** | Queries automáticas podem causar lentidão |
+
+### 🎯 Próximo Nível
+
+No **NÍVEL 3**, você aprenderá a controlar o carregamento com `lazy="raise"` e configurar ambos os lados com `back_populates`!
+
+---
+
+## 2.3 NÍVEL 3: N-1 Profissional - Controle Total 📗 INTERMEDIÁRIO
+
+> **Nível**: INTERMEDIÁRIO - Configure relacionamentos de forma profissional.
+
+### Evoluindo o Código: Adicionando Controles
+
+Agora vamos adicionar os controles profissionais: `lazy="raise"`, `back_populates`, `init=False`:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# RELACIONAMENTO USER-TEAM: NÍVEL 3 - PROFISSIONAL
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import Integer, String, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from infra.configs.database import Base
+
+
+class Team(Base):
+    """Time - NÍVEL 3: Com o OUTRO LADO do relacionamento."""
+    __tablename__ = "teams"
+
+    team_name: Mapped[str] = mapped_column(String(100))
+
+    # ═══ NOVO: O OUTRO LADO DO RELACIONAMENTO ═══
+    # Team "vê" seus membros
+    team_members: Mapped[list["User"]] = relationship(
+        back_populates="team",    # Conecta com User.team
+        lazy="raise",             # Força eager loading
+        init=False,               # Não aparece no construtor
+        default_factory=list      # Lista vazia por padrão
+    )
+
+
+class User(Base):
+    """Usuário - NÍVEL 3: Relacionamento profissional."""
+    __tablename__ = "users"
+
+    user_full_name: Mapped[str] = mapped_column(String(200))
+
+    # FK com ondelete
+    user_team_id: Mapped[int] = mapped_column(
+        ForeignKey("teams.id", ondelete="RESTRICT")  # Protege contra deleção
+    )
+
+    # Relationship PROFISSIONAL
+    team: Mapped["Team"] = relationship(
+        back_populates="team_members",  # Conecta com Team.team_members
+        lazy="raise",                   # ERRO se tentar carregar sem eager loading
+        init=False                      # Não aparece no construtor
+    )
+```
+
+### O Que Cada Parâmetro Faz
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PARÂMETROS DO RELATIONSHIP                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   back_populates="team"                                                     │
+│   └─► Conecta os dois lados: user.team ↔ team.team_members                 │
+│       Se você fizer user.team = team, automaticamente                       │
+│       team.team_members inclui esse user                                    │
+│                                                                             │
+│   lazy="raise"                                                              │
+│   └─► Se você tentar acessar user.team sem carregar antes,                 │
+│       SQLAlchemy levanta ERRO ao invés de fazer query automática           │
+│       Isso FORÇA você a usar eager loading (evita N+1)                      │
+│                                                                             │
+│   init=False                                                                │
+│   └─► Relationship NÃO aparece no construtor                               │
+│       User(user_full_name="João", user_team_id=1)  # SEM team=             │
+│                                                                             │
+│   default_factory=list                                                      │
+│   └─► Para listas (1-N): começa como lista vazia []                        │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Usando Este Código (com Eager Loading)
+
+```python
+from sqlalchemy.orm import joinedload
+
+# ✅ CORRETO: Carrega user + team em UMA query
+user = session.query(User).options(
+    joinedload(User.team)
+).filter(User.id == 1).first()
+
+print(user.team.team_name)  # Funciona! Já estava carregado
+
+# ❌ SEM eager loading: ERRO!
+user = session.query(User).filter(User.id == 1).first()
+print(user.team.team_name)  # InvalidRequestError: 'User.team' is not available
+```
+
+### ✅ O Que Você Aprendeu
+
+| Conceito | O Que É |
+|----------|---------|
+| **back_populates** | Conecta os dois lados do relacionamento |
+| **lazy="raise"** | Força eager loading explícito (evita N+1) |
+| **init=False** | Exclui do construtor (MappedAsDataclass) |
+| **ondelete="RESTRICT"** | Protege contra deleção acidental |
+
+### 🎯 Próximo Nível
+
+No **NÍVEL 4 (Estado da Arte)**, você aprenderá `TYPE_CHECKING`, `doc=`, múltiplas FKs e relacionamentos N-N!
+
+---
+
+## 2.4 NÍVEL 4: Estado da Arte - Tudo Junto 📕 AVANÇADO
+
+> **Nível**: ESTADO DA ARTE - O código profissional completo.
+
+### O Código Final: User com Todos os Relacionamentos
+
+Este é o código completo que você viu na seção **2.0 O ALVO**. Agora você entende cada parte:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# RELACIONAMENTO USER-TEAM: NÍVEL 4 - ESTADO DA ARTE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import ForeignKey, Integer, String, Enum, Index
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from enum import Enum as PyEnum
+
+from infra.configs.database import Base, Status
+
+# ═══ TYPE_CHECKING: Evita imports circulares ═══
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from infra.entities.team import Team
+    from infra.entities.ticket import Ticket
+
+
+class UserRole(PyEnum):
+    """Papel do usuário no sistema."""
+    ADMINISTRADOR = "administrador"
+    GESTOR = "gestor"
+    N2 = "especialista"
+    N1 = "atendente"
+    USER = "user"
+
+
+class User(Base):
+    """
+    Entidade de Usuário - ESTADO DA ARTE.
+
+    Relacionamentos:
+        N-1: team (Time ao qual pertence)
+        1-N: tickets_created (Tickets abertos pelo usuário)
+
+    Índices:
+        - ix_users_team_role: Busca por time + papel
+
+    Exemplo de Instanciação:
+        ```python
+        user = User(
+            user_full_name="João Silva",
+            user_email="joao@empresa.com",
+            user_password="$2b$12$hash...",
+            user_team_id=1,
+            user_role=UserRole.N1
+        )
+        ```
+    """
+    __tablename__ = "users"
+
+    # Índices compostos
+    __table_args__ = (
+        Index('ix_users_team_role', 'user_team_id', 'user_role'),
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CAMPOS com doc= para documentação
+    # ═══════════════════════════════════════════════════════════════════════════
+    user_full_name: Mapped[str] = mapped_column(
+        String(200), nullable=False,
+        doc="Nome completo do usuário"
+    )
+    user_email: Mapped[str] = mapped_column(
+        String(200), unique=True, nullable=False,
+        doc="Email corporativo (usado para login)"
+    )
+    user_password: Mapped[str] = mapped_column(
+        String(200), nullable=False,
+        doc="Hash da senha (bcrypt)"
+    )
+
+    # FK com doc=
+    user_team_id: Mapped[int] = mapped_column(
+        ForeignKey("teams.id", ondelete="RESTRICT"),
+        nullable=False,
+        doc="FK para Team. RESTRICT impede deletar time com usuários"
+    )
+
+    # Enum
+    user_role: Mapped[UserRole] = mapped_column(
+        Enum(UserRole), nullable=False,
+        doc="Papel que define nível de acesso"
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # RELATIONSHIPS - Estado da Arte
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # N-1: User pertence a UM Team
+    team: Mapped["Team"] = relationship(
+        foreign_keys=[user_team_id],
+        back_populates="team_members",
+        lazy="raise",
+        init=False
+    )
+
+    # 1-N: User criou MUITOS Tickets
+    tickets_created: Mapped[list["Ticket"]] = relationship(
+        foreign_keys="[Ticket.ticket_client_id]",
+        back_populates="client",
+        lazy="raise",
+        init=False,
+        default_factory=list
+    )
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # MÉTODOS
+    # ═══════════════════════════════════════════════════════════════════════════
+    def __repr__(self) -> str:
+        return f"<User(id={self.id}, name='{self.user_full_name}')>"
+
+    @property
+    def is_admin(self) -> bool:
+        """Verifica se usuário é administrador."""
+        return self.user_role == UserRole.ADMINISTRADOR
+```
+
+### Resumo da Evolução
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              EVOLUÇÃO: DO NÍVEL 1 AO ESTADO DA ARTE                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  NÍVEL 1: FK Mínima                                                         │
+│  └─► user_team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))     │
+│                                                                             │
+│  NÍVEL 2: + Relationship                                                    │
+│  └─► team: Mapped["Team"] = relationship()                                 │
+│                                                                             │
+│  NÍVEL 3: + Controles                                                       │
+│  └─► back_populates, lazy="raise", init=False                              │
+│                                                                             │
+│  NÍVEL 4: Estado da Arte                                                    │
+│  └─► TYPE_CHECKING, doc=, índices, múltiplos relationships, Enums          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### ✅ O Que Você Aprendeu no NÍVEL 4
+
+| Conceito | O Que É |
+|----------|---------|
+| **TYPE_CHECKING** | Import condicional para evitar circular imports |
+| **doc=""** | Documentação inline para cada campo |
+| **Index()** | Índices compostos para queries frequentes |
+| **foreign_keys=[...]** | Especifica qual FK usar (necessário com múltiplas) |
+| **Enum** | Tipos restritos para campos de classificação |
+
+---
+
+## 📚 TÓPICOS ESPECIALIZADOS (Referência Detalhada)
+
+As seções a seguir são **referência detalhada** sobre tópicos específicos. Use-as para consulta quando precisar implementar padrões avançados.
+
+---
+
+## 2.5 Referência: Regras de Foreign Key
 
 ```python
 # ❌ ERRADO: Tipo errado
@@ -7167,9 +7580,9 @@ user_team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))  # "teams" com
 
 ---
 
-## 2.2 Relationship - Navegação entre Objetos 📚 BÁSICO
+## 2.6 Referência: FK vs Relationship - Física vs Virtual
 
-> **Nível**: BÁSICO - Entenda a diferença entre FK (física) e Relationship (virtual).
+> **Referência**: Detalhamento conceitual sobre a diferença entre FK e Relationship.
 
 ### Conceito Fundamental: Física vs Virtual
 
@@ -7605,7 +8018,7 @@ class User(Base):
 
 ---
 
-## 2.3 Relacionamento N-1 (Many-to-One) - DETALHADO 📗 INTERMEDIÁRIO
+## 2.7 Referência: N-1 (Many-to-One) - Detalhes Completos
 
 > **Nível**: INTERMEDIÁRIO - Implementação prática do relacionamento mais comum.
 
@@ -7786,7 +8199,7 @@ class User(Base):
 
 ---
 
-## 2.4 O Parâmetro lazy - CRUCIAL para Performance 📗 INTERMEDIÁRIO
+## 2.8 Referência: O Parâmetro lazy - Estratégias de Carregamento
 
 > **Nível**: INTERMEDIÁRIO - Entenda estratégias de carregamento para evitar N+1.
 
@@ -8101,7 +8514,7 @@ user = session.query(User).options(
 
 ---
 
-## 2.5 Eager Loading - Carregamento Explícito 📕 AVANÇADO
+## 2.9 Referência: Eager Loading - joinedload vs selectinload
 
 > **Nível**: AVANÇADO - Técnicas para controle fino de carregamento.
 
@@ -8215,7 +8628,7 @@ for user in users:
 
 ---
 
-## 2.6 Relacionamento N-N (Many-to-Many) 📕 AVANÇADO
+## 2.10 Referência: N-N (Many-to-Many) - Tabelas de Associação
 
 > **Nível**: AVANÇADO - Relacionamentos com tabela intermediária.
 
@@ -8322,7 +8735,7 @@ for attendant in ticket.attendants:
 
 ---
 
-## 2.7 Tabela de Associação com Atributos Extras 📕 AVANÇADO
+## 2.11 Referência: Associação com Atributos Extras
 
 > **Nível**: AVANÇADO - N-N com dados adicionais na associação.
 
@@ -8491,7 +8904,7 @@ for ticket in user.tickets:  # ERRO com lazy="raise"!
 
 ---
 
-## 2.7.5 Cascade - Propagação de Operações 📕 AVANÇADO
+## 2.12 Referência: Cascade - Propagação de Operações
 
 > **Nível**: AVANÇADO - Controle de operações em cascata.
 
@@ -8682,7 +9095,7 @@ ForeignKey("chats.id", ondelete="CASCADE")  # Banco também deleta
 
 ---
 
-## 2.8 Relacionamentos Avançados ⭐ ESTADO DA ARTE
+## 2.13 Referência: Relacionamentos Avançados (Self-ref, Múltiplas FKs)
 
 > **Nível**: ESTADO DA ARTE - Padrões complexos para sistemas reais.
 
@@ -8937,7 +9350,7 @@ foreign_keys="[Ticket.ticket_client_id]" # ✅ String (FK está em Ticket)
 
 ---
 
-## 2.9 Guia Completo: Implementação de Relacionamentos em AMBOS OS LADOS ⭐ ESTADO DA ARTE
+## 2.14 Referência: Guia Completo de Implementação (Ambos os Lados)
 
 > **Nível**: ESTADO DA ARTE - Guia definitivo para implementação profissional.
 
@@ -10454,9 +10867,584 @@ def get_users(service: UserService = Depends()):
 - ✅ Documentação automática (OpenAPI)
 - ✅ Fácil manter e evoluir
 
+### O Que Você Vai Aprender Neste Módulo
+
+Assim como nos módulos anteriores, você verá a **MESMA funcionalidade (CRUD de User)** evoluindo em arquitetura:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  JORNADA DESTE MÓDULO: Arquitetura do Zero ao Estado da Arte                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  3.1 NÍVEL 1: Tudo Junto       → Entity + CRUD direto no endpoint          │
+│  3.2 NÍVEL 2: Schemas          → + Pydantic para validação/serialização    │
+│  3.3 NÍVEL 3: Repository       → + Camada de acesso a dados                │
+│  3.4 NÍVEL 4: Estado da Arte   → + Service + Exceptions + DI               │
+│                                                                             │
+│  → Resultado: Você entenderá cada camada e por que ela existe              │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
-## 3.1 Por Que Não Usar to_dict() nos Models
+## 3.1 NÍVEL 1: Tudo Junto - O Início Ruim 📚 BÁSICO
+
+> **Nível**: BÁSICO - Como NÃO fazer (mas muitos fazem).
+
+### O Código Que Funciona Mas Não Escala
+
+Este é o código que muitos tutoriais mostram. Funciona para projetos pequenos:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# ARQUITETURA NÍVEL 1: TUDO EM UM ARQUIVO (❌ Não faça isso em produção!)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from fastapi import FastAPI
+from sqlalchemy import create_engine, String, Integer
+from sqlalchemy.orm import Session, Mapped, mapped_column, DeclarativeBase
+
+# === TUDO JUNTO: Model, lógica, endpoint ===
+
+engine = create_engine("sqlite:///database.db")
+
+class Base(DeclarativeBase):
+    pass
+
+class User(Base):
+    """User com to_dict() - Padrão comum mas problemático."""
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+    email: Mapped[str] = mapped_column(String(200))
+
+    def to_dict(self):
+        """❌ Método que parece útil mas causa problemas."""
+        return {"id": self.id, "name": self.name, "email": self.email}
+
+Base.metadata.create_all(engine)
+app = FastAPI()
+
+
+@app.post("/users")
+def create_user(name: str, email: str):
+    """❌ PROBLEMAS: Sem validação, lógica no endpoint, sem tratamento de erro."""
+    with Session(engine) as session:
+        user = User(name=name, email=email)
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        return user.to_dict()
+
+
+@app.get("/users/{user_id}")
+def get_user(user_id: int):
+    """❌ PROBLEMAS: SQL direto, sem tratamento de not found."""
+    with Session(engine) as session:
+        user = session.get(User, user_id)
+        if not user:
+            return {"error": "User not found"}  # ❌ Não é exceção HTTP
+        return user.to_dict()
+
+
+@app.get("/users")
+def list_users():
+    """❌ PROBLEMAS: Sem paginação, carrega tudo na memória."""
+    with Session(engine) as session:
+        users = session.query(User).all()
+        return [u.to_dict() for u in users]
+```
+
+### Por Que Este Código É Ruim
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    PROBLEMAS DO NÍVEL 1                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  1. SEM VALIDAÇÃO                                                           │
+│     • email pode ser "abc" (não é email)                                    │
+│     • name pode ser "" (vazio)                                              │
+│                                                                             │
+│  2. LÓGICA NO ENDPOINT                                                      │
+│     • Impossível testar sem HTTP                                            │
+│     • Duplicação se precisar em outro lugar                                 │
+│                                                                             │
+│  3. SEM TRATAMENTO DE ERRO                                                  │
+│     • {"error": "..."} não é padrão HTTP                                    │
+│     • Cliente não sabe o status code                                        │
+│                                                                             │
+│  4. to_dict() PROBLEMÁTICO                                                  │
+│     • Recursão infinita com relacionamentos                                 │
+│     • datetime, Enum não serializáveis                                      │
+│                                                                             │
+│  5. SEM DOCUMENTAÇÃO                                                        │
+│     • Swagger não sabe os tipos                                             │
+│     • Outros devs não sabem o contrato                                      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### ✅ O Que Você Aprendeu
+
+| Problema | Consequência |
+|----------|--------------|
+| **to_dict()** | Recursão, tipos não serializáveis |
+| **Lógica no endpoint** | Difícil testar, código duplicado |
+| **Sem validação** | Dados inválidos no banco |
+| **Sem exceções** | Respostas inconsistentes |
+
+### 🎯 Próximo Nível
+
+No **NÍVEL 2**, você aprenderá Pydantic Schemas para resolver validação e serialização!
+
+---
+
+## 3.2 NÍVEL 2: Schemas Pydantic - Validação e Serialização 📚 BÁSICO
+
+> **Nível**: BÁSICO - Adicione validação automática e documentação.
+
+### Evoluindo: Adicionando Schemas
+
+Agora separamos a **validação/serialização** da **Entity**:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# ARQUITETURA NÍVEL 2: ENTITY + SCHEMAS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# === schemas/user_schemas.py ===
+from pydantic import BaseModel, EmailStr, Field
+
+class UserCreate(BaseModel):
+    """Schema de ENTRADA - Valida dados recebidos."""
+    name: str = Field(..., min_length=2, max_length=100)
+    email: EmailStr  # ✅ Valida formato de email automaticamente!
+
+
+class UserResponse(BaseModel):
+    """Schema de SAÍDA - Define o que retorna."""
+    id: int
+    name: str
+    email: str
+
+    model_config = {"from_attributes": True}  # ✅ Converte de Entity automaticamente
+
+
+# === infra/entities/user.py ===
+from sqlalchemy import String, Integer
+from sqlalchemy.orm import Mapped, mapped_column
+from infra.configs.database import Base
+
+class User(Base):
+    """Entity LIMPA - Sem to_dict()!"""
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, init=False)
+    name: Mapped[str] = mapped_column(String(100))
+    email: Mapped[str] = mapped_column(String(200), unique=True)
+    # ❌ REMOVIDO: def to_dict() - Não precisa mais!
+
+
+# === api/routes/user_routes.py ===
+from fastapi import FastAPI, HTTPException
+from sqlalchemy.orm import Session
+
+app = FastAPI()
+
+@app.post("/users", response_model=UserResponse, status_code=201)
+def create_user(user_data: UserCreate):  # ✅ Validação automática!
+    """
+    Cria usuário.
+
+    ✅ Validação automática via Pydantic
+    ✅ Documentação automática no Swagger
+    ✅ Serialização automática na resposta
+    """
+    with Session(engine) as session:
+        # Pydantic já validou - dados são seguros
+        user = User(name=user_data.name, email=user_data.email)
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        return user  # ✅ FastAPI converte para UserResponse automaticamente!
+
+
+@app.get("/users/{user_id}", response_model=UserResponse)
+def get_user(user_id: int):
+    with Session(engine) as session:
+        user = session.get(User, user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="Usuário não encontrado")  # ✅ Exceção HTTP correta!
+        return user
+```
+
+### O Que Mudou
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    NÍVEL 1 vs NÍVEL 2                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   NÍVEL 1 (Antes)                    NÍVEL 2 (Agora)                       │
+│   ─────────────────                  ─────────────────                      │
+│                                                                             │
+│   def create_user(name, email):      def create_user(data: UserCreate):    │
+│       # Sem validação                    # ✅ Validado automaticamente!     │
+│                                                                             │
+│   return user.to_dict()              return user                            │
+│       # ❌ Manual, problemático          # ✅ Automático via response_model │
+│                                                                             │
+│   {"error": "not found"}             raise HTTPException(404)               │
+│       # ❌ Não é padrão HTTP             # ✅ Status code correto           │
+│                                                                             │
+│   # Swagger sem tipos                 # ✅ Swagger com tipos completos     │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### ✅ O Que Você Aprendeu
+
+| Conceito | O Que É |
+|----------|---------|
+| **Schema de Entrada** | `UserCreate` - Valida dados recebidos |
+| **Schema de Saída** | `UserResponse` - Define formato da resposta |
+| **from_attributes** | Permite converter Entity → Schema automaticamente |
+| **HTTPException** | Forma correta de retornar erros HTTP |
+
+### 🎯 Próximo Nível
+
+No **NÍVEL 3**, você aprenderá Repository Pattern para isolar acesso a dados!
+
+---
+
+## 3.3 NÍVEL 3: Repository - Isolamento do Banco 📗 INTERMEDIÁRIO
+
+> **Nível**: INTERMEDIÁRIO - Adicione camada de acesso a dados.
+
+### Evoluindo: Adicionando Repository
+
+Agora separamos o **acesso a dados** dos endpoints:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# ARQUITETURA NÍVEL 3: ENTITY + SCHEMAS + REPOSITORY
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# === infra/repositories/user_repository.py ===
+from sqlalchemy.orm import Session
+from infra.entities.user import User
+
+
+class UserRepository:
+    """
+    Repository: Isola TODO acesso a dados.
+
+    Benefícios:
+    - Fácil trocar de ORM (SQLAlchemy → outro)
+    - Fácil testar (mock do repository)
+    - Queries reutilizáveis
+    """
+
+    def __init__(self, session: Session):
+        self.session = session
+
+    def create(self, name: str, email: str) -> User:
+        """Cria usuário no banco."""
+        user = User(name=name, email=email)
+        self.session.add(user)
+        self.session.commit()
+        self.session.refresh(user)
+        return user
+
+    def get_by_id(self, user_id: int) -> User | None:
+        """Busca por ID."""
+        return self.session.get(User, user_id)
+
+    def get_by_email(self, email: str) -> User | None:
+        """Busca por email."""
+        return self.session.query(User).filter(User.email == email).first()
+
+    def list_all(self, skip: int = 0, limit: int = 100) -> list[User]:
+        """Lista com paginação."""
+        return self.session.query(User).offset(skip).limit(limit).all()
+
+
+# === api/routes/user_routes.py ===
+from fastapi import FastAPI, HTTPException, Depends
+from sqlalchemy.orm import Session
+from infra.configs.connection import get_db
+from infra.repositories.user_repository import UserRepository
+from schemas.user_schemas import UserCreate, UserResponse
+
+app = FastAPI()
+
+
+def get_user_repository(db: Session = Depends(get_db)) -> UserRepository:
+    """Dependency Injection do Repository."""
+    return UserRepository(db)
+
+
+@app.post("/users", response_model=UserResponse, status_code=201)
+def create_user(
+    user_data: UserCreate,
+    repo: UserRepository = Depends(get_user_repository)  # ✅ Injeção de dependência!
+):
+    # Verificar email único
+    if repo.get_by_email(user_data.email):
+        raise HTTPException(400, "Email já cadastrado")
+
+    # ✅ Endpoint não sabe SQL - usa Repository
+    user = repo.create(name=user_data.name, email=user_data.email)
+    return user
+
+
+@app.get("/users/{user_id}", response_model=UserResponse)
+def get_user(
+    user_id: int,
+    repo: UserRepository = Depends(get_user_repository)
+):
+    user = repo.get_by_id(user_id)
+    if not user:
+        raise HTTPException(404, "Usuário não encontrado")
+    return user
+```
+
+### O Que Mudou
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    NÍVEL 2 vs NÍVEL 3                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   NÍVEL 2 (Antes)                    NÍVEL 3 (Agora)                       │
+│   ─────────────────                  ─────────────────                      │
+│                                                                             │
+│   session.add(user)                  repo.create(name, email)              │
+│   session.commit()                       # ✅ Endpoint não vê SQL          │
+│       # ❌ SQL no endpoint                                                  │
+│                                                                             │
+│   session.get(User, id)              repo.get_by_id(id)                    │
+│       # ❌ ORM exposto                   # ✅ Abstração clara              │
+│                                                                             │
+│   # Difícil testar                   # ✅ Fácil mock: mock_repo.get_by_id  │
+│                                                                             │
+│   # Queries duplicadas               # ✅ Queries centralizadas            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### ✅ O Que Você Aprendeu
+
+| Conceito | O Que É |
+|----------|---------|
+| **Repository** | Camada que isola TODO acesso a dados |
+| **Depends()** | Injeção de dependência do FastAPI |
+| **Abstração** | Endpoint não conhece SQLAlchemy |
+
+### 🎯 Próximo Nível
+
+No **NÍVEL 4 (Estado da Arte)**, você aprenderá Service Layer para lógica de negócio!
+
+---
+
+## 3.4 NÍVEL 4: Estado da Arte - Arquitetura Completa 📕 AVANÇADO
+
+> **Nível**: ESTADO DA ARTE - A arquitetura profissional completa.
+
+### O Código Final: Todas as Camadas
+
+Este é o código completo que você viu na seção **3.0 O ALVO**:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# ARQUITETURA NÍVEL 4: ESTADO DA ARTE - TODAS AS CAMADAS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# === exceptions/user_exceptions.py ===
+from fastapi import HTTPException, status
+
+class UserNotFoundException(HTTPException):
+    def __init__(self, user_id: int):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Usuário {user_id} não encontrado"
+        )
+
+class EmailAlreadyExistsException(HTTPException):
+    def __init__(self, email: str):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Email {email} já cadastrado"
+        )
+
+
+# === services/user_service.py ===
+from infra.repositories.user_repository import UserRepository
+from schemas.user_schemas import UserCreate, UserUpdate
+from exceptions.user_exceptions import UserNotFoundException, EmailAlreadyExistsException
+
+
+class UserService:
+    """
+    Service: Camada de LÓGICA DE NEGÓCIO.
+
+    Responsabilidades:
+    - Coordenar operações
+    - Aplicar regras de negócio
+    - Orquestrar múltiplos repositories
+    - Lançar exceções apropriadas
+    """
+
+    def __init__(self, repository: UserRepository):
+        self.repository = repository
+
+    def create_user(self, data: UserCreate) -> User:
+        """
+        Cria usuário com validações de negócio.
+
+        Regras:
+        - Email deve ser único
+        - Senha será hasheada (se aplicável)
+        """
+        # Regra de negócio: email único
+        if self.repository.get_by_email(data.email):
+            raise EmailAlreadyExistsException(data.email)
+
+        # Criar usuário
+        return self.repository.create(
+            name=data.name,
+            email=data.email
+        )
+
+    def get_user(self, user_id: int) -> User:
+        """Busca usuário ou lança exceção."""
+        user = self.repository.get_by_id(user_id)
+        if not user:
+            raise UserNotFoundException(user_id)
+        return user
+
+    def update_user(self, user_id: int, data: UserUpdate) -> User:
+        """Atualiza com validações."""
+        user = self.get_user(user_id)  # Lança exceção se não existe
+
+        # Regra: se mudou email, verificar se novo email é único
+        if data.email and data.email != user.email:
+            if self.repository.get_by_email(data.email):
+                raise EmailAlreadyExistsException(data.email)
+
+        return self.repository.update(user, data.model_dump(exclude_unset=True))
+
+
+# === api/dependencies.py ===
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from infra.configs.connection import get_db
+from infra.repositories.user_repository import UserRepository
+from services.user_service import UserService
+
+
+def get_user_service(db: Session = Depends(get_db)) -> UserService:
+    """Factory de UserService com todas as dependências."""
+    repository = UserRepository(db)
+    return UserService(repository)
+
+
+# === api/routes/user_routes.py ===
+from fastapi import APIRouter, Depends, status
+from services.user_service import UserService
+from api.dependencies import get_user_service
+from schemas.user_schemas import UserCreate, UserUpdate, UserResponse
+
+router = APIRouter(prefix="/users", tags=["Users"])
+
+
+@router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+def create_user(
+    data: UserCreate,
+    service: UserService = Depends(get_user_service)
+):
+    """
+    Cria novo usuário.
+
+    ✅ Endpoint LIMPO - apenas coordena
+    ✅ Validação: Pydantic (UserCreate)
+    ✅ Lógica: Service (email único)
+    ✅ Dados: Repository (SQL)
+    """
+    return service.create_user(data)
+
+
+@router.get("/{user_id}", response_model=UserResponse)
+def get_user(
+    user_id: int,
+    service: UserService = Depends(get_user_service)
+):
+    """Busca usuário por ID."""
+    return service.get_user(user_id)  # Service lança exceção se não existe
+
+
+@router.patch("/{user_id}", response_model=UserResponse)
+def update_user(
+    user_id: int,
+    data: UserUpdate,
+    service: UserService = Depends(get_user_service)
+):
+    """Atualiza usuário."""
+    return service.update_user(user_id, data)
+```
+
+### Resumo da Evolução
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              EVOLUÇÃO: DO NÍVEL 1 AO ESTADO DA ARTE                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  NÍVEL 1: Tudo Junto                                                        │
+│  └─► Entity com to_dict() + SQL no endpoint + sem validação                │
+│                                                                             │
+│  NÍVEL 2: + Schemas                                                         │
+│  └─► Pydantic para validação e serialização automática                     │
+│                                                                             │
+│  NÍVEL 3: + Repository                                                      │
+│  └─► Acesso a dados isolado, queries reutilizáveis                         │
+│                                                                             │
+│  NÍVEL 4: Estado da Arte                                                    │
+│  └─► Service (lógica), Exceptions customizadas, DI completa                │
+│                                                                             │
+│  RESULTADO FINAL:                                                           │
+│  ┌──────────┐    ┌──────────┐    ┌────────────┐    ┌────────┐             │
+│  │ Endpoint │───►│ Service  │───►│ Repository │───►│ Entity │             │
+│  │ (HTTP)   │    │ (Lógica) │    │ (SQL)      │    │ (ORM)  │             │
+│  └──────────┘    └──────────┘    └────────────┘    └────────┘             │
+│       │                                                                     │
+│       └─► Schema (validação/serialização)                                  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### ✅ O Que Você Aprendeu
+
+| Camada | Responsabilidade |
+|--------|------------------|
+| **Entity** | Mapeamento ORM (tabela ↔ objeto) |
+| **Schema** | Validação de entrada, formato de saída |
+| **Repository** | Acesso a dados (CRUD, queries) |
+| **Service** | Lógica de negócio, coordenação |
+| **Endpoint** | Receber HTTP, chamar service, retornar resposta |
+
+---
+
+## 📚 TÓPICOS ESPECIALIZADOS (Referência Detalhada)
+
+As seções a seguir são **referência detalhada** sobre cada camada. Use-as para consulta quando precisar de detalhes específicos.
+
+---
+
+## 3.5 Referência: Por Que Não Usar to_dict() nos Models
 
 ### Entendendo o Contexto
 
@@ -10586,7 +11574,7 @@ class UserSchema(BaseModel):
 
 ---
 
-## 3.2 Schemas com Pydantic
+## 3.6 Referência: Schemas Pydantic em Detalhe
 
 Esta seção segue a metodologia de construcao linear do conhecimento. Vamos evoluir um UserSchema do basico ao estado da arte, sem repeticoes, construindo incrementalmente.
 
@@ -11680,7 +12668,7 @@ user4 = User.model_validate_json('{"id": 3, "name": "Carlos", "email": "c@e.com"
 
 ---
 
-## 3.2.1 Aprofundamento: model_dump() e model_dump_json()
+## 3.6.1 Aprofundamento: model_dump() e model_dump_json()
 
 Estes dois métodos são **essenciais** para trabalhar com APIs. Domine-os completamente.
 
@@ -11832,7 +12820,7 @@ class UserService:
 
 ---
 
-## 3.2.2 Exemplo Prático End-to-End: User + Team
+## 3.6.2 Exemplo Prático End-to-End: User + Team
 
 Este exemplo mostra o fluxo **completo** de uma feature, do banco de dados até a API. Use como referência para suas implementações.
 
@@ -12641,7 +13629,7 @@ def delete_team(
 
 ---
 
-## 3.2.3 Soft Delete Estratégico (Sem NULLs!)
+## 3.6.3 Soft Delete Estratégico (Sem NULLs!)
 
 Sua abordagem é correta: soft delete **não deve deixar dados órfãos**.
 
@@ -12823,7 +13811,7 @@ class TeamService:
 
 ---
 
-## 3.3 Services - Camada de Negócio
+## 3.7 Referência: Services - Camada de Negócio em Detalhe
 
 ### Arquitetura em Camadas
 
@@ -13704,7 +14692,7 @@ repo.create(user)
 
 ---
 
-## 3.4 API Endpoints com FastAPI
+## 3.8 Referência: API Endpoints com FastAPI em Detalhe
 
 ### O Que É FastAPI?
 
@@ -14495,9 +15483,407 @@ Preditivas:
 
 Este módulo ensina como fazer queries complexas **mantendo performance**.
 
+### O Que Você Vai Aprender Neste Módulo
+
+Assim como nos módulos anteriores, você verá **queries de analytics evoluindo** do básico ao complexo:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  JORNADA DESTE MÓDULO: Analytics do Zero ao Estado da Arte                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  4.1 NÍVEL 1: COUNT e SUM      → Agregações básicas em uma tabela          │
+│  4.2 NÍVEL 2: GROUP BY         → Agrupando e filtrando resultados          │
+│  4.3 NÍVEL 3: CASE e Subquery  → Lógica condicional e queries aninhadas    │
+│  4.4 NÍVEL 4: Estado da Arte   → Analytics Service completo                │
+│                                                                             │
+│  → Resultado: Você criará dashboards com métricas complexas                │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
-## 4.1 Queries de Agregação
+## 4.1 NÍVEL 1: COUNT e SUM - Agregações Básicas 📚 BÁSICO
+
+> **Nível**: BÁSICO - Funções de agregação fundamentais.
+
+### O Conceito: Resumir Dados
+
+**Agregação** transforma múltiplos registros em um único valor:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# ANALYTICS NÍVEL 1: AGREGAÇÕES BÁSICAS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import func
+from sqlalchemy.orm import Session
+
+# === COUNT: Quantos registros existem? ===
+total_tickets = session.query(func.count(Ticket.id)).scalar()
+# Retorna: 1523
+
+# === SUM: Soma de valores ===
+total_horas = session.query(func.sum(Ticket.hours_worked)).scalar()
+# Retorna: 4850.5
+
+# === AVG: Média ===
+media_satisfacao = session.query(func.avg(Ticket.satisfaction)).scalar()
+# Retorna: 8.5
+
+# === MAX / MIN: Maior e menor ===
+maior_tempo = session.query(func.max(Ticket.resolution_time)).scalar()
+menor_tempo = session.query(func.min(Ticket.resolution_time)).scalar()
+```
+
+### Visualização
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    AGREGAÇÃO: 1000 REGISTROS → 1 VALOR                       │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   Tickets (1000 registros)              Resultado da Agregação              │
+│   ┌──────────────────────┐              ┌──────────────────────┐            │
+│   │ id=1, hours=2.5      │              │                      │            │
+│   │ id=2, hours=1.0      │  ──COUNT──►  │  total: 1000         │            │
+│   │ id=3, hours=3.5      │  ──SUM────►  │  soma: 4850.5        │            │
+│   │ ...                  │  ──AVG────►  │  média: 4.85         │            │
+│   │ id=1000, hours=5.0   │              │                      │            │
+│   └──────────────────────┘              └──────────────────────┘            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### ✅ O Que Você Aprendeu
+
+| Função | O Que Faz | Exemplo |
+|--------|-----------|---------|
+| **COUNT** | Conta registros | `func.count(Ticket.id)` |
+| **SUM** | Soma valores | `func.sum(Ticket.hours)` |
+| **AVG** | Calcula média | `func.avg(Ticket.rating)` |
+| **MAX/MIN** | Maior/menor valor | `func.max(Ticket.time)` |
+
+### 🎯 Próximo Nível
+
+No **NÍVEL 2**, você aprenderá GROUP BY para agregar por categoria!
+
+---
+
+## 4.2 NÍVEL 2: GROUP BY - Agrupando Resultados 📚 BÁSICO
+
+> **Nível**: BÁSICO - Agrupe dados por categorias.
+
+### Evoluindo: Agregação Por Grupo
+
+Agora queremos saber "quantos tickets **por status**" ou "média **por time**":
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# ANALYTICS NÍVEL 2: GROUP BY
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# === Tickets por Status ===
+tickets_por_status = session.query(
+    Ticket.status,
+    func.count(Ticket.id).label("total")
+).group_by(Ticket.status).all()
+
+# Retorna:
+# [('aberto', 342), ('em_andamento', 156), ('fechado', 1025)]
+
+
+# === Tickets por Time ===
+tickets_por_time = session.query(
+    Team.team_name,
+    func.count(Ticket.id).label("total"),
+    func.avg(Ticket.satisfaction).label("satisfacao_media")
+).join(Ticket.team
+).group_by(Team.team_name).all()
+
+# Retorna:
+# [('Analytics', 450, 8.7), ('Suporte', 623, 8.2), ('Projetos', 450, 8.9)]
+
+
+# === HAVING: Filtrar DEPOIS de agrupar ===
+times_com_muitos_tickets = session.query(
+    Team.team_name,
+    func.count(Ticket.id).label("total")
+).join(Ticket.team
+).group_by(Team.team_name
+).having(func.count(Ticket.id) > 100  # ✅ Filtra grupos, não registros
+).all()
+```
+
+### WHERE vs HAVING
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    WHERE vs HAVING                                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   WHERE: Filtra ANTES de agrupar                                            │
+│   ─────────────────────────────                                             │
+│   .filter(Ticket.created_at >= '2024-01-01')  # Só tickets de 2024         │
+│   .group_by(...)                                                            │
+│                                                                             │
+│   HAVING: Filtra DEPOIS de agrupar                                          │
+│   ──────────────────────────────                                            │
+│   .group_by(Team.name)                                                      │
+│   .having(func.count() > 100)  # Só times com mais de 100 tickets          │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### ✅ O Que Você Aprendeu
+
+| Conceito | O Que Faz |
+|----------|-----------|
+| **GROUP BY** | Agrupa registros por uma coluna |
+| **label()** | Dá nome ao resultado da agregação |
+| **HAVING** | Filtra grupos (depois de GROUP BY) |
+| **WHERE** | Filtra registros (antes de GROUP BY) |
+
+### 🎯 Próximo Nível
+
+No **NÍVEL 3**, você aprenderá CASE para lógica condicional!
+
+---
+
+## 4.3 NÍVEL 3: CASE e Lógica Condicional 📗 INTERMEDIÁRIO
+
+> **Nível**: INTERMEDIÁRIO - Agregações condicionais e subqueries.
+
+### Evoluindo: Lógica Dentro da Query
+
+Agora queremos "contar tickets abertos E fechados na mesma query":
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# ANALYTICS NÍVEL 3: CASE E SUBQUERIES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import case, and_, or_
+
+# === CASE: IF/ELSE dentro da query ===
+metricas_por_time = session.query(
+    Team.team_name,
+
+    # Conta TODOS
+    func.count(Ticket.id).label("total"),
+
+    # Conta só ABERTOS (case como filtro condicional)
+    func.sum(
+        case((Ticket.status == 'aberto', 1), else_=0)
+    ).label("abertos"),
+
+    # Conta só FECHADOS
+    func.sum(
+        case((Ticket.status == 'fechado', 1), else_=0)
+    ).label("fechados"),
+
+    # Calcula PERCENTUAL de fechados
+    (func.sum(case((Ticket.status == 'fechado', 1), else_=0)) * 100.0 /
+     func.nullif(func.count(Ticket.id), 0)  # nullif evita divisão por zero
+    ).label("percent_fechados")
+
+).join(Ticket.team
+).group_by(Team.team_name).all()
+
+# Retorna:
+# [('Analytics', 450, 50, 380, 84.4), ('Suporte', 623, 120, 480, 77.0)]
+
+
+# === Condições complexas ===
+tickets_urgentes_atrasados = session.query(
+    func.count(Ticket.id)
+).filter(
+    and_(
+        Ticket.priority == 'urgente',
+        Ticket.status != 'fechado',
+        Ticket.deadline < func.now()  # Passou do prazo
+    )
+).scalar()
+```
+
+### O Poder do CASE
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CASE: MÚLTIPLAS MÉTRICAS EM UMA QUERY                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   SEM CASE (3 queries):              COM CASE (1 query):                    │
+│   ─────────────────────              ──────────────────                     │
+│                                                                             │
+│   # Query 1                          SELECT                                 │
+│   SELECT COUNT(*) FROM tickets         team_name,                           │
+│   WHERE status = 'aberto'              COUNT(*) as total,                   │
+│                                        SUM(CASE WHEN status='aberto'        │
+│   # Query 2                                THEN 1 ELSE 0 END) as abertos,  │
+│   SELECT COUNT(*) FROM tickets         SUM(CASE WHEN status='fechado'       │
+│   WHERE status = 'fechado'                 THEN 1 ELSE 0 END) as fechados  │
+│                                      FROM tickets                           │
+│   # Query 3                          GROUP BY team_name;                    │
+│   SELECT COUNT(*) FROM tickets                                              │
+│                                      # ✅ UMA query = 3x mais rápido!      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### ✅ O Que Você Aprendeu
+
+| Conceito | O Que Faz |
+|----------|-----------|
+| **case()** | IF/ELSE dentro do SQL |
+| **nullif()** | Evita divisão por zero |
+| **and_(), or_()** | Combina condições |
+| **Múltiplas métricas** | Uma query = melhor performance |
+
+### 🎯 Próximo Nível
+
+No **NÍVEL 4 (Estado da Arte)**, você criará um Analytics Service completo!
+
+---
+
+## 4.4 NÍVEL 4: Estado da Arte - Analytics Service Completo 📕 AVANÇADO
+
+> **Nível**: ESTADO DA ARTE - Service de analytics profissional.
+
+Este é o código completo que você viu na seção **4.0 O ALVO**. Agora você entende cada parte:
+
+```python
+# ═══════════════════════════════════════════════════════════════════════════════
+# ANALYTICS SERVICE - ESTADO DA ARTE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from sqlalchemy import func, case, extract, and_
+from sqlalchemy.orm import Session
+from datetime import datetime, timedelta
+from pydantic import BaseModel
+
+
+class TeamMetrics(BaseModel):
+    """Schema de métricas de time."""
+    team_id: int
+    team_name: str
+    total_tickets: int
+    tickets_open: int
+    tickets_closed: int
+    avg_resolution_hours: float | None
+    satisfaction_avg: float | None
+    sla_compliance_percent: float | None
+
+
+class TicketAnalyticsService:
+    """
+    Service de Analytics - Estado da Arte.
+
+    Princípios:
+    - Uma query por método (evita N+1)
+    - Cálculos no banco (não em Python)
+    - Schemas tipados para retorno
+    - Filtros por período
+    """
+
+    def __init__(self, session: Session):
+        self.session = session
+
+    def get_team_dashboard(
+        self,
+        start_date: datetime,
+        end_date: datetime
+    ) -> list[TeamMetrics]:
+        """
+        Dashboard completo de performance por time.
+
+        Métricas em UMA ÚNICA query:
+        - Total, abertos, fechados
+        - Tempo médio de resolução
+        - Satisfação média
+        - % SLA compliance
+        """
+        result = self.session.query(
+            Team.id.label("team_id"),
+            Team.team_name,
+
+            func.count(Ticket.id).label("total_tickets"),
+
+            func.sum(case(
+                (Ticket.status == TicketStatus.ABERTO, 1), else_=0
+            )).label("tickets_open"),
+
+            func.sum(case(
+                (Ticket.status == TicketStatus.FECHADO, 1), else_=0
+            )).label("tickets_closed"),
+
+            func.avg(case(
+                (Ticket.closed_at.isnot(None),
+                 extract('epoch', Ticket.closed_at - Ticket.created_at) / 3600),
+                else_=None
+            )).label("avg_resolution_hours"),
+
+            func.avg(Ticket.satisfaction_rating).label("satisfaction_avg"),
+
+            (func.sum(case(
+                (and_(
+                    Ticket.closed_at.isnot(None),
+                    Ticket.closed_at <= Ticket.deadline
+                ), 1), else_=0
+            )) * 100.0 / func.nullif(func.count(Ticket.id), 0)
+            ).label("sla_compliance_percent")
+
+        ).outerjoin(Ticket, Team.id == Ticket.team_id
+        ).filter(Ticket.created_at.between(start_date, end_date)
+        ).group_by(Team.id, Team.team_name
+        ).all()
+
+        return [TeamMetrics(**row._asdict()) for row in result]
+
+    def get_daily_trend(self, days: int = 30) -> list[dict]:
+        """Tendência diária para gráficos."""
+        start = datetime.now() - timedelta(days=days)
+
+        return self.session.query(
+            func.date_trunc('day', Ticket.created_at).label("date"),
+            func.count(Ticket.id).label("count")
+        ).filter(Ticket.created_at >= start
+        ).group_by(func.date_trunc('day', Ticket.created_at)
+        ).order_by("date").all()
+```
+
+### Resumo da Evolução
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│              EVOLUÇÃO: DO NÍVEL 1 AO ESTADO DA ARTE                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  NÍVEL 1: COUNT e SUM                                                       │
+│  └─► func.count(), func.sum(), func.avg()                                  │
+│                                                                             │
+│  NÍVEL 2: GROUP BY                                                          │
+│  └─► .group_by(), .having(), .label()                                      │
+│                                                                             │
+│  NÍVEL 3: CASE e Lógica                                                     │
+│  └─► case(), nullif(), múltiplas métricas em uma query                     │
+│                                                                             │
+│  NÍVEL 4: Estado da Arte                                                    │
+│  └─► Analytics Service com Pydantic, filtros por período, trends           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📚 TÓPICOS ESPECIALIZADOS (Referência Detalhada)
+
+As seções a seguir são **referência detalhada** sobre agregações e performance.
+
+---
+
+## 4.5 Referência: Queries de Agregação em Detalhe
 
 ### Entendendo Agregações
 
@@ -14796,7 +16182,7 @@ resolution_rate = (
 
 ---
 
-## 4.2 Analytics Service
+## 4.6 Referência: Analytics Service Patterns
 
 ### Estrutura
 
@@ -14925,7 +16311,7 @@ def team_analytics(db: Session = Depends(get_db)):
 
 ---
 
-## 4.3 Otimizações Avançadas
+## 4.7 Referência: Otimizações Avançadas
 
 ### 1. Subqueries
 
@@ -14993,7 +16379,7 @@ for user in users:
 
 ---
 
-## 4.4 Índices e Performance
+## 4.8 Referência: Índices e Performance
 
 ### Entendendo Índices: A Analogia do Livro
 
@@ -15487,9 +16873,30 @@ Código Com Padrões:
 
 Este módulo fornece checklists, convenções e padrões para garantir os 3 pilares.
 
+### Jornada de Maturidade do Código
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  JORNADA DESTE MÓDULO: Maturidade do Código                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  5.1 Checklist Básico     → Verificações essenciais antes do commit        │
+│  5.2 Nomenclatura         → Nomes consistentes e claros                    │
+│  5.3 Segurança            → Validações e proteções                         │
+│  5.4 Testes               → Garantia de funcionamento                      │
+│  5.5 Erros Comuns         → O que evitar                                   │
+│  5.6 Ordem de Criação     → Sequência correta de registros                 │
+│                                                                             │
+│  → Use como REFERÊNCIA durante todo o desenvolvimento                      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
-## 5.1 Checklist de Implementação
+## 5.1 Checklist de Implementação 📋 ESSENCIAL
+
+> **Referência**: Use este checklist ANTES de cada commit.
 
 ### O Que É Este Checklist?
 
@@ -15581,7 +16988,7 @@ PERIODICAMENTE:
 
 ---
 
-## 5.2 Padrões de Nomenclatura
+## 5.2 Padrões de Nomenclatura 📋 ESSENCIAL
 
 ### Por Que Nomenclatura Importa?
 
@@ -15695,7 +17102,7 @@ AnalyticsService
 
 ---
 
-## 5.3 Segurança e Validação
+## 5.3 Segurança e Validação ⚠️ CRÍTICO
 
 ### Por Que Segurança É Crítica?
 
@@ -15810,7 +17217,7 @@ db.execute(
 
 ---
 
-## 5.4 Testes
+## 5.4 Testes 📕 AVANÇADO
 
 ### O Que É pytest?
 
@@ -16447,7 +17854,7 @@ def test_create_user_endpoint():
 
 ---
 
-## 5.5 Erros Comuns e Soluções
+## 5.5 Erros Comuns e Soluções 🔧 REFERÊNCIA
 
 Esta seção consolida os erros mais frequentes ao usar SQLAlchemy com MappedAsDataclass.
 
@@ -16619,7 +18026,7 @@ for user in users:
 
 ---
 
-## 5.6 Ordem de Criação de Registros
+## 5.6 Ordem de Criação de Registros 📋 ESSENCIAL
 
 Ao popular o banco, você DEVE respeitar as dependências de FK.
 
@@ -16859,7 +18266,7 @@ Este módulo é um guia prático para implementar funcionalidades do zero ao dep
 
 ---
 
-## 6.1 Criando uma Nova Entidade
+## 6.1 Criando uma Nova Entidade 📚 BÁSICO
 
 Quando você precisa adicionar uma nova tabela ao banco de dados, deve seguir uma sequência específica de passos. A ordem importa porque cada camada depende da anterior.
 
@@ -17115,7 +18522,7 @@ app.include_router(category_routes.router, prefix="/api/v1")
 
 ---
 
-## 6.2 Criando um Novo Endpoint
+## 6.2 Criando um Novo Endpoint 📗 INTERMEDIÁRIO
 
 Nem sempre você precisa criar uma entidade nova. Às vezes precisa apenas adicionar um endpoint a uma entidade existente.
 
@@ -17173,7 +18580,7 @@ def list_tickets(
 
 ---
 
-## 6.3 Implementando CRUD Completo
+## 6.3 Implementando CRUD Completo ⭐ ESTADO DA ARTE
 
 Este é o resumo visual de tudo que você aprendeu. Quando precisar criar uma funcionalidade completa, siga este fluxo.
 
@@ -17288,7 +18695,7 @@ Este módulo cobre tudo que você precisa para colocar sua aplicação em produ�
 
 ---
 
-## 7.1 Docker - Containerização
+## 7.1 Docker - Containerização 📚 BÁSICO
 
 ### O Que É Docker?
 
@@ -17619,7 +19026,7 @@ docker-compose down -v
 
 ---
 
-## 7.2 Configuração para Produção
+## 7.2 Configuração para Produção 📗 INTERMEDIÁRIO
 
 ### Variáveis de Ambiente Seguras
 
@@ -17745,7 +19152,7 @@ def get_db():
 
 ---
 
-## 7.3 Observabilidade
+## 7.3 Observabilidade 📕 AVANÇADO
 
 ### Logging Estruturado
 
@@ -18086,7 +19493,7 @@ def liveness_check():
 
 ---
 
-## 7.4 Configuração do FastAPI para Produção
+## 7.4 Configuração do FastAPI para Produção 📕 AVANÇADO
 
 ### main.py Completo
 
@@ -18198,7 +19605,7 @@ async def generic_exception_handler(request: Request, exc: Exception):
 
 ---
 
-## 7.5 Git e GitHub - Versionamento Profissional
+## 7.5 Git e GitHub - Versionamento Profissional 📚 BÁSICO
 
 ### Por Que Versionamento Importa?
 
@@ -18670,7 +20077,7 @@ Crie `.github/pull_request_template.md`:
 
 ---
 
-## 7.6 CI/CD com GitHub Actions
+## 7.6 CI/CD com GitHub Actions ⭐ ESTADO DA ARTE
 
 ### Por Que CI/CD?
 
@@ -18935,7 +20342,7 @@ Adicione badges para mostrar status do CI:
 
 ---
 
-## 7.7 Checklist de Deploy
+## 7.7 Checklist de Deploy 📋 ESSENCIAL
 
 ### Antes de Ir para Produção
 
@@ -19418,7 +20825,7 @@ def delete_user(
 
 ---
 
-## 8.1 Por Que Segurança Importa
+## 8.1 Por Que Segurança Importa 📚 BÁSICO
 
 ### O Custo de Ignorar Segurança
 
@@ -19461,7 +20868,7 @@ Validar, sanitizar e escapar TODA entrada externa.
 
 ---
 
-## 8.2 Hash de Senhas com Bcrypt
+## 8.2 Hash de Senhas com Bcrypt 📚 BÁSICO
 
 ### Por Que Hash e Não Criptografia?
 
@@ -19710,7 +21117,7 @@ class UserResponse(BaseModel):
 
 ---
 
-## 8.3 JWT - JSON Web Tokens
+## 8.3 JWT - JSON Web Tokens 📗 INTERMEDIÁRIO
 
 ### O Que É JWT?
 
@@ -19909,7 +21316,7 @@ Por que dois tokens?
 
 ---
 
-## 8.4 Autenticação no FastAPI
+## 8.4 Autenticação no FastAPI 📗 INTERMEDIÁRIO
 
 ### Dependency de Autenticação
 
@@ -20211,7 +21618,7 @@ def delete_user(
 
 ---
 
-## 8.5 Autorização e Roles
+## 8.5 Autorização e Roles 📕 AVANÇADO
 
 ### Sistema de Roles (Papéis)
 
@@ -20363,7 +21770,7 @@ def get_reports(user: User = Depends(require_roles(RoleType.ADMIN, RoleType.ANAL
 
 ---
 
-## 8.6 Recuperação de Senha
+## 8.6 Recuperação de Senha 📕 AVANÇADO
 
 ### Fluxo de Recuperação
 
@@ -20538,7 +21945,7 @@ def reset_password(
 
 ---
 
-## 8.7 Boas Práticas de Segurança
+## 8.7 Boas Práticas de Segurança ⭐ ESTADO DA ARTE
 
 ### Checklist de Segurança
 
@@ -20762,7 +22169,80 @@ class Settings(BaseSettings):
 
 # MÓDULO 9: USER - DO ZERO À PRODUÇÃO (Tutorial Completo)
 
+> **Metodologia**: Este módulo é o **CORAÇÃO** do tutorial. Aqui você constrói User passando por TODAS as camadas, do básico ao estado da arte.
+
 Este modulo e o **coracao do tutorial**. Aqui voce vai construir User passando por TODAS as camadas, do basico ao estado da arte. Ao terminar, voce tera um modelo completo que serve de referencia para construir qualquer outra entidade.
+
+---
+
+## 9.0 O ALVO: User Completo - Do Banco à API
+
+🎯 **VEJA PRIMEIRO O DESTINO**: Este é o sistema User completo que você terá ao final deste módulo. Todas as camadas trabalhando juntas.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    USER COMPLETO - ESTADO DA ARTE                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   REQUEST: POST /users  {"email": "joao@email.com", "name": "João"}        │
+│      │                                                                      │
+│      ▼                                                                      │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ API LAYER (user_routes.py)                                          │   │
+│   │ • Valida entrada com UserCreate (Pydantic)                          │   │
+│   │ • Injeta UserService via Depends()                                  │   │
+│   │ • Retorna UserResponse                                              │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│      │                                                                      │
+│      ▼                                                                      │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ SERVICE LAYER (user_service.py)                                     │   │
+│   │ • Verifica se email já existe                                       │   │
+│   │ • Hash da senha com bcrypt                                          │   │
+│   │ • Lança UserAlreadyExistsError se duplicado                         │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│      │                                                                      │
+│      ▼                                                                      │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ REPOSITORY LAYER (user_repository.py)                               │   │
+│   │ • get_by_email() - busca existente                                  │   │
+│   │ • create() - insere no banco                                        │   │
+│   │ • Eager loading com joinedload(User.team)                           │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│      │                                                                      │
+│      ▼                                                                      │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ ENTITY LAYER (user.py)                                              │   │
+│   │ • Campos: id, email, password_hash, team_id, role, status           │   │
+│   │ • Relationships: team, tickets_created, managed_team                │   │
+│   │ • lazy="raise", back_populates, TYPE_CHECKING                       │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│      │                                                                      │
+│      ▼                                                                      │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ DATABASE (PostgreSQL)                                               │   │
+│   │ • Tabela: users                                                     │   │
+│   │ • Índices: ix_users_email, ix_users_team_role                       │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### O Que Você Construirá
+
+| Camada | Arquivo | O Que Faz |
+|--------|---------|-----------|
+| **Entity** | `user.py` | Mapeamento ORM com relacionamentos |
+| **Repository** | `user_repository.py` | CRUD + queries específicas |
+| **Exceptions** | `user_exceptions.py` | Erros customizados |
+| **Schemas** | `user_schemas.py` | Validação entrada/saída |
+| **Service** | `user_service.py` | Lógica de negócio |
+| **API** | `user_routes.py` | Endpoints HTTP |
+| **Tests** | `test_user.py` | Validação de tudo |
+
+> 📚 **Nas seções seguintes**, cada camada evolui de BÁSICO → INTERMEDIÁRIO → AVANÇADO → ESTADO DA ARTE.
+
+---
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
